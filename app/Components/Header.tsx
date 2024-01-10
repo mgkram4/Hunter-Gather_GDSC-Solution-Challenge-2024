@@ -14,13 +14,10 @@ export default function Header() {
           filled with culinary wonders.
         </p>
         <div className="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
-          <Button className="border-black text-xl bg-green-600 text-white">
+          <Button className="text-xl bg-green-600 text-white">
             Discover Recipes
           </Button>
-          <Button
-            variant={"outline"}
-            className="text-xl bg-transparent hover:border-black hover:bg-transparent text-black"
-          >
+          <Button variant={"ghost"} className="text-xl  text-black">
             Feeling Hangry?
           </Button>
         </div>
