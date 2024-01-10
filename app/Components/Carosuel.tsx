@@ -24,6 +24,15 @@ export default function Carosuel() {
         <CarouselItem className="basis-1/2 md:basis-1/3">
           <Card />
         </CarouselItem>
+        <CarouselItem className="basis-1/2 md:basis-1/3">
+          <Card />
+        </CarouselItem>
+        <CarouselItem className="basis-1/2 md:basis-1/3">
+          <Card />
+        </CarouselItem>
+        <CarouselItem className="basis-1/2 md:basis-1/3">
+          <Card />
+        </CarouselItem>
       </CarouselContent>
       <CarouselPrevious />
       <CarouselNext />
