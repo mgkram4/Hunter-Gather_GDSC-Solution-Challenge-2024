@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import React from "react";
 
 export default function Header() {
@@ -14,12 +13,12 @@ export default function Header() {
           filled with culinary wonders.
         </p>
         <div className="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
-          <Button className="text-xl bg-green-600 text-white">
+          <button className="text-xl p-2 rounded-xl hover:opacity-90 hover:text-black  hover:shadow-md bg-green-600 text-white">
             Discover Recipes
-          </Button>
-          <Button variant={"ghost"} className="text-xl  text-black">
+          </button>
+          <button className="text-xl p-2 hover:bg-slate-50 hover:opacity-90 rounded-xl hover:text-green-600  hover:shadow-md text-black">
             Feeling Hangry?
-          </Button>
+          </button>
         </div>
       </div>
     </div>

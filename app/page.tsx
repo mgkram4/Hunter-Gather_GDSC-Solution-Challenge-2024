@@ -1,12 +1,10 @@
 import Image from "next/image";
-import Header from "./Components/Header";
-import Carosuel from "./Components/Carosuel";
+import Header from "../Components/Header";
 
 export default function Home() {
   return (
     <main>
       <Header />
-      <Carosuel />
     </main>
   );
 }
