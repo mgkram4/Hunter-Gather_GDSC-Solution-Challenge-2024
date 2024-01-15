@@ -1,5 +1,6 @@
 import { RxHamburgerMenu } from "react-icons/rx";
 import { PiCookingPotLight } from "react-icons/pi";
+import Link from "next/link";
 
 export default function Navbar() {
   return (
@@ -33,9 +34,11 @@ export default function Navbar() {
               </a>
             </li>
             <li>
-              <button className="block text-white  hover:bg-green-700 p-2 rounded-xl bg-green-600 ">
-                Login
-              </button>
+              <Link href="/routes/login">
+                <button className="block text-white  hover:bg-green-700 p-2 rounded-xl bg-green-600 ">
+                  Login
+                </button>
+              </Link>
             </li>
           </ul>
         </div>
