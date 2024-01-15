@@ -1,6 +1,6 @@
 import { NewUser } from "@api/models/users";
 import { UserRepository } from "@api/repositories";
-
+import { Provider } from "@supabase/supabase-js";
 /**
  * Service function to get all users.
  *
@@ -37,10 +37,8 @@ export const getUserByEmail = async (email: string) => {
  * @returns {Promise<User>}
  */
 export const createUser = async (user: NewUser) => {
-  // TODO also add a user on auth side with supabase
   return await UserRepository.createUser(user);
 };
-
 /**
  * Service function to update a user by id.
  *
