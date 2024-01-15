@@ -8,14 +8,14 @@ export const authMethod = pgEnum("auth_method", [
   "x",
 ]);
 
-export const users = pgTable("users", {
+export const users = pgTable("Users", {
   id: serial("id").primaryKey(),
-  firstName: varchar("first_name", { length: 255 }).notNull(),
-  lastName: varchar("last_name", { length: 255 }).notNull(),
-  profilePicture: text("profile_picture"),
+  firstName: varchar("firstName", { length: 255 }).notNull(),
+  lastName: varchar("lastName", { length: 255 }).notNull(),
+  profilePicture: text("profilePicture"),
   email: varchar("email", { length: 255 }).notNull().unique(),
   password: varchar("password", { length: 255 }),
-  authMethod: authMethod("auth_method").default("traditional").notNull(),
+  authMethod: authMethod("authMethod").default("traditional").notNull(),
 });
 
 export type User = typeof users.$inferSelect;
