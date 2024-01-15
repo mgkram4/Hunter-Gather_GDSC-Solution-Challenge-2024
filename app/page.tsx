@@ -22,7 +22,7 @@ export default function Home() {
         </div>
       </div>
       <div className="flex items-center justify-center h-screen bg-slate-100">
-        test
+        <div>test</div>
       </div>
     </main>
   );
