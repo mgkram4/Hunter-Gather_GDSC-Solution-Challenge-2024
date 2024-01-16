@@ -1,6 +1,5 @@
-import { NewUser } from "@api/models/users";
-import { UserRepository } from "@api/repositories";
-import { Provider } from "@supabase/supabase-js";
+import { NewUser } from "@lib/models/users";
+import { UserRepository } from "@lib/repositories";
 /**
  * Service function to get all users.
  *

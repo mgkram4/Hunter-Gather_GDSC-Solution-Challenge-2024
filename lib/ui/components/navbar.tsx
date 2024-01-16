@@ -1,13 +1,16 @@
 import { RxHamburgerMenu } from "react-icons/rx";
 import { PiCookingPotLight } from "react-icons/pi";
 import Link from "next/link";
-import routes from "@config/routes";
+import { supabase } from "@lib/supabase";
+import { CLIENT_ROUTES } from "@config/routes";
 
-export default function Navbar() {
+export default async function Navbar() {
+  const email = (await supabase.auth.getUser()).data.user?.email;
+
   return (
-    <div className="bg-white border-gray-200 m-2 ">
-      <div className="w-full flex flex-wrap items-center justify-between mx-auto p-4">
-        <a href="/" className="flex items-center space-x-3 ">
+    <div className="bg-white border-gray-200 m-2">
+      <div className="w-full flex items-center justify-between mx-auto p-4">
+        <a href="/" className="items-center space-x-3 ">
           {/* Logo */}
           <PiCookingPotLight className="w-10 h-10" />
         </a>
@@ -21,7 +24,7 @@ export default function Navbar() {
             <li>
               <a
                 href="#"
-                className=" block text-green-600 p-2  hover:text-green-500 "
+                className="block text-green-600 p-2  hover:text-green-500 "
               >
                 Home
               </a>
@@ -35,9 +38,9 @@ export default function Navbar() {
               </a>
             </li>
             <li>
-              <Link href={routes.LOGIN}>
-                <button className="block text-white  hover:bg-green-700 p-2 rounded-xl bg-green-600 ">
-                  Login
+              <Link href={CLIENT_ROUTES.SIGNIN}>
+                <button className="block text-white hover:bg-green-700 p-2 rounded-xl bg-green-600 ">
+                  {email || "Login"}
                 </button>
               </Link>
             </li>
