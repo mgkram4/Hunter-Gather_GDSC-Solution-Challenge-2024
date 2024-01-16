@@ -4,6 +4,13 @@ import { redirect } from "next/navigation";
 import { ROUTES } from "@/src/config/routes";
 import { NewUser } from "@/src/types/tables";
 
+export enum AUTH_METHODS {
+  GOOGLE = "google",
+  FACEBOOK = "facebook",
+  TRADITIONAL = "traditional",
+  X = "x",
+}
+
 export const signUpWithEmailAction = async (formData: FormData) => {
   "use server";
 
@@ -24,6 +31,8 @@ export const signUpWithEmailAction = async (formData: FormData) => {
         redirect(
           `${ROUTES.SIGNUP}?error=A user with this email already exists.`
         );
+      default:
+        redirect(`${ROUTES.SIGNUP}?error=An unknown error occurred.`);
     }
   }
 
@@ -58,8 +67,11 @@ export const signInWithEmailAction = async (formData: FormData) => {
 
   if (auth.error) {
     switch (auth.error.message) {
-      case "Invalid credentials":
-        redirect(`${ROUTES.SIGNIN}?error=Invalid credentials.`);
+      case "Invalid login credentials":
+        redirect(`${ROUTES.SIGNIN}?error=Invalid email/password combination.`);
+      default:
+        console.log(auth.error);
+        redirect(`${ROUTES.SIGNIN}?error=An unknown error occurred.`);
     }
   }
 

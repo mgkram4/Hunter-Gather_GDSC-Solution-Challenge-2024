@@ -1,4 +1,7 @@
-import { signUpWithEmailAction } from "@actions/auth/signup/actions";
+"use server";
+
+import { signUpWithEmailAction } from "@/src/actions/auth/signup/actions";
+import GoogleSignInButton from "@components/button/g-signin";
 
 interface SignUpProps {
   searchParams?: {
@@ -35,7 +38,10 @@ export default async function SignUp({ searchParams }: SignUpProps) {
           <button className="bg-green-500 text-white p-2 rounded hover:bg-green-600 cursor-pointer">
             Sign up
           </button>
-          <p className="text-red-500 text-center font-bold">{searchParams?.error}</p>
+          <GoogleSignInButton isSignUp />
+          <p className="text-red-500 text-center font-bold">
+            {searchParams?.error}
+          </p>
         </form>
       </div>
     </div>
