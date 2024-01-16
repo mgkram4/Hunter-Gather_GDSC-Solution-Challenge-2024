@@ -9,8 +9,14 @@ export enum ERROR_MESSAGES_FORMATTED {
   INTERNAL_SERVER_ERROR = "An internal server error has occurred, please try again.",
 }
 
+/**
+ * Middleware function for handling errors.
+ *
+ * @param {Error} error - the error to handle
+ * @param {string} path - the path to handle the error for
+ * @returns {NextResponse}
+ */
 export const getError = (error: Error, path: string) => {
-  console.log(error);
   switch (path) {
     case API_ROUTES.SIGNIN:
       switch (error.message) {

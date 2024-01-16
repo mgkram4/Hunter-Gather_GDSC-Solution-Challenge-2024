@@ -4,6 +4,12 @@ import { getError } from "@lib/error";
 import { AuthService } from "@lib/services";
 import { NextRequest, NextResponse } from "next/server";
 
+/**
+ * Handler function for signing up a user with email and password.
+ *
+ * @param {NextRequest} req
+ * @returns {NextResponse}
+ */
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
