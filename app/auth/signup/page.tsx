@@ -2,8 +2,12 @@
 
 import { API_ROUTES, CLIENT_ROUTES } from "@config/routes";
 import { useState } from "react";
+import { createBrowserClient } from "@supabase/ssr";
+import { SUPABASE_KEY, SUPABASE_URL } from "@config/constants";
 
 export default function SignUp() {
+  const supabase = createBrowserClient(SUPABASE_URL, SUPABASE_KEY);
+
   const [error, setError] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -30,6 +34,23 @@ export default function SignUp() {
       // TODO: redirect to the taste profile page
       window.location.href = CLIENT_ROUTES.HOME;
     }
+  };
+
+  const handleSignUpWithGoogle = async (e: any) => {
+    e.preventDefault();
+    setError("");
+
+    const auth = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        queryParams: {
+          access_type: "offline",
+          prompt: "consent",
+        },
+
+        redirectTo: `${window.location.origin}${API_ROUTES.PROVIDER_SIGNUP}?provider=google`,
+      },
+    });
   };
 
   return (
@@ -64,6 +85,12 @@ export default function SignUp() {
             className="bg-green-500 text-white p-2 rounded hover:bg-green-600 cursor-pointer"
           >
             Sign Up
+          </button>
+          <button
+            onClick={handleSignUpWithGoogle}
+            className="border-2 border-gray-200 p-2 rounded cursor-pointer text-green-500"
+          >
+            Continue with Google
           </button>
         </form>
         <p>{error}</p>

@@ -7,5 +7,5 @@ export enum CLIENT_ROUTES {
 export enum API_ROUTES {
   SIGNIN = "/api/auth/signin",
   SIGNUP = "/api/auth/register",
-  GOOGLE_SIGNUP = "/api/auth/google/register",
+  PROVIDER_SIGNUP = "/api/auth/provider/register",
 }

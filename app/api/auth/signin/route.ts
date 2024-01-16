@@ -2,6 +2,7 @@ import { HTTP_CODES } from "@config/constants";
 import { CLIENT_ROUTES, API_ROUTES } from "@config/routes";
 import { getError } from "@lib/error";
 import { AuthService } from "@lib/services";
+import { getClient } from "@lib/supabase";
 import { NextRequest, NextResponse } from "next/server";
 
 /**
@@ -12,8 +13,10 @@ import { NextRequest, NextResponse } from "next/server";
  */
 export async function POST(req: NextRequest) {
   try {
+    const client = getClient();
     const body = await req.json();
-    await AuthService.signInWithEmail(body);
+
+    await AuthService.signInWithEmail(body, client);
 
     return NextResponse.json(
       { message: "Signed in successfully" },

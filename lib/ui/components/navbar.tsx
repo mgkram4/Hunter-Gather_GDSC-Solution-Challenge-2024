@@ -1,11 +1,13 @@
 import { RxHamburgerMenu } from "react-icons/rx";
 import { PiCookingPotLight } from "react-icons/pi";
 import Link from "next/link";
-import { supabase } from "@lib/supabase";
 import { CLIENT_ROUTES } from "@config/routes";
+import { createBrowserClient } from "@supabase/ssr";
+import { SUPABASE_KEY, SUPABASE_URL } from "@config/constants";
+import { supabaseBrowser } from "@lib/supabase";
 
 export default async function Navbar() {
-  const user = await supabase.auth.getUser();
+  const user = await supabaseBrowser.auth.getUser();
 
   return (
     <div className="bg-white border-gray-200 m-2">

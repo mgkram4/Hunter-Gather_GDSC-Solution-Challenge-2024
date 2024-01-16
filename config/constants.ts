@@ -2,6 +2,10 @@
 export const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 export const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
 
+// Application
+export const BASE_URL =
+  process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+
 // Drizzle
 export const POSTGRES_CONNECTION_STRING =
   process.env.NEXT_PUBLIC_POSTGRES_CONNECTION_STRING ||

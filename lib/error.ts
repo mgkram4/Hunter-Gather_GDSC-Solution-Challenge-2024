@@ -1,6 +1,7 @@
-import { HTTP_CODES } from "@config/constants";
-import { API_ROUTES } from "@config/routes";
+import { BASE_URL, HTTP_CODES } from "@config/constants";
+import { API_ROUTES, CLIENT_ROUTES } from "@config/routes";
 import { NextResponse } from "next/server";
+import { logger } from "./logger";
 
 export enum ERROR_MESSAGES_FORMATTED {
   EMAIL_AND_PASSWORD_REQUIRED = "Email and password are required",
@@ -77,7 +78,15 @@ export const getError = (error: Error, path: string) => {
             },
           );
       }
+    case API_ROUTES.PROVIDER_SIGNUP:
+      switch (error.message) {
+        case 'duplicate key value violates unique constraint "Users_email_unique"':
+          return NextResponse.redirect(
+            `${BASE_URL}${CLIENT_ROUTES.SIGNUP}?error=Email already registered`,
+          );
+      }
     default:
+      logger.error(error);
       return NextResponse.json(
         {
           message: ERROR_MESSAGES_FORMATTED.INTERNAL_SERVER_ERROR,
