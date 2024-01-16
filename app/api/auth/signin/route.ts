@@ -1,5 +1,5 @@
 import { HTTP_CODES } from "@config/constants";
-import { CLIENT_ROUTES, SERVER_ROUTES } from "@config/routes";
+import { CLIENT_ROUTES, API_ROUTES } from "@config/routes";
 import { getError } from "@lib/error";
 import { AuthService } from "@lib/services";
 import { NextRequest, NextResponse } from "next/server";
@@ -9,9 +9,11 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     await AuthService.signInWithEmail(body);
 
-    return NextResponse.redirect(CLIENT_ROUTES.HOME, { status: HTTP_CODES.OK });
+    return NextResponse.json(
+      { message: "Signed in successfully" },
+      { status: HTTP_CODES.OK },
+    );
   } catch (error) {
-    console.log(error);
-    return getError(error as Error, SERVER_ROUTES.SIGNIN);
+    return getError(error as Error, API_ROUTES.SIGNIN);
   }
 }

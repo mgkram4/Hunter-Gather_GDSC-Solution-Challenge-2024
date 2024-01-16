@@ -19,13 +19,17 @@ export const signUpWithEmail = async (body: EmailBody) => {
     throw new Error("Email and password are required");
   } else {
     const user = await supabase.auth.signUp({
-      email: body.email as string,
-      password: body.email as string,
+      email: body.email,
+      password: body.password,
     });
 
+    if (user.error) {
+      throw new Error(user.error.message);
+    }
+
     await UserService.createUser({
-      uuid: user.data.user?.id as string,
       email: body.email as string,
+      uuid: user.data.user?.id as string,
     });
   }
 };
@@ -35,8 +39,8 @@ export const signInWithEmail = async (body: EmailBody) => {
     throw new Error("Email and password are required");
   } else {
     const { error, data } = await supabase.auth.signInWithPassword({
-      email: body.email as string,
-      password: body.password as string,
+      email: body.email,
+      password: body.password,
     });
 
     if (error) {

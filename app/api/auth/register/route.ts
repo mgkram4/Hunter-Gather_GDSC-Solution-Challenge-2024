@@ -1,15 +1,20 @@
 import { HTTP_CODES } from "@config/constants";
+import { API_ROUTES } from "@config/routes";
+import { getError } from "@lib/error";
 import { AuthService } from "@lib/services";
-import type { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: NextApiRequest, res: NextApiResponse) {
-  const data = req.body;
+export async function POST(req: NextRequest) {
   try {
-    await AuthService.signUpWithEmail(data);
-    res.status(HTTP_CODES.OK).json({ success: true });
+    const body = await req.json();
+
+    await AuthService.signUpWithEmail(body);
+
+    return NextResponse.json(
+      { message: "Signed up successfully" },
+      { status: HTTP_CODES.OK },
+    );
   } catch (error) {
-    res
-      .status(HTTP_CODES.UNAUTHORIZED)
-      .json({ success: false, message: error });
+    return getError(error as Error, API_ROUTES.SIGNUP);
   }
 }

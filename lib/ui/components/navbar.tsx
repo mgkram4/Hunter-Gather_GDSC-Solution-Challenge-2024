@@ -5,7 +5,7 @@ import { supabase } from "@lib/supabase";
 import { CLIENT_ROUTES } from "@config/routes";
 
 export default async function Navbar() {
-  const email = (await supabase.auth.getUser()).data.user?.email;
+  const user = await supabase.auth.getUser();
 
   return (
     <div className="bg-white border-gray-200 m-2">
@@ -40,7 +40,7 @@ export default async function Navbar() {
             <li>
               <Link href={CLIENT_ROUTES.SIGNIN}>
                 <button className="block text-white hover:bg-green-700 p-2 rounded-xl bg-green-600 ">
-                  {email || "Login"}
+                  {user.data.user?.email || "Login"}
                 </button>
               </Link>
             </li>

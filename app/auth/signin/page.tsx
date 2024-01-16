@@ -1,14 +1,17 @@
 "use client";
 
-import { SERVER_ROUTES } from "@config/routes";
+import { CLIENT_ROUTES, API_ROUTES } from "@config/routes";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function SignIn() {
+  const router = useRouter();
+
   const [error, setError] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSignUpWithEmail = async (e: any) => {
+  const handleSignInWithEmail = async (e: any) => {
     e.preventDefault();
     setError("");
 
@@ -17,7 +20,7 @@ export default function SignIn() {
       password,
     });
 
-    const req = await fetch(SERVER_ROUTES.SIGNIN, {
+    const req = await fetch(API_ROUTES.SIGNIN, {
       method: "POST",
       body,
     });
@@ -26,6 +29,8 @@ export default function SignIn() {
 
     if (!req.ok) {
       setError(res.message);
+    } else {
+      router.push(CLIENT_ROUTES.HOME);
     }
   };
   return (
@@ -56,7 +61,7 @@ export default function SignIn() {
           </label>
 
           <button
-            onClick={handleSignUpWithEmail}
+            onClick={handleSignInWithEmail}
             className="bg-green-500 text-white p-2 rounded hover:bg-green-600 cursor-pointer"
           >
             Login
