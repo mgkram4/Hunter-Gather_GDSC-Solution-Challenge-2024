@@ -1,12 +1,9 @@
 "use client";
 
-import { CLIENT_ROUTES, API_ROUTES } from "@config/routes";
-import { useRouter } from "next/navigation";
+import { API_ROUTES, CLIENT_ROUTES } from "@config/routes";
 import { useState } from "react";
 
 export default function SignIn() {
-  const router = useRouter();
-
   const [error, setError] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -30,7 +27,8 @@ export default function SignIn() {
     if (!req.ok) {
       setError(res.message);
     } else {
-      router.push(CLIENT_ROUTES.HOME);
+      // force a hard reload here to update the navbar
+      window.location.href = CLIENT_ROUTES.HOME;
     }
   };
   return (

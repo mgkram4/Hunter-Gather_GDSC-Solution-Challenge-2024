@@ -1,11 +1,9 @@
 "use client";
 
 import { API_ROUTES, CLIENT_ROUTES } from "@config/routes";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function SignUp() {
-  const router = useRouter();
   const [error, setError] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -29,7 +27,8 @@ export default function SignUp() {
     if (!req.ok) {
       setError(res.message);
     } else {
-      router.push(CLIENT_ROUTES.HOME);
+      // TODO: redirect to the taste profile page
+      window.location.href = CLIENT_ROUTES.HOME;
     }
   };
 
