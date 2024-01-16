@@ -14,20 +14,21 @@ export async function GET(request: Request) {
     const requestUrl = new URL(request.url);
     const code = requestUrl.searchParams.get("code");
     const isSignup = requestUrl.searchParams.get("isSignup");
+    const provider = requestUrl.searchParams.get("provider");
 
     if (code) {
       const cookieStore = cookies();
       const supabase = createClient(cookieStore);
       await supabase.auth.exchangeCodeForSession(code);
 
-      if (Boolean(isSignup)) {
+      if (isSignup === "true") {
         const user = await supabase.auth.getUser();
         const data = user.data.user!;
 
         const body: NewUser = {
           uuid: data.id,
           email: data.email!,
-          authMethod: data.app_metadata.provider as AUTH_METHODS,
+          authMethod: provider as AUTH_METHODS,
         };
 
         await supabase.from("Users").insert<NewUser>(body);
@@ -37,5 +38,6 @@ export async function GET(request: Request) {
     return NextResponse.redirect(`${BASE_URL}${ROUTES.HOME}`);
   } catch (error) {
     console.log(error);
+    return NextResponse.redirect(`${BASE_URL}${ROUTES.HOME}`);
   }
 }

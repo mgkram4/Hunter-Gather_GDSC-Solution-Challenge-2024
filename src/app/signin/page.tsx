@@ -1,4 +1,5 @@
 import { signInWithEmailAction } from "@/src/actions/auth/signup/actions";
+import XSignInButton from "@/src/components/button/x-signin";
 import GoogleSignInButton from "@components/button/g-signin";
 
 interface SignUpProps {
@@ -37,6 +38,8 @@ export default function SignIn({ searchParams }: SignUpProps) {
             Sign In
           </button>
           <GoogleSignInButton isSignUp={false} />
+          <XSignInButton isSignUp={false} />
+
           <p className="text-red-500 text-center font-bold">
             {searchParams?.error}
           </p>

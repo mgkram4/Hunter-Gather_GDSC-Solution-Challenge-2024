@@ -16,7 +16,7 @@ export default function GoogleSignInButton({
     await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${BASE_URL}${API_ROUTES.AUTH_CALLBACK}?isSignup=${isSignUp}`,
+        redirectTo: `${BASE_URL}${API_ROUTES.AUTH_CALLBACK}?isSignup=${isSignUp}&provider=google`,
       },
     });
   };
