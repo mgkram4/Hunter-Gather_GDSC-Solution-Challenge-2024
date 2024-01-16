@@ -11,6 +11,11 @@ export enum AUTH_METHODS {
   X = "x",
 }
 
+/**
+ * Server action for signing up with email and password.
+ *
+ * @param {FormData} formData
+ */
 export const signUpWithEmailAction = async (formData: FormData) => {
   "use server";
 
@@ -51,6 +56,11 @@ export const signUpWithEmailAction = async (formData: FormData) => {
   redirect(ROUTES.HOME);
 };
 
+/**
+ * Server action for signing in with email and password.
+ *
+ * @param formData
+ */
 export const signInWithEmailAction = async (formData: FormData) => {
   "use server";
 

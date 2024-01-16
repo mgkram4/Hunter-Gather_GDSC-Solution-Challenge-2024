@@ -6,6 +6,12 @@ import { ROUTES } from "@/src/config/routes";
 import { NewUser } from "@/src/types/tables";
 import { AUTH_METHODS } from "@/src/actions/auth/signup/actions";
 
+/**
+ * Handler function for processing the callback from the OAuth provider.
+ *
+ * @param {Request} request
+ * @returns {NextResponse}
+ */
 export async function GET(request: Request) {
   // The `/auth/callback` route is required for the server-side auth flow implemented
   // by the Auth Helpers package. It exchanges an auth code for the user's session.
