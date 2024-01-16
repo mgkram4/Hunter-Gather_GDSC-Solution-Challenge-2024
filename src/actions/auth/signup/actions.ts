@@ -29,7 +29,7 @@ export const signUpWithEmailAction = async (formData: FormData) => {
     switch (auth.error.message) {
       case "User already registered":
         redirect(
-          `${ROUTES.SIGNUP}?error=A user with this email already exists.`
+          `${ROUTES.SIGNUP}?error=A user with this email already exists.`,
         );
       default:
         redirect(`${ROUTES.SIGNUP}?error=An unknown error occurred.`);
