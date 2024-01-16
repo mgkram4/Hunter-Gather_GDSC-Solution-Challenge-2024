@@ -1,3 +1,5 @@
+"use server";
+
 import { NewUser } from "@api/models/users";
 import { UserService } from ".";
 import { supabase } from "@api/supabase";
@@ -8,22 +10,26 @@ import { supabase } from "@api/supabase";
  * @param password
  * @returns
  */
-export const signupWithEmail = async (email: string, password: string) => {
+export const signUpWithEmail = async (formData: FormData) => {
+  const email = formData.get("email");
+  const password = formData.get("password");
+
   try {
-    const data: NewUser = {
-      email,
-      password,
-      authMethod: "traditional",
-    };
-    const user = await UserService.createUser(data);
+    if (!email || !password) {
+      throw new Error("Email and password are required");
+    } else {
+      const user = await supabase.auth.signUp({
+        email: email as string,
+        password: password as string,
+      });
 
-    supabase.auth.signUp({
-      email,
-      password,
-    });
-
-    return user;
+      await UserService.createUser({
+        uuid: user.data.user?.id as string,
+        email: email as string,
+      });
+    }
   } catch (error) {
+    // TODO form error handling
     console.log(error);
   }
 };

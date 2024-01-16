@@ -1,7 +1,7 @@
 import { RxHamburgerMenu } from "react-icons/rx";
 import { PiCookingPotLight } from "react-icons/pi";
 import Link from "next/link";
-import routes from "app/routes/routes";
+import routes from "@config/routes";
 
 export default function Navbar() {
   return (

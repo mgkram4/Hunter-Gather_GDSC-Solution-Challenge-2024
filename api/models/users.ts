@@ -11,11 +11,11 @@ export const authMethod = pgEnum("auth_method", [
 
 export const users = pgTable("Users", {
   id: serial("id").primaryKey(),
+  uuid: text("uuid").notNull().unique(),
   firstName: varchar("firstName", { length: 255 }),
   lastName: varchar("lastName", { length: 255 }),
   profilePicture: text("profilePicture"),
   email: varchar("email", { length: 255 }).notNull().unique(),
-  password: varchar("password", { length: 255 }),
   authMethod: authMethod("authMethod").default("traditional").notNull(),
   createdAt: timestamp("createdAt")
     .notNull()

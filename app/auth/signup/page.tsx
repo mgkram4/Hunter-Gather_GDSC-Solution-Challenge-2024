@@ -1,23 +1,17 @@
-"use client";
-
-import React, { useState } from "react";
+import { signUpWithEmail } from "@api/services/auth";
 
 export default function SignUp() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
   return (
     <div className="flex items-center justify-center ">
       <div className="max-w-sm mx-auto mt-8 p-4 bg-white rounded shadow-md">
         <h2 className="text-2xl font-bold mb-4">Sign Up</h2>
-        <form className="grid grid-cols-1 gap-4" onSubmit={(e) => {}}>
+        <form className="grid grid-cols-1 gap-4" action={signUpWithEmail}>
           <label className="block">
             Email:
             <input
               type="email"
               className="mt-1 p-2 w-full border rounded"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              name="email"
               required
             />
           </label>
@@ -27,8 +21,7 @@ export default function SignUp() {
             <input
               type="password"
               className="mt-1 p-2 w-full border rounded"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              name="password"
               required
             />
           </label>
