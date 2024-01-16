@@ -20,8 +20,9 @@
       }
     ],
     "paths": {
-      "@components/*": ["lib/components/*"],
+      "@components/*": ["lib/ui/components/*"],
       "@config/*": ["config/*"],
+      "@lib/*": ["lib/*"],
       "@api/*": ["api/*"]
     }
   },

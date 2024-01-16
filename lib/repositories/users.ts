@@ -1,5 +1,5 @@
-import { db } from "@api/drizzle";
-import { NewUser, users } from "@api/models/users";
+import { db } from "@lib/drizzle";
+import { NewUser, users } from "@lib/models/users";
 import { eq } from "drizzle-orm";
 
 /**

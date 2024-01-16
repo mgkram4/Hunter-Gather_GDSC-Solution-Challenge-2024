@@ -1,23 +1,34 @@
 "use client";
 
-import { supabase } from "@api/supabase";
-import React, { useState } from "react";
+import { API_ROUTES, CLIENT_ROUTES } from "@config/routes";
+import { useState } from "react";
 
 export default function SignUp() {
+  const [error, setError] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const signUpNewUser = async () => {
-    const { data, error } = await supabase.auth.signUp({
+  const handleSignUpWithEmail = async (e: any) => {
+    e.preventDefault();
+    setError("");
+
+    const body = JSON.stringify({
       email,
       password,
-      options: {},
     });
 
-    if (error) {
-      console.error("Sign-up error:", error.message);
+    const req = await fetch(API_ROUTES.SIGNUP, {
+      method: "POST",
+      body,
+    });
+
+    const res = await req.json();
+
+    if (!req.ok) {
+      setError(res.message);
     } else {
-      console.log("Sign-up successful:", data);
+      // TODO: redirect to the taste profile page
+      window.location.href = CLIENT_ROUTES.HOME;
     }
   };
 
@@ -25,19 +36,13 @@ export default function SignUp() {
     <div className="flex items-center justify-center ">
       <div className="max-w-sm mx-auto mt-8 p-4 bg-white rounded shadow-md">
         <h2 className="text-2xl font-bold mb-4">Sign Up</h2>
-        <form
-          className="grid grid-cols-1 gap-4"
-          onSubmit={(e) => {
-            e.preventDefault();
-            signUpNewUser();
-          }}
-        >
+        <form className="grid grid-cols-1 gap-4">
           <label className="block">
             Email:
             <input
               type="email"
               className="mt-1 p-2 w-full border rounded"
-              value={email}
+              name="email"
               onChange={(e) => setEmail(e.target.value)}
               required
             />
@@ -48,19 +53,20 @@ export default function SignUp() {
             <input
               type="password"
               className="mt-1 p-2 w-full border rounded"
-              value={password}
+              name="password"
               onChange={(e) => setPassword(e.target.value)}
               required
             />
           </label>
 
           <button
-            type="submit"
+            onClick={handleSignUpWithEmail}
             className="bg-green-500 text-white p-2 rounded hover:bg-green-600 cursor-pointer"
           >
             Sign Up
           </button>
         </form>
+        <p>{error}</p>
       </div>
     </div>
   );
