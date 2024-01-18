@@ -1,15 +1,21 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
+import { createClient } from "https://esm.sh/@supabase/supabase-js";
 import { Database } from "../_shared/types/supabase.ts";
+import similarity from "https://esm.sh/compute-cosine-similarity@1.1.0";
+
+const SUPABASE_URL = Deno.env.get("LOCAL_SUPABASE_URL") || Deno.env.get("SUPABASE_URL") || "";
+const SUPABASE_ANON_KEY = Deno.env.get("LOCAL_SUPABASE_ANON_KEY") || Deno.env.get("SUPABASE_ANON_KEY") || "";
+
+const calculateSimilarity = (x: number[], y: number[]) => {
+  return similarity(x, y);
+}
 
 Deno.serve(async (req) => {
   const authHeader = req.headers.get("Authorization");
 
   const supabaseClient = createClient<Database>(
-    Deno.env.get("SUPABASE_URL") ?? "",
-    Deno.env.get("SUPABASE_ANON_KEY") ?? "",
+    SUPABASE_URL, SUPABASE_ANON_KEY,
     {
       global: { headers: { Authorization: authHeader! } },
-      db: { schema: "public" },
     },
   );
 
@@ -26,12 +32,45 @@ Deno.serve(async (req) => {
   
   
   */
+  const userTasteProfiles = await supabaseClient
+    .from("user_taste_profiles")
+    .select("bitterness, saltiness, sweetness, sourness, spiciness");
 
-  const tasteProfile = await supabaseClient
-    .from("UserTasteProfiles")
-    .select("*");
 
-  return new Response(JSON.stringify(tasteProfile), {
+  const recipes = await supabaseClient.from("recipes").select("*");
+
+  const recipeTasteProfiles = await Promise.all(recipes.data!.map(async (recipe) => {
+    const recipeTasteProfile = await supabaseClient
+      .from("recipe_taste_profiles")
+      .select("bitterness, saltiness, sweetness, sourness, spiciness")
+      .eq("recipe_id", recipe.id);
+
+
+    const values = [
+      recipeTasteProfile.data![0].bitterness,
+      recipeTasteProfile.data![0].saltiness,
+      recipeTasteProfile.data![0].sweetness,
+      recipeTasteProfile.data![0].sourness,
+      recipeTasteProfile.data![0].spiciness,
+    ]
+
+    return values;
+  }));
+
+  const userValues = [
+    userTasteProfiles.data![0].bitterness,
+    userTasteProfiles.data![0].saltiness,
+    userTasteProfiles.data![0].sweetness,
+    userTasteProfiles.data![0].sourness,
+    userTasteProfiles.data![0].spiciness,
+  ]
+
+  const similarityScores = recipeTasteProfiles.map((recipeTasteProfile) => {
+    return calculateSimilarity(userValues, recipeTasteProfile);
+  })
+  
+
+  return new Response(JSON.stringify(similarityScores), {
     headers: { "Content-Type": "application/json" },
   });
 });
