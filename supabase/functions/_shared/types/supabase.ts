@@ -87,24 +87,21 @@ export interface Database {
         Row: {
           created_at: string
           id: number
-          name: string
-          quantity: string
+          items: Json
           recipe_id: number
           updated_at: string
         }
         Insert: {
           created_at?: string
           id?: number
-          name: string
-          quantity: string
+          items?: Json
           recipe_id: number
           updated_at?: string
         }
         Update: {
           created_at?: string
           id?: number
-          name?: string
-          quantity?: string
+          items?: Json
           recipe_id?: number
           updated_at?: string
         }
