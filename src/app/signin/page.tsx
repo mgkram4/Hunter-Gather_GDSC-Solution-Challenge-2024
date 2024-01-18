@@ -1,5 +1,5 @@
-import { signInWithEmailAction } from "@/src/actions/auth/signup/actions";
-import XSignInButton from "@/src/components/button/x-signin";
+import { signInWithEmailAction } from "@actions/auth/signup/actions";
+import XSignInButton from "@components/button/x-signin";
 import GoogleSignInButton from "@components/button/g-signin";
 import Link from "next/link";
 import { PiCookingPotLight } from "react-icons/pi";
@@ -64,7 +64,7 @@ export default function SignIn({ searchParams }: SignUpProps) {
             {searchParams?.error}
           </p>
         </form>
-        <Link href="/">
+        <Link href="/signup">
           <h3 className="flex mt-2 items-center justify-center text-gray-400 cursor-pointer hover:underline">
             New? Sign Up!
           </h3>
