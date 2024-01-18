@@ -4,6 +4,7 @@ interface UserProfile {
   handle: string;
   bio: string;
   isCurrentUser: boolean; // Indicates if the profile belongs to the signed-in user
+  tasteProfile?: UserTasteProfile;
 }
 
 // Dummy data for user's taste profile
@@ -17,6 +18,7 @@ const UserProfileInfo = ({
   handle,
   bio,
   isCurrentUser,
+  tasteProfile,
 }: UserProfile) => {
   return (
     <div className="flex flex-col md:flex-row md:items-start space-y-4 md:space-y-0 md:space-x-6">
@@ -58,7 +60,17 @@ const UserProfileInfo = ({
           </div>
         </div>
         {/* Creator Taste Profile */}
-        <div>{/* Map and display tastes */}</div>
+        <div className="mt-4">
+          {tasteProfile &&
+            tasteProfile.tastes.map((taste, index) => (
+              <div
+                key={index}
+                className="inline-block bg-green-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-200 mr-2"
+              >
+                #{taste}
+              </div>
+            ))}
+        </div>
         {/* Bio/Description section */}
         <div className="mt-4">
           <p>{bio}</p>
@@ -69,38 +81,25 @@ const UserProfileInfo = ({
 };
 
 // Main ProfilePage component
-const ProfilePage = () => {
+export const ProfilePage = () => {
+  // Dummy user taste profile data
+  const userTasteProfile: UserTasteProfile = {
+    tastes: ["Salty", "Spicy", "Sweet"],
+  };
+
   // Dummy user profile data
   const userProfile: UserProfile = {
     username: "JaneDoe",
     handle: "@janedoe",
     bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    isCurrentUser: true, // This should be determined by your auth logic
-  };
-
-  // Dummy user taste profile data
-  const userTasteProfile: UserTasteProfile = {
-    tastes: ["Salty", "Spicy", "Sweet"], // Replace with actual data
+    isCurrentUser: true,
+    tasteProfile: userTasteProfile,
   };
 
   return (
-    <main className="p-4">
+    <div className="p-4">
       <UserProfileInfo {...userProfile} />
-      {/* User's Taste Profile */}
-      <div className="mt-4">
-        {userTasteProfile.tastes.map((taste, index) => (
-          <span
-            key={index}
-            className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
-          >
-            #{taste}
-          </span>
-        ))}
-      </div>
-      {/* Bio/Description and the rest of the profile content */}
-      {/* ... */}
-    </main>
+      {/* Posts/Recipes */}
+    </div>
   );
 };
-
-export default ProfilePage;
