@@ -21,19 +21,21 @@ const UserProfileInfo = ({
   tasteProfile,
 }: UserProfile) => {
   return (
-    <div className="flex flex-col md:flex-row md:items-start space-y-4 md:space-y-0 md:space-x-6">
-      <div className="space-y-3">
-        {/* Profile picture, username and handle */}
+    <div className="flex flex-row items-center justify-center">
+      {/* Profile picture, username, handle, and buttons */}
+      <div className="flex flex-col items-center">
         <img
           alt={`${username}'s profile`}
+          src="/path-to-profile-image.jpg" // Placeholder for the profile image path
           className="w-24 h-24 rounded-full object-cover"
         />
-        <h1 className="text-xl font-bold">{username}</h1>
-        <p className="text-gray-500">{handle}</p>
-        {/* Settings and Share buttons, conditionally rendered */}
+        <div>
+          <h1 className="text-2xl font-bold">{username}</h1>
+          <p className="text-gray-500">{handle}</p>
+        </div>
         {isCurrentUser && (
-          <div className="flex space-x-2">
-            <button className="bg-green-400 text-white px-4 py-2 rounded-lg">
+          <div className="flex mt-4 md:mt-0">
+            <button className="bg-green-400 text-white px-4 py-2 rounded-lg mr-2">
               Settings
             </button>
             <button className="bg-green-400 text-white px-4 py-2 rounded-lg">
@@ -43,9 +45,10 @@ const UserProfileInfo = ({
         )}
       </div>
 
-      <div className="flex-1 space-y-3">
-        {/* Recipe, Followers, and Following displays/buttons */}
-        <div className="flex justify-between">
+      {/* Stats and Taste Profile */}
+      <div className="mt-4 md:mt-0 md:flex md:items-center md:space-x-6">
+        <div className="flex justify-between space-x-4">
+          {/* Stats */}
           <div className="text-center">
             <p className="text-lg font-bold">Recipes</p>
             {/* Number of recipes */}
@@ -59,21 +62,16 @@ const UserProfileInfo = ({
             {/* Number of followings */}
           </div>
         </div>
-        {/* Creator Taste Profile */}
-        <div className="mt-4">
-          {tasteProfile &&
-            tasteProfile.tastes.map((taste, index) => (
-              <div
-                key={index}
-                className="inline-block bg-green-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-200 mr-2"
-              >
-                #{taste}
-              </div>
-            ))}
-        </div>
-        {/* Bio/Description section */}
-        <div className="mt-4">
-          <p>{bio}</p>
+        {/* Taste Tags */}
+        <div className="flex flex-wrap mt-4 md:mt-0">
+          {tasteProfile?.tastes.map((taste, index) => (
+            <div
+              key={index}
+              className="bg-green-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-200 mr-2 mb-2"
+            >
+              #{taste}
+            </div>
+          ))}
         </div>
       </div>
     </div>
@@ -81,7 +79,7 @@ const UserProfileInfo = ({
 };
 
 // Main ProfilePage component
-export const ProfilePage = () => {
+const ProfilePage = () => {
   // Dummy user taste profile data
   const userTasteProfile: UserTasteProfile = {
     tastes: ["Salty", "Spicy", "Sweet"],
@@ -97,9 +95,11 @@ export const ProfilePage = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className="p-4 min-h-screen">
       <UserProfileInfo {...userProfile} />
       {/* Posts/Recipes */}
     </div>
   );
 };
+
+export default ProfilePage;
