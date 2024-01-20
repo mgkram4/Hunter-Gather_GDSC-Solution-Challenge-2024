@@ -3,6 +3,7 @@
 import { BASE_URL } from "@/src/config/constants";
 import { API_ROUTES, ROUTES } from "@/src/config/routes";
 import { createClient } from "@/src/utils/supabase/client";
+import { FaXTwitter } from "react-icons/fa6";
 
 export interface XSignInButtonProps {
   isSignUp?: boolean;
@@ -22,9 +23,9 @@ export default function XSignInButton({ isSignUp }: XSignInButtonProps) {
   return (
     <button
       onClick={signInWithX}
-      className="text-gray-600 p-2 rounded cursor-pointer border-2 border-gray-600"
+      className="flex items-center justify-center text-gray-600 p-2 rounded cursor-pointer border-2 border-gray-600  hover:opacity-70"
     >
-      Continue with X
+      <FaXTwitter className="text-2xl mr-2" /> Continue with X
     </button>
   );
 }
