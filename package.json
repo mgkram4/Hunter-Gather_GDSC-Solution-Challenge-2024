@@ -8,9 +8,10 @@
     "precommit": "npx prettier --write . && git add ."
   },
   "dependencies": {
-    "@supabase/ssr": "latest",
+    "@supabase/ssr": "^0.0.10",
     "@supabase/supabase-js": "latest",
     "autoprefixer": "10.4.15",
+    "date-fns": "^3.2.0",
     "geist": "^1.0.0",
     "husky": "^8.0.3",
     "next": "latest",

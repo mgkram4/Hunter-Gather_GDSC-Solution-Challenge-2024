@@ -35,12 +35,11 @@ export default async function Navbar() {
               </a>
             </li>
             <li>
-              <a
-                href="#"
-                className="block text-gray-900 p-2  hover:text-green-500 "
-              >
-                Recipes
-              </a>
+              <Link href={ROUTES.RECIPE}>
+                <div className="block text-gray-900 p-2  hover:text-green-500 ">
+                  Recipes
+                </div>
+              </Link>
             </li>
             <li>
               {email ? (
