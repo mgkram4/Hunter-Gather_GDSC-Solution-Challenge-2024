@@ -1,26 +1,34 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js";
 import { Database } from "../_shared/types/types.ts";
-import { SUPABASE_ANON_KEY, SUPABASE_URL } from "../_shared/types/constants.ts";
+import { SUPABASE_ANON_KEY, SUPABASE_URL } from "../_shared/constants.ts";
+import {
+  env,
+  pipeline,
+} from "https://cdn.jsdelivr.net/npm/@xenova/transformers@2.5.0";
+import { RecommendationService } from "./service.ts";
+
+// Configuration for Deno runtime
+env.useBrowserCache = false;
+env.allowLocalModels = false;
 
 /**
- * Serverless function for generating the recipe embeddings.
+ * Serverless function for generating recipe recommendations
  */
 Deno.serve(async (req) => {
   const authHeader = req.headers.get("Authorization");
-  const supabaseClient = createClient<Database>(
-    SUPABASE_URL, SUPABASE_ANON_KEY,
+   const supabaseClient = createClient<Database>(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY,
     {
       global: { headers: { Authorization: authHeader! } },
-    },
+    }
   );
 
-  // generate the recipe embeddings for the row level fields
-  const recipes = await supabaseClient.from("recipes").select("*");
-  
+  // retrieve recently created recipes
+  const recipes = await RecommendationService(supabaseClient, 37);
 
   
-
-  return new Response(JSON.stringify(), {
+  return new Response(JSON.stringify(recipes), {
     headers: { "Content-Type": "application/json" },
   });
 });

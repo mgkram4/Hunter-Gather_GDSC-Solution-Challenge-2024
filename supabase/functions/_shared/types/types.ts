@@ -161,6 +161,7 @@ export interface Database {
         Row: {
           bitterness: number
           created_at: string
+          embeddings: string | null
           id: number
           recipe_id: number
           saltiness: number
@@ -173,6 +174,7 @@ export interface Database {
         Insert: {
           bitterness?: number
           created_at?: string
+          embeddings?: string | null
           id?: number
           recipe_id: number
           saltiness?: number
@@ -185,6 +187,7 @@ export interface Database {
         Update: {
           bitterness?: number
           created_at?: string
+          embeddings?: string | null
           id?: number
           recipe_id?: number
           saltiness?: number
@@ -206,16 +209,17 @@ export interface Database {
       }
       recipes: {
         Row: {
-          bookmarkCount: number
-          commentCount: number
+          bookmark_count: number
+          comment_count: number
           commentId: number | null
           created_at: string
           date_published: string
+          embeddings: string | null
           headliner_image: string | null
           id: number
           ingredientsId: number | null
-          instructions: string
-          ratingCount: number
+          instructions: Json
+          rating_count: number
           short_description: string | null
           taste_profile_id: number | null
           title: string
@@ -223,16 +227,17 @@ export interface Database {
           user_id: number
         }
         Insert: {
-          bookmarkCount?: number
-          commentCount?: number
+          bookmark_count?: number
+          comment_count?: number
           commentId?: number | null
           created_at?: string
           date_published: string
+          embeddings?: string | null
           headliner_image?: string | null
           id?: number
           ingredientsId?: number | null
-          instructions: string
-          ratingCount?: number
+          instructions?: Json
+          rating_count?: number
           short_description?: string | null
           taste_profile_id?: number | null
           title: string
@@ -240,16 +245,17 @@ export interface Database {
           user_id: number
         }
         Update: {
-          bookmarkCount?: number
-          commentCount?: number
+          bookmark_count?: number
+          comment_count?: number
           commentId?: number | null
           created_at?: string
           date_published?: string
+          embeddings?: string | null
           headliner_image?: string | null
           id?: number
           ingredientsId?: number | null
-          instructions?: string
-          ratingCount?: number
+          instructions?: Json
+          rating_count?: number
           short_description?: string | null
           taste_profile_id?: number | null
           title?: string
@@ -323,6 +329,7 @@ export interface Database {
         Row: {
           bitterness: number
           created_at: string
+          embeddings: string | null
           id: number
           saltiness: number
           savoriness: number
@@ -335,6 +342,7 @@ export interface Database {
         Insert: {
           bitterness?: number
           created_at?: string
+          embeddings?: string | null
           id?: number
           saltiness?: number
           savoriness?: number
@@ -347,6 +355,7 @@ export interface Database {
         Update: {
           bitterness?: number
           created_at?: string
+          embeddings?: string | null
           id?: number
           saltiness?: number
           savoriness?: number
