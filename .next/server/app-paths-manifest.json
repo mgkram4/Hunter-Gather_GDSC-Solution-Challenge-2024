@@ -1,4 +1,8 @@
 {
-  "/profile/page": "app/profile/page.js",
-  "/page": "app/page.js"
+  "/not-found": "app/not-found.js",
+  "/signin/page": "app/signin/page.js",
+  "/page": "app/page.js",
+  "/auth/callback/route": "app/auth/callback/route.js",
+  "/signup/page": "app/signup/page.js",
+  "/profile/page": "app/profile/page.js"
 }
