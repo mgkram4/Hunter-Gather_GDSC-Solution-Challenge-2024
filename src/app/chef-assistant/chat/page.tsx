@@ -1,5 +1,4 @@
 "use client";
-"use client";
 
 import { ROUTES } from "@/src/config/routes";
 import { createClient } from "@/src/utils/supabase/client";
@@ -34,7 +33,7 @@ export default function ChefAssistant() {
     await addDoc(messageCollectionRef, {});
 
     router.push(
-      `${ROUTES.CHEF_ASSISTANT}/uid/${data.user?.id}/cid/${newChatCollectionRef.id}`
+      `${ROUTES.CHEF_ASSISTANT}/${newChatCollectionRef.id}`
     );
   };
 

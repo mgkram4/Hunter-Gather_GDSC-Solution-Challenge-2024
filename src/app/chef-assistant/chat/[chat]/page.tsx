@@ -2,24 +2,29 @@
 
 import { ROUTES } from "@/src/config/routes";
 import { createClient } from "@/src/utils/supabase/client";
-import { update } from "firebase/database";
+import { on } from "events";
 import {
+  DocumentData,
+  QuerySnapshot,
   addDoc,
   collection,
   doc,
-  getFirestore,
+  getDocs,
+  onSnapshot,
   orderBy,
   query,
   updateDoc,
 } from "firebase/firestore";
+
+import { getFirestore } from "firebase/firestore";
+
 import { useParams, useRouter } from "next/navigation";
-import router from "next/router";
 import { useEffect, useState } from "react";
 import {
+  ObservableStatus,
   useFirebaseApp,
   useFirestore,
   useFirestoreCollection,
-  useFirestoreCollectionData,
 } from "reactfire";
 
 export default function ChefAssistant() {
@@ -27,27 +32,60 @@ export default function ChefAssistant() {
   const router = useRouter();
   const params = useParams();
   const db = useFirestore();
-  const [message, setMessage] = useState<string>("");
 
-  const chatsCollectionRef = collection(db, `users/${params.uid}/chats`);
-  const messageCollectionRef = collection(
-    db,
-    `users/${params.uid}/chats/${params.cid}/messages`
-  );
+  const [prompt, setPrompt] = useState<string>();
+  const [messages, setMessages] = useState<QuerySnapshot<DocumentData>>();
+  const [chats, setChats] = useState<QuerySnapshot<DocumentData>>();
+  const [userId, setUserId] = useState<string>("");
 
-  const chatsQuery = query(chatsCollectionRef, orderBy("createdAt", "desc"));
+  const loadData = async () => {
+    const { error, data } = await supabase.auth.getUser();
 
-  const messages = useFirestoreCollection(messageCollectionRef);
-  const chats = useFirestoreCollection(chatsQuery);
+    if (!data || error) {
+      router.push(
+        `${ROUTES.SIGNIN}?error=${"You must be signed in to access this page."}`
+      );
+    }
+    setUserId(data.user!.id);
+
+    const chatsCollectionRef = collection(db, `users/${data.user!.id}/chats`);
+    const messagesCollectionRef = collection(
+      db,
+      `users/${data.user!.id}/chats/${params.chat}/messages`
+    );
+    const messageDocs = await getDocs(messagesCollectionRef);
+
+    const chatsQuery = query(chatsCollectionRef, orderBy("createdAt", "desc"));
+    const chatsDocs = await getDocs(chatsQuery);
+
+    onSnapshot(messagesCollectionRef, (snapshot) => {
+      setMessages(snapshot);
+    });
+    onSnapshot(chatsQuery, (snapshot) => {
+      setChats(snapshot);
+    });
+
+    setChats(chatsDocs);
+    setMessages(messageDocs);
+  };
 
   const handleSendMessages = async () => {
-    await addDoc(messageCollectionRef, { prompt: message });
+    const messageCollectionRef = collection(
+      db,
+      `users/${userId}/chats/${params.chat}/messages`
+    );
 
-    await updateDoc(doc(db, `users/${params.uid}/chats/${params.cid}`), {
-      title: messages.data?.docs[0].data().prompt || message,
+    await addDoc(messageCollectionRef, { prompt: prompt });
+
+    await updateDoc(doc(db, `users/${userId}/chats/${params.chat}`), {
+      title: messages!.docs[messages!.docs.length - 1].data().prompt || prompt,
     });
-    setMessage("");
+    setPrompt("");
   };
+
+  useEffect(() => {
+    loadData();
+  }, []);
 
   return (
     <div className={"flex h-full"}>
@@ -61,7 +99,7 @@ export default function ChefAssistant() {
         >
           Start a new chat
         </button>
-        {chats.data?.docs.map((chat) => {
+        {chats?.docs.map((chat) => {
           return (
             <button
               className="border-2 border-gray-700 w-full"
@@ -79,7 +117,7 @@ export default function ChefAssistant() {
       <div className={"w-4/5 flex flex-col h-screen"}>
         <h1 className={"text-xl ml-2"}>Chef Assistant</h1>
         <div className={"overflow-scroll"}>
-          {messages.data?.docs.map((doc) => {
+          {messages?.docs.map((doc) => {
             return (
               doc.data().prompt && (
                 <div className="flow-root ml-2 mr-2 flex-grow">
@@ -111,11 +149,11 @@ export default function ChefAssistant() {
           <input
             className={"w-[90%]"}
             onChange={(e) => {
-              setMessage(e.target.value);
+              setPrompt(e.target.value);
             }}
             type="text"
             placeholder="Type here..."
-            value={message}
+            value={prompt}
           />
           <button className={"p-2"} onClick={handleSendMessages}>
             Send Message
