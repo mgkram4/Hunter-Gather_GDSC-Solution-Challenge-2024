@@ -1,16 +1,12 @@
 "use client";
+"use client";
 
 import { ROUTES } from "@/src/config/routes";
 import { createClient } from "@/src/utils/supabase/client";
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
-import { add } from "husky";
-import { redirect, useRouter } from "next/navigation";
+import { addDoc, collection } from "firebase/firestore";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import {
-  useFirebaseApp,
-  useFirestore,
-  useFirestoreCollectionData,
-} from "reactfire";
+import { useFirestore } from "reactfire";
 
 export default function ChefAssistant() {
   const router = useRouter();
@@ -27,12 +23,19 @@ export default function ChefAssistant() {
     }
 
     const chatCollectionRef = collection(db, `users/${data.user!.id}/chats`);
-    const newChatCollectionRef = await addDoc(chatCollectionRef, {});
-    const messageCollectionRef = collection(db, `users/${data.user!.id}/chats/${newChatCollectionRef.id}/messages`);
+    const newChatCollectionRef = await addDoc(chatCollectionRef, {
+      createdAt: new Date(),
+    });
+    const messageCollectionRef = collection(
+      db,
+      `users/${data.user!.id}/chats/${newChatCollectionRef.id}/messages`
+    );
 
     await addDoc(messageCollectionRef, {});
 
-    router.push(`${ROUTES.CHEF_ASSISTANT}/uid/${data.user?.id}/cid/${newChatCollectionRef.id}`);
+    router.push(
+      `${ROUTES.CHEF_ASSISTANT}/uid/${data.user?.id}/cid/${newChatCollectionRef.id}`
+    );
   };
 
   // get the current user
@@ -40,5 +43,5 @@ export default function ChefAssistant() {
     createChat();
   }, []);
 
-  return <>hi</>;
+  return <>Loading new chat...</>;
 }

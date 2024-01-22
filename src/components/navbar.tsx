@@ -1,3 +1,5 @@
+"use server";
+
 import { RxHamburgerMenu } from "react-icons/rx";
 import { PiCookingPotLight } from "react-icons/pi";
 import Link from "next/link";
