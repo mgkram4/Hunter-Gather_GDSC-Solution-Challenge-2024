@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <footer className="bg-white rounded-lg shadow m-4">
+    <footer className="bg-white rounded-lg shadow m-4 bottom-0">
       <div className="w-full max-w-screen-xl mx-auto p-4 md:py-8">
         <div className="sm:flex sm:items-center sm:justify-between">
           <span className="self-center text-2xl font-semibold whitespace-nowrap">
