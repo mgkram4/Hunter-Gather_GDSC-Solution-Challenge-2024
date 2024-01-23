@@ -1,3 +1,8 @@
+"use client";
+
+import { createClient } from "@utils/supabase/client";
+import { useEffect, useState } from "react";
+
 /*
 #TODO
 - [ ] Display dummy user profile stats
@@ -13,10 +18,10 @@
 
 // Dummy data types
 interface UserProfile {
-  username: string;
-  handle: string;
-  bio: string;
-  isCurrentUser: boolean; // Indicates if the profile belongs to the signed-in user
+  username: string | undefined;
+  handle: string | undefined;
+  bio: string | undefined;
+  isCurrentUser: boolean | undefined; // Indicates if the profile belongs to the signed-in user
   tasteProfile?: UserTasteProfile;
 }
 
@@ -26,27 +31,21 @@ interface UserTasteProfile {
 }
 
 // UserProfile component
-const UserProfileInfo = ({
-  username,
-  handle,
-  bio,
-  isCurrentUser,
-  tasteProfile,
-}: UserProfile) => {
+const UserProfileInfo = (props: UserProfile) => {
   return (
     <div className="flex flex-row items-center justify-evenly">
       {/* Profile picture, username, handle, and buttons */}
       <div className="flex flex-col items-center">
         <img
-          alt={`${username}'s profile`}
+          alt={`${props.username}'s profile`}
           src="/path-to-profile-image.jpg" // Placeholder for the profile image path
           className="w-24 h-24 rounded-full object-cover"
         />
         <div>
-          <h1 className="text-2xl font-bold">{username}</h1>
-          <p className="text-gray-500">{handle}</p>
+          <h1 className="text-2xl font-bold">{props.username}</h1>
+          <p className="text-gray-500">{props.handle}</p>
         </div>
-        {isCurrentUser && (
+        {props.isCurrentUser && (
           <div className="flex mt-4 md:mt-0 p-8">
             <button className="bg-green-400 text-white px-4 py-2 rounded-lg mr-2">
               Settings
@@ -76,11 +75,13 @@ const UserProfileInfo = ({
             {/* Number of followings */}
           </div>
         </div>
-        <div className="flex justify-between space-x-4 m-4 p-2">{bio}</div>
+        <div className="flex justify-between space-x-4 m-4 p-2">
+          {props.bio}
+        </div>
       </div>
       {/* Taste Tags */}
       <div className="flex flex-wrap mt-4 md:mt-0">
-        {tasteProfile?.tastes.map((taste, index) => (
+        {props.tasteProfile?.tastes.map((taste, index) => (
           <div
             key={index}
             className="bg-green-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-200 mr-2 mb-2"
@@ -93,25 +94,80 @@ const UserProfileInfo = ({
   );
 };
 
+interface ProfilePageProps {
+  isSignedIn: boolean;
+}
+
 // Main ProfilePage component
-const ProfilePage = () => {
+const ProfilePage = ({ isSignedIn }: ProfilePageProps) => {
+  const [signedIn, setSignedIn] = useState<boolean>(false);
+  const [isCurrentUser, setIsCurrentUser] = useState<boolean>(false);
+  const [profilePicture, setProfilePicture] = useState<string | undefined>();
+  const [username, setUsername] = useState<string | undefined>(undefined);
+  const [handle, setHandle] = useState<string | undefined>(undefined);
+  const [bio, setBio] = useState<string | undefined>(undefined);
+  const [tasteProfile, setTasteProfile] = useState<string[]>([]);
+
+  // Supabase data
+  const supabase = createClient();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const { error, data } = await supabase
+          .from("users")
+          .select("*")
+          .eq("id", "41");
+        if (error) console.log(error);
+        else {
+          console.log(data);
+          setUsername(data[0].username);
+          setHandle(data[0].handle);
+          setBio(data[0].bio);
+          setProfilePicture(data[0].profilePicture);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
   // Dummy user taste profile data
+  /*
   const userTasteProfile: UserTasteProfile = {
     tastes: ["Salty", "Spicy", "Sweet"],
   };
+  */
 
   // Dummy user profile data
+  /*
   const userProfile: UserProfile = {
+    isCurrentUser: true,
     username: "JaneDoe",
     handle: "@janedoe",
     bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    isCurrentUser: true,
     tasteProfile: userTasteProfile,
+  };
+  */
+
+  const userProfile: UserProfile = {
+    isCurrentUser: false,
+    username: username,
+    handle: handle,
+    bio: bio,
   };
 
   return (
     <div className="p-4 min-h-screen">
-      <UserProfileInfo {...userProfile} />
+      <UserProfileInfo
+        isCurrentUser={userProfile.isCurrentUser}
+        username={userProfile.username}
+        handle={userProfile.handle}
+        bio={userProfile.bio}
+        tasteProfile={userProfile.tasteProfile}
+      />
       {/* Posts/Recipes */}
     </div>
   );
