@@ -1,7 +1,7 @@
 "use client";
 
 import { FirebaseAppProvider } from "reactfire";
-import { FIREBASE_CONFIG } from "@/src/config/constants";
+import { FIREBASE_CONFIG } from "@config/constants";
 
 export default function ChefAssistantLayout({
   children,

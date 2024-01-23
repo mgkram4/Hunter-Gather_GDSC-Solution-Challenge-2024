@@ -1,25 +1,10 @@
+"use server";
+
 import { redirect } from "next/navigation";
-import { ROUTES } from "@/src/config/routes";
+import { ROUTES } from "@config/routes";
 import { NewUser } from "@/supabase/functions/_shared/types/tables";
-import { AuthHelpers } from "@/src/utils/helpers";
-
-export enum AUTH_METHODS {
-  GOOGLE = "google",
-  FACEBOOK = "facebook",
-  TRADITIONAL = "traditional",
-  X = "x",
-}
-
-const enum ERROR_MESSAGES {
-  ALREADY_REGISTERED = "User already registered",
-  ALREADY_REGISTERED_POSTGRES = 'duplicate key value violates unique constraint "Users_pkey"',
-  INVALID_LOGIN_CREDENTIALS = "Invalid login credentials",
-}
-const enum ERROR_RESPONSES {
-  ALREADY_REGISTERED = "A user with this email already exists.",
-  UNKNOWN = "An unknown error occurred.",
-  INVALID_LOGIN_CREDENTIALS = "Invalid email/password combination.",
-}
+import { AuthHelpers } from "@utils/helpers/auth";
+import { ERROR_MESSAGES, ERROR_RESPONSES } from "@utils/helpers/auth/enums";
 
 /**
  * Server action for signing up with email and password.
