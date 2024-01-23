@@ -1,14 +1,24 @@
-import { cookies } from "next/headers";
-import { createClient } from "@utils/supabase/server";
 import { redirect } from "next/navigation";
 import { ROUTES } from "@/src/config/routes";
 import { NewUser } from "@/supabase/functions/_shared/types/tables";
+import { AuthHelpers } from "@/src/utils/helpers";
 
 export enum AUTH_METHODS {
   GOOGLE = "google",
   FACEBOOK = "facebook",
   TRADITIONAL = "traditional",
   X = "x",
+}
+
+const enum ERROR_MESSAGES {
+  ALREADY_REGISTERED = "User already registered",
+  ALREADY_REGISTERED_POSTGRES = 'duplicate key value violates unique constraint "Users_pkey"',
+  INVALID_LOGIN_CREDENTIALS = "Invalid login credentials",
+}
+const enum ERROR_RESPONSES {
+  ALREADY_REGISTERED = "A user with this email already exists.",
+  UNKNOWN = "An unknown error occurred.",
+  INVALID_LOGIN_CREDENTIALS = "Invalid email/password combination.",
 }
 
 /**
@@ -19,11 +29,8 @@ export enum AUTH_METHODS {
 export const signUpWithEmailAction = async (formData: FormData) => {
   "use server";
 
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
-
-  const email = formData.get("email") as string;
-  const password = formData.get("password") as string;
+  const supabase = AuthHelpers.getSupabaseClient();
+  const { email, password } = AuthHelpers.getTradtionalAuthFormData(formData);
 
   const auth = await supabase.auth.signUp({
     email,
@@ -32,12 +39,12 @@ export const signUpWithEmailAction = async (formData: FormData) => {
 
   if (auth.error) {
     switch (auth.error.message) {
-      case "User already registered":
+      case ERROR_MESSAGES.ALREADY_REGISTERED:
         redirect(
-          `${ROUTES.SIGNUP}?error=A user with this email already exists.`,
+          `${ROUTES.SIGNUP}?error=${ERROR_RESPONSES.ALREADY_REGISTERED}`,
         );
       default:
-        redirect(`${ROUTES.SIGNUP}?error=An unknown error occurred.`);
+        redirect(`${ROUTES.SIGNUP}?error=${ERROR_RESPONSES.UNKNOWN}`);
     }
   }
 
@@ -48,8 +55,10 @@ export const signUpWithEmailAction = async (formData: FormData) => {
 
   if (db.error) {
     switch (db.error.message) {
-      case 'duplicate key value violates unique constraint "Users_pkey"':
-        redirect(`${ROUTES.SIGNUP}?error=This email is already in use.`);
+      case ERROR_MESSAGES.ALREADY_REGISTERED_POSTGRES:
+        redirect(
+          `${ROUTES.SIGNUP}?error=${ERROR_RESPONSES.ALREADY_REGISTERED}`,
+        );
     }
   }
 
@@ -64,11 +73,8 @@ export const signUpWithEmailAction = async (formData: FormData) => {
 export const signInWithEmailAction = async (formData: FormData) => {
   "use server";
 
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
-
-  const email = formData.get("email") as string;
-  const password = formData.get("password") as string;
+  const supabase = AuthHelpers.getSupabaseClient();
+  const { email, password } = AuthHelpers.getTradtionalAuthFormData(formData);
 
   const auth = await supabase.auth.signInWithPassword({
     email,
@@ -77,11 +83,13 @@ export const signInWithEmailAction = async (formData: FormData) => {
 
   if (auth.error) {
     switch (auth.error.message) {
-      case "Invalid login credentials":
-        redirect(`${ROUTES.SIGNIN}?error=Invalid email/password combination.`);
+      case ERROR_MESSAGES.INVALID_LOGIN_CREDENTIALS:
+        redirect(
+          `${ROUTES.SIGNIN}?error=${ERROR_RESPONSES.INVALID_LOGIN_CREDENTIALS}`,
+        );
       default:
         console.log(auth.error);
-        redirect(`${ROUTES.SIGNIN}?error=An unknown error occurred.`);
+        redirect(`${ROUTES.SIGNIN}?error=${ERROR_RESPONSES.UNKNOWN}`);
     }
   }
 
@@ -91,8 +99,7 @@ export const signInWithEmailAction = async (formData: FormData) => {
 export const signOutAction = async () => {
   "use server";
 
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = AuthHelpers.getSupabaseClient();
 
   const { error } = await supabase.auth.signOut();
 
