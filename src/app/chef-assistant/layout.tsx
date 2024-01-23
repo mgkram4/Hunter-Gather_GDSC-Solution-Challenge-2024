@@ -8,8 +8,9 @@ export default function ChefAssistantLayout({
 }: {
   children: React.ReactNode;
 }) {
- 
   return (
-    <FirebaseAppProvider firebaseConfig={FIREBASE_CONFIG}>{children}</FirebaseAppProvider>
+    <FirebaseAppProvider firebaseConfig={FIREBASE_CONFIG}>
+      {children}
+    </FirebaseAppProvider>
   );
 }

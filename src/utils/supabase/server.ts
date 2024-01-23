@@ -1,5 +1,5 @@
 import { SUPABASE_ANON_KEY, SUPABASE_URL } from "@/src/config/constants";
-import { Database } from "@/src/types/supabase";
+import { Database } from "@/supabase/functions/_shared/types/types";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { cookies } from "next/headers";
 

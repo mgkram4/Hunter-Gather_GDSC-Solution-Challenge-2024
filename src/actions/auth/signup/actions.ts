@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { createClient } from "@utils/supabase/server";
 import { redirect } from "next/navigation";
 import { ROUTES } from "@/src/config/routes";
-import { NewUser } from "@/src/types/tables";
+import { NewUser } from "@/supabase/functions/_shared/types/tables";
 
 export enum AUTH_METHODS {
   GOOGLE = "google",

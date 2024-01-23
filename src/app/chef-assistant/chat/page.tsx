@@ -17,7 +17,7 @@ export default function ChefAssistant() {
 
     if (!data || error) {
       router.push(
-        `${ROUTES.SIGNIN}?error=${"You must be signed in to access this page."}`
+        `${ROUTES.SIGNIN}?error=${"You must be signed in to access this page."}`,
       );
     }
 
@@ -27,14 +27,12 @@ export default function ChefAssistant() {
     });
     const messageCollectionRef = collection(
       db,
-      `users/${data.user!.id}/chats/${newChatCollectionRef.id}/messages`
+      `users/${data.user!.id}/chats/${newChatCollectionRef.id}/messages`,
     );
 
     await addDoc(messageCollectionRef, {});
 
-    router.push(
-      `${ROUTES.CHEF_ASSISTANT}/${newChatCollectionRef.id}`
-    );
+    router.push(`${ROUTES.CHEF_ASSISTANT}/${newChatCollectionRef.id}`);
   };
 
   // get the current user

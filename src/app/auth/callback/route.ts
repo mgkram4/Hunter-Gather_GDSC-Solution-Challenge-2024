@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { BASE_URL } from "@/src/config/constants";
 import { ROUTES } from "@/src/config/routes";
-import { NewUser } from "@/src/types/tables";
+import { NewUser } from "@/supabase/functions/_shared/types/tables";
 import { AUTH_METHODS } from "@/src/actions/auth/signup/actions";
 
 /**

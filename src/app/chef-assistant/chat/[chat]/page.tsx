@@ -43,7 +43,7 @@ export default function ChefAssistant() {
 
     if (!data || error) {
       router.push(
-        `${ROUTES.SIGNIN}?error=${"You must be signed in to access this page."}`
+        `${ROUTES.SIGNIN}?error=${"You must be signed in to access this page."}`,
       );
     }
     setUserId(data.user!.id);
@@ -51,7 +51,7 @@ export default function ChefAssistant() {
     const chatsCollectionRef = collection(db, `users/${data.user!.id}/chats`);
     const messagesCollectionRef = collection(
       db,
-      `users/${data.user!.id}/chats/${params.chat}/messages`
+      `users/${data.user!.id}/chats/${params.chat}/messages`,
     );
     const messageDocs = await getDocs(messagesCollectionRef);
 
@@ -72,7 +72,7 @@ export default function ChefAssistant() {
   const handleSendMessages = async () => {
     const messageCollectionRef = collection(
       db,
-      `users/${userId}/chats/${params.chat}/messages`
+      `users/${userId}/chats/${params.chat}/messages`,
     );
 
     await addDoc(messageCollectionRef, { prompt: prompt });
@@ -105,7 +105,7 @@ export default function ChefAssistant() {
               className="border-2 border-gray-700 w-full"
               onClick={() => {
                 router.push(
-                  `${ROUTES.CHEF_ASSISTANT}/uid/${params.uid}/cid/${chat.id}`
+                  `${ROUTES.CHEF_ASSISTANT}/uid/${params.uid}/cid/${chat.id}`,
                 );
               }}
             >

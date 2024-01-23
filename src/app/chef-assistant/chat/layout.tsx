@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  FirestoreProvider,
-  useFirebaseApp,
-} from "reactfire";
+import { FirestoreProvider, useFirebaseApp } from "reactfire";
 import { getFirestore } from "firebase/firestore";
 
 export default function ChefAssistantLayout({
@@ -12,5 +9,7 @@ export default function ChefAssistantLayout({
   children: React.ReactNode;
 }) {
   const firebaseInstance = getFirestore(useFirebaseApp());
-  return <FirestoreProvider sdk={firebaseInstance}>{children}</FirestoreProvider>;
+  return (
+    <FirestoreProvider sdk={firebaseInstance}>{children}</FirestoreProvider>
+  );
 }
