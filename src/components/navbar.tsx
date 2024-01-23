@@ -1,3 +1,4 @@
+import React from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { PiCookingPotLight } from "react-icons/pi";
 import Link from "next/link";
@@ -5,6 +6,8 @@ import { ROUTES } from "@config/routes";
 import { createClient } from "@utils/supabase/server";
 import { cookies } from "next/headers";
 import { signOutAction } from "../actions/auth/signup/actions";
+import Navbarr from "./navhamburger";
+import { CiLogin } from "react-icons/ci";
 
 export default async function Navbar() {
   const cookieStore = cookies();
@@ -13,51 +16,34 @@ export default async function Navbar() {
   const email = user.data.user?.email;
 
   return (
-    <div className="bg-white border-gray-200 m-2 ">
-      <div className="w-full flex flex-wrap items-center justify-between mx-auto p-4">
-        <a href="/" className="flex items-center space-x-3 ">
+    <div className="bg-primary ">
+      <div className="w-full flex flex-wrap items-center p-2">
+        {/* Mobile Hamburger (Always visible) */}
+        <Navbarr />
+        <PiCookingPotLight className="w-14 h-14" />
+        <div className="flex items-center ml-auto space-x-4">
           {/* Logo */}
-          <PiCookingPotLight className="w-10 h-10" />
-        </a>
-        {/* Mobile Hamburger */}
-        <button className="md:hidden inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg  hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200">
-          <RxHamburgerMenu className="w-6 h-6" />
-        </button>
-        {/* Nav Elements */}
-        <div className="hidden w-full md:block md:w-auto">
-          <ul className="font-medium text-lg flex flex-col p-1 md:p-0 mt-4 rounded-lg md:flex-row md:space-x-4 md:mt-0  ">
-            <li>
-              <a
-                href="#"
-                className=" block text-green-600 p-2  hover:text-green-500 "
-              >
-                Home
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="block text-gray-900 p-2  hover:text-green-500 "
-              >
-                Recipes
-              </a>
-            </li>
-            <li>
-              {email ? (
-                <form action={signOutAction}>
-                  <button className="block text-white  hover:bg-green-700 p-2 rounded-xl bg-green-600 ">
-                    {email}
-                  </button>
-                </form>
-              ) : (
-                <Link href={ROUTES.SIGNIN}>
-                  <button className="block text-white  hover:bg-green-700 p-2 rounded-xl bg-green-600 ">
-                    Login
-                  </button>
-                </Link>
-              )}
-            </li>
-          </ul>
+          <input
+            type="text"
+            placeholder="Search..."
+            className="px-2 py-1 border border-black rounded-md focus:outline-none focus:border-green-600 bg-transparent placeholder:text-white"
+          />
+
+          <div className="  md:items-end flex justify-end">
+            {email ? (
+              <form action={signOutAction}>
+                <button className="block text-black hover:bg-green-700 p-2 rounded-xl bg-white">
+                  {email}
+                </button>
+              </form>
+            ) : (
+              <Link href={ROUTES.SIGNIN}>
+                <button className="block text-white hover:bg-green-700 px-2 py-1  rounded-xl border border-black bg">
+                  Login
+                </button>
+              </Link>
+            )}
+          </div>
         </div>
       </div>
     </div>
