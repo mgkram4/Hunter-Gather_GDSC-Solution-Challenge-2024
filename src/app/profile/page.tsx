@@ -18,10 +18,11 @@ import { useEffect, useState } from "react";
 
 // Dummy data types
 interface UserProfile {
-  username: string | undefined;
-  handle: string | undefined;
-  bio: string | undefined;
-  isCurrentUser: boolean | undefined; // Indicates if the profile belongs to the signed-in user
+  firstName: string | undefined | null;
+  lastName?: string | undefined | null;
+  handle?: string | undefined;
+  bio?: string | undefined;
+  isCurrentUser?: boolean | undefined; // Indicates if the profile belongs to the signed-in user
   tasteProfile?: UserTasteProfile;
 }
 
@@ -37,12 +38,14 @@ const UserProfileInfo = (props: UserProfile) => {
       {/* Profile picture, username, handle, and buttons */}
       <div className="flex flex-col items-center">
         <img
-          alt={`${props.username}'s profile`}
+          alt={`${props.firstName}'s profile`}
           src="/path-to-profile-image.jpg" // Placeholder for the profile image path
           className="w-24 h-24 rounded-full object-cover"
         />
         <div>
-          <h1 className="text-2xl font-bold">{props.username}</h1>
+          <h1 className="text-2xl font-bold">
+            {props.firstName} {props.lastName}
+          </h1>
           <p className="text-gray-500">{props.handle}</p>
         </div>
         {props.isCurrentUser && (
@@ -102,8 +105,11 @@ interface ProfilePageProps {
 const ProfilePage = ({ isSignedIn }: ProfilePageProps) => {
   const [signedIn, setSignedIn] = useState<boolean>(false);
   const [isCurrentUser, setIsCurrentUser] = useState<boolean>(false);
-  const [profilePicture, setProfilePicture] = useState<string | undefined>();
-  const [username, setUsername] = useState<string | undefined>(undefined);
+  const [profilePicture, setProfilePicture] = useState<
+    string | undefined | null
+  >();
+  const [firstName, setFirstName] = useState<string | undefined | null>();
+  const [lastName, setLastName] = useState<string | undefined | null>();
   const [handle, setHandle] = useState<string | undefined>(undefined);
   const [bio, setBio] = useState<string | undefined>(undefined);
   const [tasteProfile, setTasteProfile] = useState<string[]>([]);
@@ -121,15 +127,17 @@ const ProfilePage = ({ isSignedIn }: ProfilePageProps) => {
         if (error) console.log(error);
         else {
           console.log(data);
-          setUsername(data[0].username);
-          setHandle(data[0].handle);
-          setBio(data[0].bio);
-          setProfilePicture(data[0].profilePicture);
+          setFirstName(data[0]?.firstName);
+          setLastName(data[0]?.lastName);
         }
       } catch (error) {
         console.log(error);
       }
     };
+
+    if (!bio)
+      setBio("Lorem ipsum dolor sit amet, consectetur adipiscing elit.");
+    if (!handle) setHandle("@janedoe");
 
     fetchUser();
   }, []);
@@ -152,21 +160,14 @@ const ProfilePage = ({ isSignedIn }: ProfilePageProps) => {
   };
   */
 
-  const userProfile: UserProfile = {
-    isCurrentUser: false,
-    username: username,
-    handle: handle,
-    bio: bio,
-  };
-
   return (
     <div className="p-4 min-h-screen">
       <UserProfileInfo
-        isCurrentUser={userProfile.isCurrentUser}
-        username={userProfile.username}
-        handle={userProfile.handle}
-        bio={userProfile.bio}
-        tasteProfile={userProfile.tasteProfile}
+        isCurrentUser={isCurrentUser}
+        firstName={firstName}
+        lastName={lastName}
+        handle={handle}
+        bio={bio}
       />
       {/* Posts/Recipes */}
     </div>
