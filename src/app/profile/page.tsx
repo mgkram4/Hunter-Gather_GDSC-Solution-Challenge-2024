@@ -13,10 +13,11 @@
 
 // Dummy data types
 interface UserProfile {
-  username: string;
-  handle: string;
-  bio: string;
-  isCurrentUser: boolean; // Indicates if the profile belongs to the signed-in user
+  firstName: string | undefined | null;
+  lastName?: string | undefined | null;
+  handle?: string | undefined;
+  bio?: string | undefined;
+  isCurrentUser?: boolean | undefined; // Indicates if the profile belongs to the signed-in user
   tasteProfile?: UserTasteProfile;
 }
 
@@ -38,13 +39,15 @@ const UserProfileInfo = ({
       {/* Profile picture, username, handle, and buttons */}
       <div className="flex flex-col items-center">
         <img
-          alt={`${username}'s profile`}
+          alt={`${props.firstName}'s profile`}
           src="/path-to-profile-image.jpg" // Placeholder for the profile image path
           className="w-24 h-24 rounded-full object-cover"
         />
         <div>
-          <h1 className="text-2xl font-bold">{username}</h1>
-          <p className="text-gray-500">{handle}</p>
+          <h1 className="text-2xl font-bold">
+            {props.firstName} {props.lastName}
+          </h1>
+          <p className="text-gray-500">{props.handle}</p>
         </div>
         {isCurrentUser && (
           <div className="flex mt-4 md:mt-0 p-8">
@@ -94,7 +97,46 @@ const UserProfileInfo = ({
 };
 
 // Main ProfilePage component
-const ProfilePage = () => {
+const ProfilePage = ({ isSignedIn }: ProfilePageProps) => {
+  const [signedIn, setSignedIn] = useState<boolean>(false);
+  const [isCurrentUser, setIsCurrentUser] = useState<boolean>(false);
+  const [profilePicture, setProfilePicture] = useState<
+    string | undefined | null
+  >();
+  const [firstName, setFirstName] = useState<string | undefined | null>();
+  const [lastName, setLastName] = useState<string | undefined | null>();
+  const [handle, setHandle] = useState<string | undefined>(undefined);
+  const [bio, setBio] = useState<string | undefined>(undefined);
+  const [tasteProfile, setTasteProfile] = useState<string[]>([]);
+
+  // Supabase data
+  const supabase = createClient();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const { error, data } = await supabase
+          .from("users")
+          .select("*")
+          .eq("id", "41");
+        if (error) console.log(error);
+        else {
+          console.log(data);
+          setFirstName(data[0]?.firstName);
+          setLastName(data[0]?.lastName);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (!bio)
+      setBio("Lorem ipsum dolor sit amet, consectetur adipiscing elit.");
+    if (!handle) setHandle("@janedoe");
+
+    fetchUser();
+  }, []);
+
   // Dummy user taste profile data
   const userTasteProfile: UserTasteProfile = {
     tastes: ["Salty", "Spicy", "Sweet"],
@@ -108,10 +150,17 @@ const ProfilePage = () => {
     isCurrentUser: true,
     tasteProfile: userTasteProfile,
   };
+  */
 
   return (
     <div className="p-4 min-h-screen">
-      <UserProfileInfo {...userProfile} />
+      <UserProfileInfo
+        isCurrentUser={isCurrentUser}
+        firstName={firstName}
+        lastName={lastName}
+        handle={handle}
+        bio={bio}
+      />
       {/* Posts/Recipes */}
     </div>
   );
