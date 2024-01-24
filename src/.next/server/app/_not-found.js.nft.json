@@ -1,9 +1,0 @@
-{
-  "version": 1,
-  "files": [
-    "../webpack-runtime.js",
-    "../chunks/215.js",
-    "../chunks/404.js",
-    "_not-found_client-reference-manifest.js"
-  ]
-}
