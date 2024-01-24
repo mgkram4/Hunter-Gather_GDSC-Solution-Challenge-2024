@@ -2,20 +2,23 @@
 
 import { createClient } from "@/src/utils/supabase/client";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import { format } from "date-fns";
+import React, { useEffect, useState } from "react";
+import { formatDistanceToNow } from "date-fns";
 import { FaRegStar, FaRegComment, FaRegBookmark } from "react-icons/fa";
 import { FaRegShareFromSquare } from "react-icons/fa6";
 import { BsBookmarkPlus, BsFillBookmarkCheckFill } from "react-icons/bs";
 import { TbShoppingCartPlus, TbShoppingCartCopy } from "react-icons/tb";
+import CircleSlider from "@/src/components/circle_slider";
 
 export default function Recipe() {
   const params = useParams<{ id: string }>();
   const id = params.id;
-  const [profilePic, setProfilePic] = useState();
-  const [username, setUsername] = useState<string | null | undefined>();
+  const [profilePicOP, setProfilePicOP] = useState();
+  const [usernameOP, setUsernameOP] = useState<string | null | undefined>();
   const [handle, setHandle] = useState<string | undefined>();
   //pull bookmarked from user
+  const [profilePic, setProfilePic] = useState();
+  const [username, setUsername] = useState<string | null | undefined>();
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [title, setTitle] = useState<string | undefined>();
   const [description, setDescription] = useState<string | null | undefined>();
@@ -34,11 +37,24 @@ export default function Recipe() {
   const [savoriness, setSavoriness] = useState<number | undefined>();
   const [spiciness, setSpiciness] = useState<number | undefined>();
   const [cartState, setCartState] = useState<{ [key: string]: boolean }>({});
+  const [comments, setComments] = useState<
+    { comment: string; usernameComment: string }[]
+  >([]);
+  const [newComment, setNewComment] = useState<{
+    comment: string;
+    usernameComment: string;
+  }>();
+  const [newCommentText, setNewCommentText] = useState<string | undefined>();
+  const [commented, setCommented] = useState(false);
+  //pull rating from user
+  const [rated, setRated] = useState(false);
+  const [sliderValue, setSliderValue] = React.useState(0);
 
   const supabase = createClient();
 
   const handleBookmarkClick = () => {
     setIsBookmarked(!isBookmarked);
+    //set bookmark in db
   };
 
   const handleAddCart = (ingredient) => {
@@ -46,6 +62,31 @@ export default function Recipe() {
       ...prevStates,
       [ingredient]: !prevStates[ingredient],
     }));
+    //add to cart
+  };
+
+  const handleCommented = () => {
+    if (newCommentText && newCommentText?.trim() !== "") {
+      const newUserComment = {
+        usernameComment: usernameOP || "", // Assuming usernameOP is defined in your component
+        comment: newCommentText || "",
+        posted: formatDistanceToNow(new Date(), { addSuffix: true }),
+      };
+      setComments([newUserComment, ...comments]);
+      setNewComment(newUserComment);
+      setNewCommentText("");
+      setCommented(true);
+      //pass newComment to db
+    }
+  };
+
+  const handleRating = () => {
+    setRated(true);
+    //pass sliderValue to db
+  };
+
+  const handleSliderChange = (newValue) => {
+    setSliderValue(Math.round(newValue));
   };
 
   useEffect(() => {
@@ -64,7 +105,7 @@ export default function Recipe() {
         if (error) {
           console.log(error);
         }
-        setUsername(data?.firstName + " " + data?.lastName);
+        setUsernameOP(data?.firstName + " " + data?.lastName);
         setHandle(data?.email);
       } catch (error) {
         console.log(error);
@@ -83,8 +124,14 @@ export default function Recipe() {
         }
         setTitle(data?.title);
         setDescription(data?.short_description);
-        setDatePublished(format(new Date(data!.date_published), "MMM d, yyyy"));
-        setDateUpdated(format(new Date(data!.updated_at), "MMM d, yyyy"));
+        setDatePublished(
+          formatDistanceToNow(new Date(data!.date_published), {
+            addSuffix: true,
+          }),
+        );
+        setDateUpdated(
+          formatDistanceToNow(new Date(data!.updated_at), { addSuffix: true }),
+        );
         setRatingCount(data?.rating_count);
         setCommentCount(data?.comment_count);
         setBookmarkCount(data?.bookmark_count);
@@ -161,9 +208,65 @@ export default function Recipe() {
         setBitterness(data!.bitterness * 100);
         setSavoriness(data!.savoriness * 100);
         setSpiciness(data!.spiciness * 100);
-        console.log(sweetness);
       } catch (error) {
         console.log(error);
+      }
+    };
+
+    const fetchComments = async () => {
+      try {
+        const recipe = await supabase
+          .from("recipes")
+          .select()
+          .match({ id })
+          .single();
+        const { error, data: commentsData } = await supabase
+          .from("comments")
+          .select()
+          .eq("recipe_id", recipe.data!.id);
+        if (error) {
+          console.log(error);
+        }
+        const commentIds = commentsData?.map((entry) => entry.user_id);
+        const usernameMap = await fetchCommentsUsers(commentIds);
+
+        const userComments =
+          commentsData?.map((entry) => ({
+            comment: entry.comment,
+            usernameComment: usernameMap?.get(entry.user_id || "Anonymous"),
+            posted: formatDistanceToNow(new Date(entry.created_at), {
+              addSuffix: true,
+            }),
+          })) || [];
+        setComments(userComments);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    const fetchCommentsUsers = async (commentIds) => {
+      try {
+        const promises = commentIds.map(async (commentId) => {
+          const { error, data } = await supabase
+            .from("users")
+            .select("id, firstName, lastName")
+            .eq("id", commentId);
+          if (error) {
+            console.log(error);
+            return new Map();
+          }
+          return data[0];
+        });
+        const results = await Promise.all(promises);
+        return new Map(
+          results.map((user) => [
+            user.id,
+            `${user.firstName} ${user.lastName}`,
+          ]),
+        );
+      } catch (error) {
+        console.log(error);
+        return new Map();
       }
     };
 
@@ -172,6 +275,7 @@ export default function Recipe() {
     fetchRatings();
     fetchIngredients();
     fetchTasteProfile();
+    fetchComments();
   }, [id]);
 
   const TasteBar = ({ percentage }) => {
@@ -185,6 +289,21 @@ export default function Recipe() {
     );
   };
 
+  const CommentPost = ({ comment }) => {
+    return (
+      <div className="flex p-4 rounded-xl">
+        <button className="w-16 h-16 rounded-full bg-gray-100">pfp</button>
+        <div className="flex flex-col ml-2 w-5/6">
+          <p className="text-lg font-medium mb-1">{comment.usernameComment}</p>
+          <div className="border-2 border-green-400 rounded-xl p-2 whitespace-normal break-words">
+            <p>{comment.comment}</p>
+            <p className="mt-2 text-sm text-gray-500">{comment.posted}</p>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="w-full h-full bg-gray-200">
       <div className="flex w-full h-[540px] p-4">
@@ -192,7 +311,7 @@ export default function Recipe() {
           <div className="flex space-x-3 mt-2 mb-6 items-center">
             <button className="w-20 h-20 rounded-full bg-gray-100">pfp</button>
             <div className="mt-1">
-              <p className="text-xl">{username}</p>
+              <p className="text-xl font-medium">{usernameOP}</p>
               <p className="text-sm">@{handle}</p>
             </div>
           </div>
@@ -260,13 +379,13 @@ export default function Recipe() {
               </p>
               <div className="flex">
                 <div className="flex w-auto h-8 pr-2 text-xl space-x-0.5">
-                  <a href="#ratings">
+                  <a href="#comments">
                     <FaRegStar className="text-3xl" />
                   </a>
                   <p>{ratingCount}</p>
                 </div>
                 <div className="flex w-auto h-8 pr-2 text-xl space-x-0.5">
-                  <a href="#reviews">
+                  <a href="#comments">
                     <FaRegComment className="text-3xl" />
                   </a>
                   <p>{commentCount}</p>
@@ -281,7 +400,7 @@ export default function Recipe() {
                   </button>
                 </div>
                 <a
-                  href="#add-review"
+                  href="#comments"
                   className="flex w-auto h-8 rounded-lg p-2 items-center text-center bg-green-600"
                 >
                   Add a review
@@ -326,8 +445,8 @@ export default function Recipe() {
       <div className="w-full h-0.5 bg-black"></div>
 
       <div className="flex justify-center space-x-48 w-full h-1/2 mt-10 pb-10 bg-gray-200">
-        <div className="w-1/4 h-[35rem] rounded-xl p-4 ml-32 bg-white">
-          <p className="mb-4 text-center text-3xl underline font-bold">
+        <div className="w-1/4 h-full rounded-xl p-10 ml-32 bg-white">
+          <p className="mb-4 text-center text-4xl underline font-bold">
             Ingredients
           </p>
           {ingredients &&
@@ -344,13 +463,13 @@ export default function Recipe() {
                   )}
                 </button>
                 <p key={ingredient} className="text-xl mb-2 ml-2">
-                  {`${ingredient}: ${quantity}`}
+                  {`${ingredient} (${quantity})`}
                 </p>
               </div>
             ))}
         </div>
-        <div className="w-1/4 h-[35rem] rounded-xl p-4 bg-white">
-          <p className="mb-4 text-center text-3xl underline font-bold">
+        <div className="w-1/4 h-full rounded-xl p-10 bg-white">
+          <p className="mb-4 text-center text-4xl underline font-bold">
             Preparation
           </p>
           {prep &&
@@ -364,7 +483,51 @@ export default function Recipe() {
 
       <div className="w-full h-0.5 bg-black"></div>
 
-      <div className="w-full h-full bg-gray-200"></div>
+      <div className="w-full h-full bg-gray-200">
+        <div id="comments" className="w-full h-full px-96 pt-6">
+          <div className="flex space-x-2 items-center">
+            <div className="w-20 h-20 rounded-full bg-gray-100">pfp</div>
+            <div className="flex flex-col w-1/2">
+              <p className="text-xl mb-1 font-medium">{usernameOP}</p>
+              <textarea
+                className="w-full h-12 p-2 rounded-lg bg-white border-2 border-green-400 text-sm resize-y"
+                placeholder="Add a comment..."
+                value={newCommentText}
+                onChange={(e) => setNewCommentText(e.target.value)}
+              />
+            </div>
+            <button
+              className="h-1/2 p-2 mt-8 rounded-full bg-green-600"
+              onClick={handleCommented}
+              disabled={commented}
+            >
+              Comment
+            </button>
+            <div className="pl-6">
+              <CircleSlider onChange={handleSliderChange} />
+            </div>
+            <button
+              className="h-1/2 p-2 mt-8 rounded-full bg-green-600"
+              onClick={handleRating}
+              disabled={rated}
+            >
+              {rated ? <div>Rated &#10003;</div> : "Add Rating"}
+            </button>
+          </div>
+
+          <div className="flex flex-col">
+            <div className="flex items-center">
+              <p className="text-2xl font-bold">Comments</p>
+              <p className="ml-2 text-2xl">{commentCount}</p>
+            </div>
+            <div>
+              {comments.map((comment, index) => (
+                <CommentPost key={index} comment={comment} />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
