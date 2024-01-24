@@ -6,8 +6,8 @@ import { ROUTES } from "@config/routes";
 import { createClient } from "@utils/supabase/server";
 import { cookies } from "next/headers";
 import { signOutAction } from "../actions/auth/signup/actions";
-import Navbarr from "./navhamburger";
-import { CiLogin } from "react-icons/ci";
+import Burger from "./navhamburger";
+import { FaSignInAlt } from "react-icons/fa";
 
 export default async function Navbar() {
   const cookieStore = cookies();
@@ -19,17 +19,19 @@ export default async function Navbar() {
     <div className="bg-primary ">
       <div className="w-full flex flex-wrap items-center p-2">
         {/* Mobile Hamburger (Always visible) */}
-        <Navbarr />
-        <PiCookingPotLight className="w-14 h-14" />
+        <Burger />
+        <Link href="/">
+          <PiCookingPotLight className="w-14 h-14 text-slate-200" />
+        </Link>
         <div className="flex items-center ml-auto space-x-4">
           {/* Logo */}
           <input
             type="text"
             placeholder="Search..."
-            className="px-2 py-1 border border-black rounded-md focus:outline-none focus:border-green-600 bg-transparent placeholder:text-white"
+            className="p-2 border-2  rounded-md focus:outline-none focus:border-green-600 bg-transparent placeholder:text-white"
           />
 
-          <div className="  md:items-end flex justify-end">
+          <div className="  md:items-end flex ">
             {email ? (
               <form action={signOutAction}>
                 <button className="block text-black hover:bg-green-700 p-2 rounded-xl bg-white">
@@ -37,10 +39,11 @@ export default async function Navbar() {
                 </button>
               </form>
             ) : (
-              <Link href={ROUTES.SIGNIN}>
-                <button className="block text-white hover:bg-green-700 px-2 py-1  rounded-xl border border-black bg">
-                  Login
-                </button>
+              <Link
+                href={ROUTES.SIGNIN}
+                className="flex items-center justify-center border-2  px-4 py-2 text-lg font-semibold text-white bg-primary rounded-md hover:bg-green-900 focus:outline-none  focus:border-green-600"
+              >
+                <FaSignInAlt className="mr-2" /> Login
               </Link>
             )}
           </div>

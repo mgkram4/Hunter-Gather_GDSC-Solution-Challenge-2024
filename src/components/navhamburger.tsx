@@ -11,8 +11,9 @@ import { RxHamburgerMenu } from "react-icons/rx";
 
 import Link from "next/link";
 import { useState } from "react";
+import { ROUTES } from "../config/routes";
 
-export default function Navbarr() {
+export default function navhamburger() {
   const [open, setOpen] = useState(false);
 
   const handleLinkClick = () => {
@@ -20,23 +21,20 @@ export default function Navbarr() {
   };
 
   return (
-    <div className=" flex items-center justify-between p-2.5 ">
+    <div className="ml-4 mr-4 flex items-center justify-between rounded-xl  border-4 m-2 hover:bg-green-900 focus:outline-none focus:bg-green-900  focus:border-green-600 ">
       <div className="cursor-pointer ml-4" onClick={() => setOpen(!open)}>
-        <RxHamburgerMenu className="w-8 h-8 mt-2" />
-      </div>
-      {/* LEFT */}
-      <div className="items-center ml-4">
-        <Link href="/"></Link>
+        <RxHamburgerMenu className="w-6 h-10 text-slate-200 " />
       </div>
 
-      {/* Mobile */}
+      <div className="items-center ml-4"></div>
+
       <div
         className={`pl-8 text-black z-10 bg-slate-200 space-y-12 text-3xl font-weight-80 flex flex-col absolute left-0 top-20 h-screen w-3/5 md:w-2/5 pt-20 shadow-2xl transition-transform duration-300 ease-in-out ${
           open ? "transform translate-x-0" : "transform -translate-x-full"
         }`}
       >
         <Link
-          href=""
+          href={ROUTES.HOME}
           onClick={handleLinkClick}
           className="flex items-center hover:text-primary hover:duration-500"
         >
@@ -44,7 +42,7 @@ export default function Navbarr() {
           <span className="">Home</span>
         </Link>
         <Link
-          href="/Products"
+          href={ROUTES.PROFILE}
           onClick={handleLinkClick}
           className="flex items-center hover:text-primary hover:duration-500"
         >
@@ -53,7 +51,7 @@ export default function Navbarr() {
           <span className="">Profile</span>
         </Link>
         <Link
-          href="/Form"
+          href={ROUTES.SIGNIN}
           onClick={handleLinkClick}
           className="flex items-center hover:text-primary hover:duration-500"
         >
@@ -62,7 +60,7 @@ export default function Navbarr() {
           <span className="">Bookmarks</span>
         </Link>
         <Link
-          href="/Cart"
+          href={ROUTES.SHOPPINGLIST}
           onClick={handleLinkClick}
           className="flex items-center hover:text-primary hover:duration-500"
         >
@@ -71,7 +69,7 @@ export default function Navbarr() {
           <span className="">Shopping List</span>
         </Link>
         <Link
-          href="/Cart"
+          href={ROUTES.HASHTAG}
           onClick={handleLinkClick}
           className="flex items-center hover:text-primary hover:duration-500"
         >
@@ -80,7 +78,7 @@ export default function Navbarr() {
           <span className="">Hashtag</span>
         </Link>
         <Link
-          href="/Cart"
+          href={ROUTES.COOKASSISTANT}
           onClick={handleLinkClick}
           className="flex items-center hover:text-primary hover:duration-500"
         >
@@ -89,7 +87,7 @@ export default function Navbarr() {
           <span className="">Cook Assistant</span>
         </Link>
         <Link
-          href="/Cart"
+          href={ROUTES.POST}
           onClick={handleLinkClick}
           className="flex items-center hover:text-primary hover:duration-500"
         >
