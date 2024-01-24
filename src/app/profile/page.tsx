@@ -1,15 +1,8 @@
-/*
-#TODO
-- [ ] Display dummy user profile stats
-- [ ] Fetch user profile data from Supabase
-- [ ] Fetch user taste data from Supabase
-- [ ] Display fetched data
-- [ ] Figure out the recipes/posts section
+"use client";
 
-#NOTE
-  import { createClient } from "@utils/supabase/server";
-  or import { createClient } from @utils/supabase/client ?
-*/
+import { createClient } from "@utils/supabase/client";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 // Dummy data types
 interface UserProfile {
@@ -98,7 +91,9 @@ const UserProfileInfo = ({
 
 // Main ProfilePage component
 const ProfilePage = ({ isSignedIn }: ProfilePageProps) => {
-  const [signedIn, setSignedIn] = useState<boolean>(false);
+  const router = useRouter();
+  const { id } = router.query;
+
   const [isCurrentUser, setIsCurrentUser] = useState<boolean>(false);
   const [profilePicture, setProfilePicture] = useState<
     string | undefined | null
@@ -109,48 +104,51 @@ const ProfilePage = ({ isSignedIn }: ProfilePageProps) => {
   const [bio, setBio] = useState<string | undefined>(undefined);
   const [tasteProfile, setTasteProfile] = useState<string[]>([]);
 
-  // Supabase data
   const supabase = createClient();
 
   useEffect(() => {
-    const fetchUser = async () => {
+    /* 
+    const fetchSession = async () => {
+      const session = await supabase.auth.getSession();
+      if (session.error) throw session.error;
+
+      setIsCurrentUser(session.data?.user?.id === id)
+    };
+    */
+
+    const checkCurrentUser = async () => {
+      try {
+        const user = await supabase.auth.getUser();
+        if (user.error) throw user.error;
+
+        setIsCurrentUser(user.data?.user?.id === id);
+      } catch (error) {
+        console.log("Error fetching current user: ", error);
+      }
+    };
+
+    const fetchUserProfile = async (uId: string) => {
       try {
         const { error, data } = await supabase
           .from("users")
           .select("*")
-          .eq("id", "41");
-        if (error) console.log(error);
-        else {
-          console.log(data);
-          setFirstName(data[0]?.firstName);
-          setLastName(data[0]?.lastName);
-        }
+          .eq("id", uId)
+          .single();
+        if (error) throw error;
+
+        setFirstName(data?.firstName);
+        setLastName(data?.lastName);
       } catch (error) {
         console.log(error);
       }
     };
 
-    if (!bio)
-      setBio("Lorem ipsum dolor sit amet, consectetur adipiscing elit.");
-    if (!handle) setHandle("@janedoe");
+    checkCurrentUser();
+    if (id) fetchUserProfile(id as string);
+  }, [id, supabase]);
 
-    fetchUser();
-  }, []);
-
-  // Dummy user taste profile data
-  const userTasteProfile: UserTasteProfile = {
-    tastes: ["Salty", "Spicy", "Sweet"],
-  };
-
-  // Dummy user profile data
-  const userProfile: UserProfile = {
-    username: "JaneDoe",
-    handle: "@janedoe",
-    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    isCurrentUser: true,
-    tasteProfile: userTasteProfile,
-  };
-  */
+  if (!bio) setBio("Lorem ipsum dolor sit amet, consectetur adipiscing elit.");
+  if (!handle) setHandle("@janedoe");
 
   return (
     <div className="p-4 min-h-screen">
