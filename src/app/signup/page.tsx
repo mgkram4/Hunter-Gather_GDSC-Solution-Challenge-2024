@@ -5,6 +5,9 @@ import XSignInButton from "@components/button/x-signin";
 import GoogleSignInButton from "@components/button/g-signin";
 import Link from "next/link";
 import { PiCookingPotLight } from "react-icons/pi";
+import Input from "@components/input/input";
+import { ROUTES } from "@/src/config/routes";
+import Button, { BUTTON_VARIANTS } from "@/src/components/button/button";
 
 interface SignUpProps {
   searchParams?: {
@@ -24,29 +27,10 @@ export default async function SignUp({ searchParams }: SignUpProps) {
           className="grid grid-cols-1 gap-4 w-full"
           action={signUpWithEmailAction}
         >
-          <label className="block">
-            Email:
-            <input
-              type="email"
-              className="mt-1 p-2 w-full rounded border-2 border-gray-200"
-              name="email"
-              required
-            />
-          </label>
+          <Input label="Email:" type="email" name="email" isRequired />
+          <Input label="Password:" type="password" name="password" isRequired />
+          <Button varient={BUTTON_VARIANTS.PRIMARY}>Sign Up</Button>
 
-          <label className="block">
-            Password:
-            <input
-              type="password"
-              className="mt-1 p-2 w-full rounded border-2 border-gray-200"
-              name="password"
-              required
-            />
-          </label>
-
-          <button className="bg-primary text-white p-2 rounded hover:bg-opacity-90 cursor-pointer w-full">
-            Sign up
-          </button>
           <div className="mt-4 grid grid-cols-3 items-center text-gray-400">
             <hr className="border-gray-400" />
             <p className="text-center text-sm">OR</p>
@@ -59,7 +43,7 @@ export default async function SignUp({ searchParams }: SignUpProps) {
             {searchParams?.error}
           </p>
         </form>
-        <Link href="/signin">
+        <Link href={ROUTES.SIGNIN}>
           <h3 className="flex mt-2 items-center justify-center text-gray-400 cursor-pointer hover:underline">
             Already a User? Login
           </h3>

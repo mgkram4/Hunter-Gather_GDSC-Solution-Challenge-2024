@@ -1,7 +1,8 @@
 "use client";
 
-import { ROUTES } from "@/src/config/routes";
-import { createClient } from "@/src/utils/supabase/client";
+import { ROUTES } from "@config/routes";
+import { ERROR_RESPONSES } from "@utils/helpers/auth/enums";
+import { createClient } from "@utils/supabase/client";
 import { addDoc, collection } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -14,21 +15,22 @@ export default function ChefAssistant() {
 
   const createChat = async () => {
     const { error, data } = await supabase.auth.getUser();
+    const hasError = error || !data;
 
-    if (!data || error) {
-      router.push(
-        `${ROUTES.SIGNIN}?error=${"You must be signed in to access this page."}`,
-      );
+    if (hasError) {
+      router.push(`${ROUTES.SIGNIN}?error=${ERROR_RESPONSES.AUTH_REQUIRED}`);
     }
 
-    const chatCollectionRef = collection(db, `users/${data.user!.id}/chats`);
+    const COLLECTION_PATHS = {
+      CHATS: `users/${data.user!.id}/chats`,
+      MESSAGES: `users/${data.user!.id}/chats/${data.user!.id}/messages`,
+    };
+
+    const chatCollectionRef = collection(db, COLLECTION_PATHS.CHATS);
     const newChatCollectionRef = await addDoc(chatCollectionRef, {
       createdAt: new Date(),
     });
-    const messageCollectionRef = collection(
-      db,
-      `users/${data.user!.id}/chats/${newChatCollectionRef.id}/messages`,
-    );
+    const messageCollectionRef = collection(db, COLLECTION_PATHS.MESSAGES);
 
     await addDoc(messageCollectionRef, {});
 

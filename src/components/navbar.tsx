@@ -7,10 +7,11 @@ import { ROUTES } from "@config/routes";
 import { createClient } from "@utils/supabase/server";
 import { cookies } from "next/headers";
 import { signOutAction } from "../actions/auth/signup/actions";
+import Button, { BUTTON_VARIANTS } from "./button/button";
 
 export default async function Navbar() {
   const cookieStore = cookies();
-  const supabase = await createClient(cookieStore);
+  const supabase = createClient(cookieStore);
   const user = await supabase.auth.getUser();
   const email = user.data.user?.email;
 
@@ -31,7 +32,7 @@ export default async function Navbar() {
             <li>
               <a
                 href="#"
-                className=" block text-green-600 p-2  hover:text-green-500 "
+                className="block text-green-600 p-2  hover:text-green-500 "
               >
                 Home
               </a>
@@ -47,15 +48,11 @@ export default async function Navbar() {
             <li>
               {email ? (
                 <form action={signOutAction}>
-                  <button className="block text-white  hover:bg-green-700 p-2 rounded-xl bg-green-600 ">
-                    {email}
-                  </button>
+                  <Button varient={BUTTON_VARIANTS.NAVBAR}>{email}</Button>
                 </form>
               ) : (
                 <Link href={ROUTES.SIGNIN}>
-                  <button className="block text-white  hover:bg-green-700 p-2 rounded-xl bg-green-600 ">
-                    Login
-                  </button>
+                  <Button varient={BUTTON_VARIANTS.NAVBAR}>Login</Button>
                 </Link>
               )}
             </li>
