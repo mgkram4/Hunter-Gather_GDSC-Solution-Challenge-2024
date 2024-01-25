@@ -11,7 +11,7 @@ import { RxHamburgerMenu } from "react-icons/rx";
 
 import Link from "next/link";
 import { useState } from "react";
-import { ROUTES } from "../config/routes";
+import { ROUTES } from "@config/routes";
 
 export default function navhamburger() {
   const [open, setOpen] = useState(false);
@@ -29,7 +29,7 @@ export default function navhamburger() {
       <div className="items-center ml-4"></div>
 
       <div
-        className={`pl-8 text-black z-10 bg-slate-200 space-y-12 text-3xl font-weight-80 flex flex-col absolute left-0 top-20 h-screen w-3/5 md:w-2/5 pt-20 shadow-2xl transition-transform duration-300 ease-in-out ${
+        className={`pl-8 text-black z-10 bg-slate-200 space-y-12 text-2xl font-weight-80 flex flex-col absolute left-0 top-20 h-screen w-3/5 md:w-2/5 pt-20 shadow-2xl transition-transform duration-300 ease-in-out ${
           open ? "transform translate-x-0" : "transform -translate-x-full"
         }`}
       >

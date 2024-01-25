@@ -1,24 +1,37 @@
-import Postsmall from "./postsmall";
+import { useEffect, useState } from "react";
+import PostSmall from "./postsmall";
+import { createClient } from "@/src/utils/supabase/client";
+import Bottomnav from "@/src/components/bottomnavbar";
+export default async function Timeline() {
+  const supabase = createClient();
+  const { data, error } = await supabase.from("recipes").select();
 
-export default function timeline() {
   return (
-    <div className="ml-auto md:w-[70%] h-full min-h-screen flex-col border-l border-r border-gray-600">
+    <div className="ml-auto md:w-[70%]  h-screen flex-col border-l border-r border-gray-300 overflow-scroll ">
       <div className="grid grid-cols-2 text-center m-2 text-xl font-bold">
         <div>Following</div>
         <div>Recommended</div>
       </div>
-      <div className="py-2 border-gray-600 items-center relative">
+      <div className="py-2 border-gray-300 items-center relative">
         <div className="flex flex-col">
-          <div className="border-gray-600 border-t border-b p-2 flex space-x-4 mr-8">
-            <div>
-              <div className="w-full h-8 rounded-full"></div>
-            </div>
-            <div className="flex flex-col space-y-2 p-2">
-              <div className="flex items-center space-x-1"></div>
-              <Postsmall />
-            </div>
-          </div>
+          {error && <p>Error fetching data from Supabase: {error.message}</p>}
+          {data &&
+            data.map((recipe, index) => (
+              <div
+                key={index}
+                className="border-gray-300 border-t border-b p-2 flex space-x-4 mr-8"
+              >
+                <div>
+                  <div className="w-full h-8 rounded-full"></div>
+                </div>
+                <div className="flex flex-col space-y-2 p-2">
+                  <div className="flex items-center space-x-1"></div>
+                  <PostSmall key={index} {...recipe} />
+                </div>
+              </div>
+            ))}
         </div>
+        <Bottomnav />
       </div>
     </div>
   );

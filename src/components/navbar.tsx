@@ -6,7 +6,7 @@ import { ROUTES } from "@config/routes";
 import { createClient } from "@utils/supabase/server";
 import { cookies } from "next/headers";
 import { signOutAction } from "../actions/auth/signup/actions";
-import Burger from "./navhamburger";
+import Burger from "./button/navhamburger";
 import { FaSignInAlt } from "react-icons/fa";
 
 export default async function Navbar() {

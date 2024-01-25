@@ -34,7 +34,7 @@ export default function Carousel({ slides }: CarouselProps) {
       >
         {slides.map((slide, index) => (
           <img
-            className="object-cover"
+            className="object-cover rounded-xl"
             key={index}
             src={slide}
             alt={`slide-${index}`}

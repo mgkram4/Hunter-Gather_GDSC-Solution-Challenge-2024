@@ -16,42 +16,56 @@ export default async function PostSmall() {
   const { data, error } = await supabase.from("recipes").select();
 
   return (
-    <div className="h-full gap-4 m-4 flex flex-col shadow-xl w-full rounded-xl">
+    <div className="m-4 ">
       {error && <p>Error fetching data from Supabase: {error.message}</p>}
       {data &&
         data.map((recipe, index) => (
-          <div key={index} className="bg-white p-4 mb-4 rounded-md shadow-md">
-            <div className="mt-4 px-2 font-bold">{recipe.title}</div>
-            <div className="p-2">
+          <div
+            key={index}
+            className="bg-white p-4 mb-4 rounded-md shadow-md border-2 border-gray-200 "
+          >
+            <div className="font-bold text-xl mb-2">{recipe.title}</div>
+            <div className="text-gray-600 mb-4">
               {recipe.short_description ||
                 "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Modi eos, earum mollitia tenetur fuga veniam voluptatum quo, dolorem ipsam"}
             </div>
 
             <Carousel autoSlide={true} slides={slideUrls}>
               {slideUrls.map((url, index) => (
-                <img key={index} src={url} alt={`slide-${index}`} />
+                <img
+                  key={index}
+                  src={url}
+                  alt={`slide-${index}`}
+                  className="w-full h-32 object-cover rounded-md mb-2"
+                />
               ))}
             </Carousel>
 
-            <div className="flex flex-row ml-4">
-              <div className="mt-4">User: Img</div>
-              <div className="flex flex-col ml-4 mt-4">
-                <div className="">User ID: {recipe.user_id}</div>
-                <div className="text-sm">
+            <div className="flex items-center justify-between  mt-4">
+              <div className="flex items-center space-x-2">
+                <div className="text-sm font-semibold">User: Img</div>
+                <div className="text-sm text-gray-500">
+                  User ID: {recipe.user_id}
+                </div>
+                <div className="text-sm text-gray-500">
                   {new Date(recipe.date_published).toDateString()}
                 </div>
               </div>
-              <div className="flex flex-row ml-auto space-x-4 m-4">
-                <div className="">
-                  {recipe.rating_count}
-                  <CiHeart className="w-6 h-6" />
+
+              <div className="flex space-x-4">
+                <div className="flex items-center space-x-1">
+                  <span className="text-sm">{recipe.rating_count}</span>
+                  <CiHeart className="w-6 h-6 hover:text-red-500 active:bg-red-300 active:text-white rounded cursor-pointer transition-all duration-300" />
                 </div>
-                <div>
-                  {recipe.bookmark_count} <CiBookmark className="w-6 h-6" />
+
+                <div className="flex items-center space-x-1">
+                  <span className="text-sm">{recipe.bookmark_count}</span>
+                  <CiBookmark className="w-6 h-6 hover:text-blue-500 active:bg-blue-300 active:text-white rounded cursor-pointer transition-all duration-300" />
                 </div>
-                <div>
-                  {recipe.comment_count}
-                  <BiComment className="w-6 h-6" />
+
+                <div className="flex items-center space-x-1">
+                  <span className="text-sm">{recipe.comment_count}</span>
+                  <BiComment className="w-6 h-6 hover:text-green-500 active:bg-green-300 active:text-white rounded cursor-pointer transition-all duration-300" />
                 </div>
               </div>
             </div>
