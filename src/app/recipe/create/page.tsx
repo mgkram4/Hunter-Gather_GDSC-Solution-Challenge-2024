@@ -1,5 +1,6 @@
 "use client";
 import Input from "@/src/components/input/input";
+import Slider from "@/src/components/input/slider";
 import Textarea from "@/src/components/input/textarea";
 import { useAuth } from "@/src/utils/hooks/auth-hook";
 import { createClient } from "@/src/utils/supabase/client";
@@ -42,6 +43,7 @@ export default function CreateRecipe() {
           name="instructions"
           showPreview
         />
+        <Slider name={"sweetness"} range={10} />
       </form>
     </div>
   );
