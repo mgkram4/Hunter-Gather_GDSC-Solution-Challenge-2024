@@ -4,6 +4,7 @@ import { CiHeart } from "react-icons/ci";
 import { BiComment } from "react-icons/bi";
 import { createClient } from "@/src/utils/supabase/client";
 
+// For ui Testing
 const slideUrls: string[] = [
   "/testfood.jpg",
   "/testfood.jpg",
@@ -13,7 +14,7 @@ const slideUrls: string[] = [
 
 export default async function PostSmall() {
   const supabase = createClient();
-  const { data, error } = await supabase.from("recipes").select();
+  const { data, error } = await supabase.from("recipes").select("*, users(*)");
 
   return (
     <div className="m-4 ">
@@ -33,6 +34,7 @@ export default async function PostSmall() {
             <Carousel autoSlide={true} slides={slideUrls}>
               {slideUrls.map((url, index) => (
                 <img
+                  // The Source will be changed to {recipe.headliner, image}
                   key={index}
                   src={url}
                   alt={`slide-${index}`}
@@ -43,9 +45,11 @@ export default async function PostSmall() {
 
             <div className="flex items-center justify-between  mt-4">
               <div className="flex items-center space-x-2">
-                <div className="text-sm font-semibold">User: Img</div>
+                <div className="text-sm font-semibold">
+                  User: {recipe.users?.profilePicture}
+                </div>
                 <div className="text-sm text-gray-500">
-                  User ID: {recipe.user_id}
+                  Profile Picture: {recipe.users?.profilePicture}
                 </div>
                 <div className="text-sm text-gray-500">
                   {new Date(recipe.date_published).toDateString()}

@@ -17,7 +17,7 @@ export default async function Navbar() {
 
   return (
     <div className="bg-primary ">
-      <div className="w-full flex flex-wrap items-center p-2">
+      <div className="w-full flex  items-center p-2">
         {/* Mobile Hamburger (Always visible) */}
         <Burger />
         <Link href="/">
@@ -41,7 +41,7 @@ export default async function Navbar() {
             ) : (
               <Link
                 href={ROUTES.SIGNIN}
-                className="flex items-center justify-center border-2  px-4 py-2 text-lg font-semibold text-white bg-primary rounded-md hover:bg-green-900 focus:outline-none  focus:border-green-600"
+                className="flex items-center justify-center border-2  px-2 py-2 text-lg font-semibold text-white bg-primary rounded-md hover:bg-green-900 focus:outline-none  focus:border-green-600"
               >
                 <FaSignInAlt className="mr-2" /> Login
               </Link>
