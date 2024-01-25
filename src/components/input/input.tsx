@@ -3,6 +3,7 @@ export interface InputProps {
   type?: string | "text";
   name: string;
   className?: string;
+  labelClassName?: string;
   isRequired?: boolean;
 }
 
@@ -11,12 +12,13 @@ export default function Input({
   type,
   name,
   className,
+  labelClassName,
   isRequired,
 }: InputProps) {
   return (
     <>
       <label className="block">
-        {label}
+        <p className={labelClassName}>{label}</p>
         <input
           type={type}
           className={`mt-1 p-2 w-full rounded border-2 border-gray-200 ${className}`}

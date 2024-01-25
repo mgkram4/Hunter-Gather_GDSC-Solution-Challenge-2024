@@ -18,12 +18,14 @@ export default function Messages({ messages }: MessagesProps) {
               </div>
               <div
                 className={
-                  "float-right right-0 bg-neutral-200 p-2 w-fit max-w-[50%] rounded-md"
+                  "float-right right-0 bg-neutral-200 px-2 w-fit max-w-[50%] rounded-md"
                 }
               >
                 {doc.data().status &&
                 doc.data().status.state === "COMPLETED" ? (
-                  <Markdown>{doc.data().response}</Markdown>
+                  <Markdown className={"markdown"}>
+                    {doc.data().response}
+                  </Markdown>
                 ) : doc.data().status && doc.data().status.state === "ERROR" ? (
                   `Gemini Error: ${doc.data().status.error}`
                 ) : (

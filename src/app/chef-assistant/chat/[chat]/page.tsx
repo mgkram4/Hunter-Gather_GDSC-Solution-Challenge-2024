@@ -109,7 +109,6 @@ export default function ChefAssistant() {
       <div className={"w-4/5 flex flex-col relative h-full"}>
         <div className={"overflow-y-scroll"}>
           <h1 className={"text-xl ml-2"}>Chef Assistant</h1>
-
           <Messages messages={messages} />
         </div>
 
