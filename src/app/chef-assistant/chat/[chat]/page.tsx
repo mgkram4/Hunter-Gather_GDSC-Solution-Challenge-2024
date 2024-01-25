@@ -21,7 +21,7 @@ import {
 
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useFirestore } from "reactfire";
+import { SuspenseWithPerf, useFirestore } from "reactfire";
 
 export default function ChefAssistant() {
   const supabase = createClient();
@@ -39,10 +39,15 @@ export default function ChefAssistant() {
     chatsCollectionRef: CollectionReference<DocumentData>,
   ) => {
     const chatsQuery = query(chatsCollectionRef, orderBy("createdAt", "desc"));
-    const chatsDocs = await getDocs(chatsQuery);
-    const messageDocs = await getDocs(messagesCollectionRef);
+    const messagesQuery = query(
+      messagesCollectionRef,
+      orderBy("createTime", "asc"),
+    );
 
-    onSnapshot(messagesCollectionRef, (snapshot) => {
+    const chatsDocs = await getDocs(chatsQuery);
+    const messageDocs = await getDocs(messagesQuery);
+
+    onSnapshot(messagesQuery, (snapshot) => {
       setMessages(snapshot);
     });
     onSnapshot(chatsQuery, (snapshot) => {
@@ -83,7 +88,7 @@ export default function ChefAssistant() {
 
     await addDoc(messageCollectionRef, { prompt: prompt });
     await updateDoc(doc(db, COLLECTION_PATHS.CHATS), {
-      title: messages?.docs[messages?.docs.length - 1]?.data().prompt || prompt,
+      title: messages?.docs[0]?.data().prompt || prompt,
     });
 
     setPrompt("");
@@ -96,27 +101,36 @@ export default function ChefAssistant() {
   return (
     <div className={"flex h-full"}>
       {/* TODO: get specific sizes added into figma */}
-      <div className="w-1/5 flex flex-col text-center h-screen border-gray-700 border-2">
-        <Chats chats={chats} />
+      <div className="w-1/5 flex flex-col text-center border-gray-700 border-2">
+        <SuspenseWithPerf traceId="chats" fallback="testing">
+          <Chats chats={chats} />
+        </SuspenseWithPerf>
       </div>
-      <div className={"w-4/5 flex flex-col h-screen"}>
-        <h1 className={"text-xl ml-2"}>Chef Assistant</h1>
-        <div className={"overflow-scroll"}>
+      <div className={"w-4/5 flex flex-col relative h-full"}>
+        <div className={"overflow-y-scroll"}>
+          <h1 className={"text-xl ml-2"}>Chef Assistant</h1>
+
           <Messages messages={messages} />
         </div>
+
         <div
           className={
-            "flex w-full aboslute border-y-2 border-r-2 border-gray-700 bottom-0 h-10"
+            "flex w-full relative border-y-2 border-r-2 border-gray-700 bottom-0"
           }
         >
           <input
-            className={"w-[90%]"}
+            className={"w-[90%] h-10"}
             onChange={(e) => {
               setPrompt(e.target.value);
             }}
             type="text"
             placeholder="Type here..."
             value={prompt}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleSendMessages();
+              }
+            }}
           />
           <button className={"p-2"} onClick={handleSendMessages}>
             Send Message

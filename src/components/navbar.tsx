@@ -26,7 +26,9 @@ export default async function Navbar() {
   const email = user.data.user?.email;
 
   return (
-    <div className={`${backgroundColor} border-gray-200 p-2`}>
+    <div
+      className={`${backgroundColor} border-gray-200 p-2 h-fit sticky top-0 w-full z-10`}
+    >
       <div className="w-full flex flex-wrap items-center justify-between mx-auto p-4">
         <a href={ROUTES.HOME} className="flex items-center space-x-3">
           {/* Logo */}
