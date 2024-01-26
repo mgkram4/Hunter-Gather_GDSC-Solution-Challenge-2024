@@ -1,5 +1,10 @@
 import { NextResponse } from "next/server";
 
+/**
+ * Middleware to add headers to the request, for accessing the origin and path in server components.
+ *
+ * @param {Request} request - The incoming request
+ */
 export function middleware(request: Request) {
   const url = new URL(request.url);
   const origin = url.origin;

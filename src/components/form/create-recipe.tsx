@@ -108,20 +108,6 @@ export default function CreateRecipeForm({
                   : null
               }
             />
-
-            <Textarea
-              labelClassName={"text-3xl font-bold mt-2"}
-              label={"Instructions"}
-              className={"min-h-[200px]"}
-              name="instructions"
-              showPreview
-              setFieldValue={setFieldValue}
-              error={
-                errors.instructions && touched.instructions
-                  ? errors.instructions
-                  : null
-              }
-            />
             <Slider
               label={"Sweetness"}
               name={"sweetness"}
@@ -186,6 +172,21 @@ export default function CreateRecipeForm({
                   : null
               }
             />
+            <Textarea
+              labelClassName={"text-3xl font-bold mt-2"}
+              label={"Instructions"}
+              className={"min-h-[200px]"}
+              name="instructions"
+              showPreview
+              setFieldValue={setFieldValue}
+              error={
+                errors.instructions && touched.instructions
+                  ? errors.instructions
+                  : null
+              }
+            />
+
+            {/* TODO: image upload, pending recipe display page */}
             <Button
               type={"submit"}
               varient={BUTTON_VARIANTS.PRIMARY}
