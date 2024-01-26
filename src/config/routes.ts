@@ -2,12 +2,12 @@ export enum ROUTES {
   SIGNIN = "/signin",
   SIGNUP = "/signup",
   HOME = "/",
-  PROFILE = "",
-  BOOKMARKS = "",
-  SHOPPINGLIST = "",
-  HASHTAG = "",
-  COOKASSISTANT = "",
-  POST = "",
+  PROFILE = "/",
+  BOOKMARKS = "/",
+  SHOPPINGLIST = "/",
+  HASHTAG = "/",
+  COOKASSISTANT = "/",
+  POST = "/",
 }
 
 export enum API_ROUTES {

@@ -1,17 +1,24 @@
+import Carousel from "./swipe-carousel";
 import { CiBookmark } from "react-icons/ci";
 import { CiHeart } from "react-icons/ci";
 import { BiComment } from "react-icons/bi";
 import { createClient } from "@/src/utils/supabase/client";
 
-export const FIREBASE_CONFIG = JSON.parse(
-  process.env.NEXT_PUBLIC_FIREBASE_CONFIG || "{}",
-);
 // For ui Testing
-const slideUrls: string[] = ["/testfood.jpg"];
+const slideUrls: string[] = [
+  "/testfood.jpg",
+  "/testfood.jpg",
+  "/testfood.jpg",
+  "/testfood.jpg",
+];
 
 export default async function PostSmall() {
   const supabase = createClient();
-  const { data, error } = await supabase.from("recipes").select("*, users(*)");
+  const { data, error } = await supabase
+    .from("recipes")
+    .select(
+      "title, short_description, headliner_image, date_published, rating_count, users(profilePicture),bookmark_count,comment_count",
+    );
 
   return (
     <div className="m-4 ">
@@ -24,28 +31,29 @@ export default async function PostSmall() {
           >
             <div className="font-bold text-xl mb-2">{recipe.title}</div>
             <div className="text-gray-600 mb-4">
-              {recipe.short_description ||
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Modi eos, earum mollitia tenetur fuga veniam voluptatum quo, dolorem ipsam"}
+              {recipe.short_description || ""}
             </div>
 
             <img
-              // The Source will be changed to {recipe.headliner, image}
               key={index}
-              src="/testfood.jpg"
-              alt={`slide-${index}`}
+              src={
+                recipe.headliner_image !== null
+                  ? recipe.headliner_image
+                  : undefined
+              }
               className="w-full h-32 object-cover rounded-md mb-2"
             />
 
             <div className="flex items-center justify-between  mt-4">
               <div className="flex items-center space-x-2">
                 <div className="text-sm font-semibold">
-                  User: {recipe.users?.profilePicture}
+                  User: <img>{recipe.users?.profilePicture}</img>
                 </div>
                 <div className="text-sm text-gray-500">
                   Profile Picture: {recipe.users?.profilePicture}
                 </div>
                 <div className="text-sm text-gray-500">
-                  {new Date(recipe.date_published).toDateString()}
+                  {new Date(recipe.date_published).toLocaleDateString()}
                 </div>
               </div>
 

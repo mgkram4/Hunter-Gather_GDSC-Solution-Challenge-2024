@@ -13,12 +13,12 @@ import Link from "next/link";
 import { useState } from "react";
 import { ROUTES } from "@config/routes";
 
-export default function navhamburger() {
+export default function NavHamburger() {
   const [open, setOpen] = useState(false);
 
-  const handleLinkClick = () => {
+  function handleLinkClick() {
     setOpen(false);
-  };
+  }
 
   return (
     <div className="ml-4 mr-4 flex items-center justify-between rounded-xl  border-4 m-2 hover:bg-green-900 focus:outline-none focus:bg-green-900  focus:border-green-600 ">
@@ -39,7 +39,7 @@ export default function navhamburger() {
           className="flex items-center hover:text-primary hover:duration-500"
         >
           <IoHomeOutline className="m-2" />
-          <span className="">Home</span>
+          <span>Home</span>
         </Link>
         <Link
           href={ROUTES.PROFILE}
@@ -48,7 +48,7 @@ export default function navhamburger() {
         >
           <CgProfile className="m-2" />
 
-          <span className="">Profile</span>
+          <span>Profile</span>
         </Link>
         <Link
           href={ROUTES.SIGNIN}
@@ -57,7 +57,7 @@ export default function navhamburger() {
         >
           <CiBookmark className="m-2" />
 
-          <span className="">Bookmarks</span>
+          <span>Bookmarks</span>
         </Link>
         <Link
           href={ROUTES.SHOPPINGLIST}
@@ -66,7 +66,7 @@ export default function navhamburger() {
         >
           <FiShoppingCart className="m-2" />
 
-          <span className="">Shopping List</span>
+          <span>Shopping List</span>
         </Link>
         <Link
           href={ROUTES.HASHTAG}
@@ -75,7 +75,7 @@ export default function navhamburger() {
         >
           <CiHashtag className="m-2" />
 
-          <span className="">Hashtag</span>
+          <span>Hashtag</span>
         </Link>
         <Link
           href={ROUTES.COOKASSISTANT}
@@ -84,7 +84,7 @@ export default function navhamburger() {
         >
           <GiCook className="m-2" />
 
-          <span className="">Cook Assistant</span>
+          <span>Cook Assistant</span>
         </Link>
         <Link
           href={ROUTES.POST}
@@ -93,7 +93,7 @@ export default function navhamburger() {
         >
           <MdOutlinePostAdd className="m-2" />
 
-          <span className="">Post</span>
+          <span>Post</span>
         </Link>
         <PiCookingPotLight className="ml-28 w-20 h-20 " />
       </div>

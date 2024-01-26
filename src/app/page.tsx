@@ -3,8 +3,7 @@ import Timeline from "./homepage/timeline";
 
 export default function Home() {
   return (
-    <main className="flex">
-      <Sidebar />
+    <main>
       <Timeline />
     </main>
   );

@@ -4,7 +4,7 @@ import { MdOutlinePostAdd } from "react-icons/md";
 import Link from "next/link";
 import { ROUTES } from "@config/routes";
 
-export default function bottomnavbar() {
+export default function BottomNavbar() {
   return (
     <div className="fixed flex justify-center space-x-32 bottom-0 w-full bg-primary bg-opacity-70 p-4  box-border md:hidden ">
       <Link href={ROUTES.HOME} className="text-white hover:text-gray-300 mr-4">
