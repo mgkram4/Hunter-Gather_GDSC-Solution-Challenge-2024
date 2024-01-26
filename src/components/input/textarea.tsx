@@ -8,6 +8,8 @@ interface TextareaProps {
   labelClassName?: string;
   isRequired?: boolean;
   showPreview?: boolean;
+  error?: string | null;
+  setFieldValue?: (field: string, value: string) => void;
 }
 
 export default function Textarea({
@@ -17,8 +19,15 @@ export default function Textarea({
   labelClassName,
   isRequired,
   showPreview,
+  error,
+  setFieldValue,
 }: TextareaProps) {
   const [preview, setPreview] = useState("");
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setPreview(e.target.value);
+    setFieldValue && setFieldValue(name, e.target.value);
+  };
   return (
     <>
       <label className="block">
@@ -35,7 +44,7 @@ export default function Textarea({
             } rounded border-2 border-gray-200 ${className}`}
             name={name}
             required={isRequired}
-            onChange={(e) => setPreview(e.target.value)}
+            onChange={handleChange}
           />
           {showPreview && (
             <div className={"mt-1 p-2 rounded border-2 border-gray-200 w-1/2"}>
@@ -44,6 +53,7 @@ export default function Textarea({
           )}
         </div>
       </label>
+      {error && <span className="font-bold text-red-500 p-2">{error}</span>}
     </>
   );
 }
