@@ -7,12 +7,26 @@ export interface ButtonProps {
   children?: React.ReactNode;
   varient?: BUTTON_VARIANTS;
   className?: string;
+  type?: "button" | "submit";
+  disabled?: boolean;
 }
 
-export default function Button({ children, varient, className }: ButtonProps) {
+export default function Button({
+  children,
+  varient,
+  className,
+  type,
+  disabled,
+}: ButtonProps) {
   return (
     <>
-      <button className={`${varient} ${className}`}>{children}</button>
+      <button
+        disabled={disabled}
+        type={type}
+        className={`${varient} ${className}`}
+      >
+        {children}
+      </button>
     </>
   );
 }
