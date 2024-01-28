@@ -1,4 +1,6 @@
-import { Field } from "formik";
+"use client";
+
+import { Field, Form } from "formik";
 
 export interface InputProps {
   label?: string;
@@ -8,6 +10,7 @@ export interface InputProps {
   labelClassName?: string;
   isRequired?: boolean;
   error?: string | null;
+  isServerComponent?: boolean;
 }
 
 export default function Input({
@@ -18,17 +21,27 @@ export default function Input({
   labelClassName,
   isRequired,
   error,
+  isServerComponent,
 }: InputProps) {
   return (
     <>
       <label className="block">
         <p className={labelClassName}>{label}</p>
-        <Field
-          type={type}
-          className={`mt-1 p-2 w-full rounded border-2 border-gray-200 ${className}`}
-          name={name}
-          required={isRequired}
-        />
+        {!isServerComponent ? (
+          <Field
+            type={type}
+            className={`mt-1 p-2 w-full rounded border-2 border-gray-200 ${className}`}
+            name={name}
+            required={isRequired}
+          />
+        ) : (
+          <input
+            type={type}
+            className={`mt-1 p-2 w-full rounded border-2 border-gray-200 ${className}`}
+            name={name}
+            required={isRequired}
+          />
+        )}
       </label>
       {error && <span className="font-bold text-red-500 flex">{error}</span>}
     </>
