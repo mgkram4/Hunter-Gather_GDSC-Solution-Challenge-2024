@@ -20,8 +20,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className} h-screen w-full`}>
         <Navbar />
-
         {children}
+        <div className="h-fit">{children}</div>
+        <Footer />
       </body>
     </html>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import { BASE_URL } from "@/src/config/constants";
-import { API_ROUTES, ROUTES } from "@/src/config/routes";
+import { API_ROUTES } from "@/src/config/routes";
 import { createClient } from "@/src/utils/supabase/client";
 import { FcGoogle } from "react-icons/fc";
 

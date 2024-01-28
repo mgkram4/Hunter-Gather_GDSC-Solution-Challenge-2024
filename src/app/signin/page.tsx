@@ -1,3 +1,5 @@
+"use server";
+
 import { signInWithEmailAction } from "@actions/auth/signup/actions";
 import XSignInButton from "@components/button/x-signin";
 import GoogleSignInButton from "@components/button/g-signin";
@@ -13,7 +15,7 @@ interface SignUpProps {
   };
 }
 
-export default function SignIn({ searchParams }: SignUpProps) {
+export default async function SignIn({ searchParams }: SignUpProps) {
   return (
     <div className="flex flex-col md:flex-row items-center justify-center min-h-screen">
       <div className="">
@@ -32,8 +34,20 @@ export default function SignIn({ searchParams }: SignUpProps) {
           className="grid grid-cols-1 gap-4 w-full"
           action={signInWithEmailAction}
         >
-          <Input label="Email:" type="email" name="email" isRequired />
-          <Input label="Password:" type="password" name="password" isRequired />
+          <Input
+            label="Email:"
+            type="email"
+            name="email"
+            isRequired
+            isServerComponent
+          />
+          <Input
+            label="Password:"
+            type="password"
+            name="password"
+            isRequired
+            isServerComponent
+          />
           <Button varient={BUTTON_VARIANTS.PRIMARY}>Sign In</Button>
 
           <div className="mt-4 grid grid-cols-3 items-center text-gray-400">

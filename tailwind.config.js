@@ -20,4 +20,9 @@ module.exports = {
     },
   },
   plugins: [],
+  safelist: [
+    {
+      pattern: /w-?(.*)/,
+    },
+  ],
 };

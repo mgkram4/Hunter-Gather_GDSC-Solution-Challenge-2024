@@ -27,8 +27,20 @@ export default async function SignUp({ searchParams }: SignUpProps) {
           className="grid grid-cols-1 gap-4 w-full"
           action={signUpWithEmailAction}
         >
-          <Input label="Email:" type="email" name="email" isRequired />
-          <Input label="Password:" type="password" name="password" isRequired />
+          <Input
+            label="Email:"
+            type="email"
+            name="email"
+            isRequired
+            isServerComponent
+          />
+          <Input
+            label="Password:"
+            type="password"
+            name="password"
+            isRequired
+            isServerComponent
+          />
           <Button varient={BUTTON_VARIANTS.PRIMARY}>Sign Up</Button>
 
           <div className="mt-4 grid grid-cols-3 items-center text-gray-400">
