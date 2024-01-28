@@ -78,7 +78,7 @@ export default function NavHamburger() {
           <span>Hashtag</span>
         </Link>
         <Link
-          href={ROUTES.COOKASSISTANT}
+          href={ROUTES.CHEF_ASSISTANT}
           onClick={handleLinkClick}
           className="flex items-center hover:text-primary hover:duration-500"
         >

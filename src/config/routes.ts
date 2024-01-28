@@ -6,8 +6,8 @@ export enum ROUTES {
   BOOKMARKS = "/",
   SHOPPINGLIST = "/",
   HASHTAG = "/",
-  COOKASSISTANT = "/",
   POST = "/",
+  CHEF_ASSISTANT = "/chef-assistant/chat",
 }
 
 export enum API_ROUTES {
