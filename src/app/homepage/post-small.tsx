@@ -4,14 +4,6 @@ import { CiHeart } from "react-icons/ci";
 import { BiComment } from "react-icons/bi";
 import { createClient } from "@/src/utils/supabase/client";
 
-// For ui Testing
-const slideUrls: string[] = [
-  "/testfood.jpg",
-  "/testfood.jpg",
-  "/testfood.jpg",
-  "/testfood.jpg",
-];
-
 export default async function PostSmall() {
   const supabase = createClient();
   const { data, error } = await supabase
