@@ -11,12 +11,13 @@ import { TbShoppingCartPlus, TbShoppingCartCopy } from "react-icons/tb";
 import CircleSlider from "@/src/components/circle_slider";
 
 export default function Recipe() {
+  const supabase = createClient();
   const params = useParams<{ id: string }>();
-  const id = params.id;
+  const [userId, setUserId] = useState<number | null>(null);
+  const recipeId = params.id;
   const [profilePicOP, setProfilePicOP] = useState();
   const [usernameOP, setUsernameOP] = useState<string | null | undefined>();
   const [handle, setHandle] = useState<string | undefined>();
-  //pull bookmarked from user
   const [profilePic, setProfilePic] = useState();
   const [username, setUsername] = useState<string | null | undefined>();
   const [isBookmarked, setIsBookmarked] = useState(false);
@@ -50,11 +51,64 @@ export default function Recipe() {
   const [rated, setRated] = useState(false);
   const [sliderValue, setSliderValue] = React.useState(0);
 
-  const supabase = createClient();
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      try {
+        const { error: idError, data: idData } = await supabase.auth.getUser();
+        if (idError) {
+          console.error(idError);
+          return;
+        }
+        setUserId(Number(idData.user.id));
 
-  const handleBookmarkClick = () => {
+        const { error: userError, data: userData } = await supabase
+          .from("users")
+          .select()
+          .eq("id", Number(userId))
+          .single();
+        setUsername(userData?.firstName + " " + userData?.lastName);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchCurrentUser();
+  }, []);
+
+  const handleBookmarkClick = async () => {
+    try {
+      const { error: fetchError, data } = await supabase
+        .from("bookmarks")
+        .select()
+        .eq("user_id", Number(userId))
+        .single();
+      if (fetchError) {
+        console.log(fetchError);
+      }
+      const bookmarkedIds = data?.recipe_ids || [];
+
+      if (!bookmarkedIds.includes(Number(recipeId))) {
+        bookmarkedIds.push(Number(recipeId));
+        const { error: updateError } = await supabase
+          .from("bookmarks")
+          .update({ recipe_ids: bookmarkedIds })
+          .eq("user_id", Number(userId));
+        if (updateError) {
+          console.error(updateError);
+        }
+      } else {
+        const removedId = bookmarkedIds.filter((id) => id !== Number(recipeId));
+        const { error: updateError } = await supabase
+          .from("bookmarks")
+          .update({ recipe_ids: removedId })
+          .eq("user_id", Number(userId));
+        if (updateError) {
+          console.error(updateError);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
     setIsBookmarked(!isBookmarked);
-    //set bookmark in db
   };
 
   const handleAddCart = (ingredient) => {
@@ -65,10 +119,10 @@ export default function Recipe() {
     //add to cart
   };
 
-  const handleCommented = () => {
+  const handleAddComment = async () => {
     if (newCommentText && newCommentText?.trim() !== "") {
       const newUserComment = {
-        usernameComment: usernameOP || "", // Assuming usernameOP is defined in your component
+        usernameComment: usernameOP || "",
         comment: newCommentText || "",
         posted: formatDistanceToNow(new Date(), { addSuffix: true }),
       };
@@ -76,13 +130,40 @@ export default function Recipe() {
       setNewComment(newUserComment);
       setNewCommentText("");
       setCommented(true);
-      //pass newComment to db
+
+      try {
+        const { error: insertError } = await supabase
+          .from("comments")
+          .insert({
+            user_id: Number(userId),
+            recipe_id: Number(recipeId),
+            comment: newUserComment.comment,
+          });
+        if (insertError) {
+          console.log(insertError);
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
-  const handleRating = () => {
+  const handleRating = async () => {
+    try {
+      const { error: insertError } = await supabase
+        .from("ratings")
+        .insert({
+          user_id: Number(userId),
+          recipe_id: Number(recipeId),
+          rating: sliderValue,
+        });
+      if (insertError) {
+        console.log(insertError);
+      }
+    } catch (error) {
+      console.log(error);
+    }
     setRated(true);
-    //pass sliderValue to db
   };
 
   const handleSliderChange = (newValue) => {
@@ -95,7 +176,7 @@ export default function Recipe() {
         const recipe = await supabase
           .from("recipes")
           .select()
-          .match({ id })
+          .eq("id", recipeId)
           .single();
         const { error, data } = await supabase
           .from("users")
@@ -117,7 +198,7 @@ export default function Recipe() {
         const { error, data } = await supabase
           .from("recipes")
           .select()
-          .match({ id })
+          .eq("id", recipeId)
           .single();
         if (error) {
           console.log(error);
@@ -146,7 +227,7 @@ export default function Recipe() {
         const recipe = await supabase
           .from("recipes")
           .select()
-          .match({ id })
+          .eq("id", recipeId)
           .single();
         const { error, data } = await supabase
           .from("ratings")
@@ -171,7 +252,7 @@ export default function Recipe() {
         const recipe = await supabase
           .from("recipes")
           .select()
-          .match({ id })
+          .eq("id", recipeId)
           .single();
         const { error, data } = await supabase
           .from("ingredients")
@@ -192,7 +273,7 @@ export default function Recipe() {
         const recipe = await supabase
           .from("recipes")
           .select()
-          .match({ id })
+          .eq("id", recipeId)
           .single();
         const { error, data } = await supabase
           .from("recipe_taste_profiles")
@@ -218,7 +299,7 @@ export default function Recipe() {
         const recipe = await supabase
           .from("recipes")
           .select()
-          .match({ id })
+          .eq("id", recipeId)
           .single();
         const { error, data: commentsData } = await supabase
           .from("comments")
@@ -270,13 +351,27 @@ export default function Recipe() {
       }
     };
 
+    const checkBookmarked = async () => {
+      const { error, data } = await supabase
+        .from("bookmarks")
+        .select()
+        .eq("user_id", Number(userId))
+        .single();
+      if (error) {
+        console.log(error);
+      }
+      const bookmarkedIds = data?.recipe_ids || [];
+      setIsBookmarked(bookmarkedIds.includes(recipeId));
+    };
+
     fetchUser();
     fetchRecipe();
     fetchRatings();
     fetchIngredients();
     fetchTasteProfile();
     fetchComments();
-  }, [id]);
+    checkBookmarked();
+  }, [userId, recipeId]);
 
   const TasteBar = ({ percentage }) => {
     return (
@@ -488,7 +583,7 @@ export default function Recipe() {
           <div className="flex space-x-2 items-center">
             <div className="w-20 h-20 rounded-full bg-gray-100">pfp</div>
             <div className="flex flex-col w-1/2">
-              <p className="text-xl mb-1 font-medium">{usernameOP}</p>
+              <p className="text-xl mb-1 font-medium">{username}</p>
               <textarea
                 className="w-full h-12 p-2 rounded-lg bg-white border-2 border-green-400 text-sm resize-y"
                 placeholder="Add a comment..."
@@ -498,7 +593,7 @@ export default function Recipe() {
             </div>
             <button
               className="h-1/2 p-2 mt-8 rounded-full bg-green-600"
-              onClick={handleCommented}
+              onClick={handleAddComment}
               disabled={commented}
             >
               Comment
