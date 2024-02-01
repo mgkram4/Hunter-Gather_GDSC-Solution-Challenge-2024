@@ -40,3 +40,7 @@
     transform: translateY(0);
   }
 }
+
+.markdown > * {
+  all: revert;
+}

@@ -3,19 +3,34 @@ import { PiCookingPotLight } from "react-icons/pi";
 import Link from "next/link";
 import { ROUTES } from "@config/routes";
 import { createClient } from "@utils/supabase/server";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { signOutAction } from "../actions/auth/signup/actions";
+import Burger from "./button/nav-hamburger";
+import Button, { BUTTON_VARIANTS } from "./button/button";
 
+// Component definition
 export default async function Navbar() {
+  const headerList = headers();
+  const pathname = headerList.get("x-path") || "";
+  const LIGHT_PATHS = [ROUTES.SIGNIN, ROUTES.SIGNUP, ROUTES.HOME];
+  const isLightTheme = LIGHT_PATHS.some((route) => pathname === route);
+
+  const backgroundColor = isLightTheme ? "bg-white" : "bg-primary";
+  const textColor = isLightTheme
+    ? "text-secondary hover:text-green-500"
+    : "text-white";
+
   const cookieStore = cookies();
-  const supabase = await createClient(cookieStore);
+  const supabase = createClient(cookieStore);
   const user = await supabase.auth.getUser();
   const email = user.data.user?.email;
 
   return (
-    <div className="bg-white border-gray-200 m-2 ">
+    <div
+      className={`${backgroundColor} border-gray-200 p-2 h-fit sticky top-0 w-full z-10`}
+    >
       <div className="w-full flex flex-wrap items-center justify-between mx-auto p-4">
-        <a href="/" className="flex items-center space-x-3 ">
+        <a href={ROUTES.HOME} className="flex items-center space-x-3">
           {/* Logo */}
           <PiCookingPotLight className="w-10 h-10" />
         </a>
@@ -27,35 +42,37 @@ export default async function Navbar() {
         <div className="hidden w-full md:block md:w-auto">
           <ul className="font-medium text-lg flex flex-col p-1 md:p-0 mt-4 rounded-lg md:flex-row md:space-x-4 md:mt-0  ">
             <li>
-              <a
-                href="#"
-                className=" block text-green-600 p-2  hover:text-green-500 "
-              >
+              <a href={ROUTES.HOME} className={`block ${textColor} p-2`}>
                 Home
               </a>
             </li>
             <li>
-              <Link href={ROUTES.RECIPE}>
-                <div className="block text-gray-900 p-2  hover:text-green-500 ">
-                  Recipes
-                </div>
-              </Link>
+              <a href="#" className={`block ${textColor} p-2`}>
+                Recipes
+              </a>
             </li>
-            <li>
-              {email ? (
+
+            {email ? (
+              <>
+                <li>
+                  <a
+                    href={ROUTES.CHEF_ASSISTANT}
+                    className={`block ${textColor} p-2`}
+                  >
+                    Chef Assistant
+                  </a>
+                </li>
                 <form action={signOutAction}>
-                  <button className="block text-white  hover:bg-green-700 p-2 rounded-xl bg-green-600 ">
-                    {email}
-                  </button>
+                  <Button varient={BUTTON_VARIANTS.NAVBAR}>{email}</Button>
                 </form>
-              ) : (
-                <Link href={ROUTES.SIGNIN}>
-                  <button className="block text-white  hover:bg-green-700 p-2 rounded-xl bg-green-600 ">
-                    Login
-                  </button>
-                </Link>
-              )}
-            </li>
+              </>
+            ) : (
+              <li>
+                <a href={ROUTES.SIGNIN}>
+                  <Button varient={BUTTON_VARIANTS.NAVBAR}>Login</Button>
+                </a>
+              </li>
+            )}
           </ul>
         </div>
       </div>

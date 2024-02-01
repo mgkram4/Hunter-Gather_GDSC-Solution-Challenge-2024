@@ -3,6 +3,12 @@ export enum ROUTES {
   SIGNIN = "/signin",
   SIGNUP = "/signup",
   HOME = "/",
+  PROFILE = "/",
+  BOOKMARKS = "/",
+  SHOPPINGLIST = "/",
+  HASHTAG = "/",
+  POST = "/",
+  CHEF_ASSISTANT = "/chef-assistant/chat",
 }
 
 export enum API_ROUTES {

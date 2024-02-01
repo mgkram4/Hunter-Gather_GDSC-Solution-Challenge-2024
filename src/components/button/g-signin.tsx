@@ -1,8 +1,9 @@
 "use client";
 
 import { BASE_URL } from "@/src/config/constants";
-import { API_ROUTES, ROUTES } from "@/src/config/routes";
+import { API_ROUTES } from "@/src/config/routes";
 import { createClient } from "@/src/utils/supabase/client";
+import { FcGoogle } from "react-icons/fc";
 
 export interface GoogleSignInButtonProps {
   isSignUp?: boolean;
@@ -24,9 +25,9 @@ export default function GoogleSignInButton({
   return (
     <button
       onClick={signInWithGoogle}
-      className="text-green-500 p-2 rounded cursor-pointer border-2 border-gray-200"
+      className="flex items-center justify-center px-4 py-2 font-semibold text-black p-2 rounded cursor-pointer border-2 border-gray-200 hover:opacity-70 active:bg-gray-200"
     >
-      Continue with Google
+      <FcGoogle className="mr-2 text-2xl" /> Continue with Google
     </button>
   );
 }
