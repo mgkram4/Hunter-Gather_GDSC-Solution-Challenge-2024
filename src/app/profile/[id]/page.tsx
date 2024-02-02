@@ -3,6 +3,8 @@
 import { createClient } from "@utils/supabase/client";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import defaultpfp from "@public/defaultpfp.png";
+//import PostSmall from "../../homepage/post-small";
 
 // UserProfile component prop types
 interface UserProfile {
@@ -13,6 +15,7 @@ interface UserProfile {
   isCurrentUser?: boolean | undefined | null;
   tasteProfile?: TasteProfile | undefined | null;
   userStats?: UserStats | undefined | null;
+  posts?: any;
 }
 
 // Taste profile value types
@@ -38,94 +41,82 @@ const UserProfileInfo = (props: UserProfile) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
   };
   return (
-    <div className="flex flex-row items-center justify-evenly">
+    <div className="flex flex-col">
       {/* Profile picture, username, handle, and buttons */}
-      <div className="flex flex-col items-center">
-        <img
-          alt={`${props.firstName}'s profile`}
-          src="/path-to-profile-image.jpg" // Placeholder for the profile image path
-          className="w-24 h-24 rounded-full object-cover"
-        />
-        <div>
-          <h1 className="text-2xl font-bold">
-            {props.firstName} {props.lastName}
-          </h1>
-          <p className="text-gray-500">{props.handle}</p>
-        </div>
-        {props.isCurrentUser && (
-          <div className="flex mt-4 md:mt-0 p-8">
-            <button className="bg-green-400 text-white px-4 py-2 rounded-lg mr-2">
-              Settings
-            </button>
-            <button className="bg-green-400 text-white px-4 py-2 rounded-lg">
-              Share
-            </button>
+      <div className="flex flex-row items-center justify-evenly">
+        <div className="flex flex-col items-center">
+          <img
+            alt={`${props.firstName}'s profile`}
+            src="/defaultpfp.png"
+            className="w-32 h-32 rounded-full object-cover m-3 p-3"
+          />
+          <div>
+            <h1 className="text-2xl font-bold">
+              {props.firstName} {props.lastName}
+            </h1>
+            <p className="text-secondary">{props.handle?.toLowerCase()}</p>
           </div>
-        )}
-      </div>
+          {props.isCurrentUser && (
+            <div className="flex mt-4 md:mt-0 p-8 justify-center">
+              <button className="bg-secondary text-ghost px-4 py-2 rounded-lg mx-2">
+                Settings
+              </button>
+              <button className="bg-secondary text-ghost px-4 py-2 rounded-lg mx-2">
+                Share
+              </button>
+            </div>
+          )}
+        </div>
 
-      {/* Stats and Taste Profile */}
-      <div className="mt-4 md:mt-0 md:flex md:items-center md:space-x-6 flex-wrap flex-col">
-        <div className="flex justify-between space-x-4 m-4 p-2">
-          {/* Stats */}
-          <div className="text-center m-4 pl-2 pr-2">
-            <p className="text-lg font-bold">Recipes</p>
-            {/* Number of recipes */}
-            <p className="text-base font-bold bg-slate-300 py-1 rounded-lg">
-              {props.userStats?.recipeCount}
-            </p>
-          </div>
-          <div className="text-center m-4 pl-2 pr-2">
-            <p className="text-lg font-bold">Followers</p>
-            {/* Number of followers */}
-            <p className="text-base font-bold bg-slate-300 py-1 rounded-lg">
-              {props.userStats?.followerCount}
-            </p>
-          </div>
-          <div className="text-center m-4 pl-2 pr-2">
-            <p className="text-lg font-bold">Following</p>
-            {/* Number of followings */}
-            <p className="text-base font-bold bg-slate-300 py-1 rounded-lg">
-              {props.userStats?.followingCount}
-            </p>
-          </div>
-        </div>
-        <div>{props.bio}</div>
-      </div>
-      {/* Taste Tags */}
-      <div className="flex flex-wrap mt-4 md:mt-0">
-        {props.tasteProfile &&
-          Object.entries(props.tasteProfile).map(([key, value]) => (
-            <div key={key} className="rounded-lg px-1 text-sm font-semibold">
-              <p className="text-sm text-black mr-2 mb-2">{capitalize(key)}</p>
-              <p className="bg-green-700 text-gray-200 rounded-lg px-3 py-1 text-sm mr-2 mb-2">
-                {value}
+        {/* Stats and Taste Profile */}
+        <div className="mt-4 md:mt-0 md:flex md:items-center md:space-x-6 flex-wrap flex-col">
+          <div className="flex justify-between space-x-4 m-4 p-2">
+            {/* Stats */}
+            <div className="text-center m-4 pl-2 pr-2">
+              <p className="text-lg font-bold">Recipes</p>
+              {/* Number of recipes */}
+              <p className="text-base font-bold bg-ghost py-1 rounded-lg">
+                {props.userStats?.recipeCount}
               </p>
             </div>
-          ))}
-      </div>
-      {/*
-      <div className="flex flex-wrap mt-4 md:mt-0">
-        {props.tasteProfile?.tastes.map((taste, index) => (
-          <div
-            key={index}
-            className="bg-green-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-200 mr-2 mb-2"
-          >
-            #{taste}
+            <div className="text-center m-4 pl-2 pr-2">
+              <p className="text-lg font-bold">Followers</p>
+              {/* Number of followers */}
+              <p className="text-base font-bold bg-ghost py-1 rounded-lg">
+                {props.userStats?.followerCount}
+              </p>
+            </div>
+            <div className="text-center m-4 pl-2 pr-2">
+              <p className="text-lg font-bold">Following</p>
+              {/* Number of followings */}
+              <p className="text-base font-bold bg-ghost py-1 rounded-lg">
+                {props.userStats?.followingCount}
+              </p>
+            </div>
           </div>
-        ))}
+        </div>
+        {/* Taste Tags */}
+        <div className="flex mt-4 md:mt-0">
+          {props.tasteProfile &&
+            Object.entries(props.tasteProfile).map(([key, value]) => (
+              <div key={key} className="rounded-lg px-1 text-sm font-semibold">
+                <p className="text-sm text-black mr-2 mb-2">
+                  {capitalize(key)}
+                </p>
+                <p className="bg-primary text-ghost rounded-lg px-3 py-1 text-sm mr-2 mb-2 text-center">
+                  {value}
+                </p>
+              </div>
+            ))}
+        </div>
       </div>
-      */}
+      <hr className="h-px my-10 bg-primary border-0"></hr>
     </div>
   );
 };
 
-interface ProfilePageProps {
-  isSignedIn: boolean;
-}
-
 // Main ProfilePage component
-const ProfilePage = ({ isSignedIn }: ProfilePageProps) => {
+const ProfilePage = () => {
   const params = useParams<{ id: string }>();
   const id = params.id;
 
@@ -141,40 +132,21 @@ const ProfilePage = ({ isSignedIn }: ProfilePageProps) => {
   const [profilePicture, setProfilePicture] = useState<
     string | undefined | null
   >();
-  const [firstName, setFirstName] = useState<string | undefined | null>();
-  const [lastName, setLastName] = useState<string | undefined | null>();
+  const [firstName, setFirstName] = useState<string | undefined | null>("");
+  const [lastName, setLastName] = useState<string | undefined | null>("");
   const [handle, setHandle] = useState<string | undefined>(undefined);
   const [bio, setBio] = useState<string | undefined>(undefined);
   const [isCurrentUser, setIsCurrentUser] = useState<boolean | undefined>(
     false,
   );
+  const [profilePictureUrl, setProfilePictureUrl] = useState<
+    string | undefined | null
+  >();
+  const [posts, setPosts] = useState<any>();
 
   const supabase = createClient();
 
   useEffect(() => {
-    /* 
-    const fetchSession = async () => {
-      const session = await supabase.auth.getSession();
-      if (session.error) throw session.error;
-
-      setIsCurrentUser(session.data?.user?.id === id)
-    };
-    */
-
-    /*
-    const checkCurrentUser = async () => {
-      try {
-        const user = await supabase.auth.getUser();
-        if (user.error) throw user.error;
-
-        setIsCurrentUser(user.data?.user?.id === id);
-        console.log("Is current user: ", isCurrentUser);
-      } catch (error) {
-        console.log("Error fetching current user: ", error);
-      }
-    };
-    */
-
     const fetchUserProfile = async () => {
       try {
         const { error, data } = await supabase
@@ -189,7 +161,7 @@ const ProfilePage = ({ isSignedIn }: ProfilePageProps) => {
           //setProfilePicture(data?.profilePicture);
 
           const user = await supabase.auth.getUser();
-          setIsCurrentUser(user.data?.user?.id === id);
+          setIsCurrentUser(user.data?.user?.email === data?.email);
         }
       } catch (error) {
         console.log("Error fetching user profile:", error);
@@ -215,36 +187,27 @@ const ProfilePage = ({ isSignedIn }: ProfilePageProps) => {
       }
     };
 
-    const fetchUserStats = async () => {
-      /*
+    const fetchPosts = async () => {
       try {
-        const { error, data } = await supabase.from("user_stats").select("*").eq("user_id", id).single();
+        const { data, error } = await supabase
+          .from("recipes")
+          .select("*")
+          .eq("user_id", id as string);
         if (error) throw error;
-        else {
-          setUserStats(data);
-        }
+        setPosts(data);
       } catch (error) {
-        console.log("Error fetching user stats:", error);
+        console.log("Error fetching user posts:", error);
       }
-      const userStats = {
-        recipeCount: 50,
-        followerCount: 50,
-        followingCount: 50,
-      };
-      setUserStats(userStats);
-      */
     };
 
-    //checkCurrentUser();
     fetchUserProfile();
     fetchTasteProfile();
-    fetchUserStats();
+    fetchPosts();
   }, [id, supabase]);
 
   if (!bio) setBio("Lorem ipsum dolor sit amet, consectetur adipiscing elit.");
-  if (!handle) setHandle("@janedoe");
-  if (!firstName) setFirstName("Jane");
-  if (!lastName) setLastName("Doe");
+  if (!handle && firstName && lastName)
+    setHandle(firstName?.charAt(0) + lastName);
 
   return (
     <div className="p-4 min-h-screen">
@@ -256,8 +219,9 @@ const ProfilePage = ({ isSignedIn }: ProfilePageProps) => {
         bio={bio}
         tasteProfile={tasteProfile}
         userStats={userStats}
+        posts={posts}
+        //profilePicture={profilePicture}
       />
-      {/* Posts/Recipes */}
     </div>
   );
 };
