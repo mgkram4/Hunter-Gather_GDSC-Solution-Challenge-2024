@@ -3,7 +3,6 @@
 import { createClient } from "@utils/supabase/client";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import defaultpfp from "@public/defaultpfp.png";
 //import PostSmall from "../../homepage/post-small";
 
 // UserProfile component prop types
@@ -110,6 +109,9 @@ const UserProfileInfo = (props: UserProfile) => {
             ))}
         </div>
       </div>
+      <div className="flex flex-col justify-center">
+        <p className="text-black text-center">{props.bio}</p>
+      </div>
       <hr className="h-px my-10 bg-primary border-0"></hr>
     </div>
   );
@@ -205,7 +207,10 @@ const ProfilePage = () => {
     fetchPosts();
   }, [id, supabase]);
 
-  if (!bio) setBio("Lorem ipsum dolor sit amet, consectetur adipiscing elit.");
+  if (!bio)
+    setBio(
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Default bio text.",
+    );
   if (!handle && firstName && lastName)
     setHandle(firstName?.charAt(0) + lastName);
 
