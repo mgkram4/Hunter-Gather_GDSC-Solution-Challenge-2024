@@ -1,36 +1,83 @@
-import React, { useState } from "react";
-import { CiBookmark } from "react-icons/ci";
+import React, { useState, useEffect } from "react";
 import { createClient } from "@/src/utils/supabase/client";
+import { useAuth } from "@/src/utils/hooks/auth-hook";
+import { useRouter } from "next/navigation";
+import { string } from "yup";
 
-export function BookmarkButton({}) {
-  const supabase = createClient();
+export default function BookmarkButton() {
+  const [bookmarkCount, setBookmarkCount] = useState(0);
   const [isBookmarked, setIsBookmarked] = useState(false);
 
-  function handleBookmarkClick() {
-    // Toggle the bookmark status
-    setIsBookmarked(!isBookmarked);
+  const supabase = createClient();
+  const router = useRouter();
+  const user = useAuth(router);
 
-    // Here, you should add logic to update the bookmark table for the current user
-    // and the given recipeId. This is just a placeholder, you need to modify it according to your Supabase schema.
-    supabase
-      .from("bookmarks")
-      .select("")
-      .then(({ data, error }) => {
-        if (error) {
-          console.error("Error updating bookmarks:", error.message);
+  async function fetchData() {
+    try {
+      if (user) {
+        const { data, error } = await supabase
+          .from("recipes")
+          .select("bookmark_count")
+          .eq("user_id", user)
+          .single();
+
+        if (data) {
+          setBookmarkCount(data.bookmark_count || 0);
+          setIsBookmarked(data.bookmark_count > 0);
+        } else {
+          console.error("Error fetching bookmark status:", error);
         }
-      });
+      }
+    } catch (error) {
+      console.error("Error fetching bookmark status:", error);
+    }
+  }
+
+  useEffect(() => {
+    (async () => {
+      await fetchData();
+    })();
+  }, [user]);
+
+  async function toggleBookmark() {
+    try {
+      if (user) {
+        const { data, error } = await supabase.from("recipes").upsert(
+          [
+            {
+              user_id: user,
+              // Add other necessary fields...
+              date_published: string, // Add your actual date_published value
+              title: string, // Add your actual title value
+              bookmark_count: isBookmarked
+                ? bookmarkCount - 1
+                : bookmarkCount + 1,
+            },
+          ],
+          { onConflict: ["user_id"], ignoreDuplicates: true },
+        );
+
+        if (data) {
+          // Update the state based on the latest value
+          setBookmarkCount((prevCount) =>
+            isBookmarked ? prevCount - 1 : prevCount + 1,
+          );
+          setIsBookmarked(!isBookmarked);
+        } else {
+          console.error("Error toggling bookmark:", error);
+        }
+      }
+    } catch (error) {
+      console.error("Error toggling bookmark:", error);
+    }
   }
 
   return (
-    <div className="flex items-center space-x-1">
-      <span className="text-sm">{/* Display bookmark count here */}</span>
-      <CiBookmark
-        className={`w-6 h-6 hover:text-blue-500 active:bg-blue-300 active:text-white rounded cursor-pointer transition-all duration-300 ${
-          isBookmarked && "text-blue-500"
-        }`}
-        onClick={handleBookmarkClick}
-      />
+    <div>
+      <p>Bookmark Count: {bookmarkCount}</p>
+      <button onClick={toggleBookmark}>
+        {isBookmarked ? "Unbookmark" : "Bookmark"}
+      </button>
     </div>
   );
 }
