@@ -1,4 +1,3 @@
-import Carousel from "./swipe-carousel";
 import { CiBookmark } from "react-icons/ci";
 import { CiHeart } from "react-icons/ci";
 import { BiComment } from "react-icons/bi";
@@ -9,7 +8,7 @@ export default async function PostSmall() {
   const { data, error } = await supabase
     .from("recipes")
     .select(
-      "title, short_description, headliner_image, date_published, rating_count, users(profilePicture),bookmark_count,comment_count",
+      "id,title, short_description, headliner_image, date_published, rating_count, users(profilePicture),bookmark_count,comment_count",
     );
 
   return (
