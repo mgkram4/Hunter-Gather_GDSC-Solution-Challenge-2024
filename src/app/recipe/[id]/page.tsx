@@ -132,13 +132,11 @@ export default function Recipe() {
       setCommented(true);
 
       try {
-        const { error: insertError } = await supabase
-          .from("comments")
-          .insert({
-            user_id: Number(userId),
-            recipe_id: Number(recipeId),
-            comment: newUserComment.comment,
-          });
+        const { error: insertError } = await supabase.from("comments").insert({
+          user_id: Number(userId),
+          recipe_id: Number(recipeId),
+          comment: newUserComment.comment,
+        });
         if (insertError) {
           console.log(insertError);
         }
@@ -150,13 +148,11 @@ export default function Recipe() {
 
   const handleRating = async () => {
     try {
-      const { error: insertError } = await supabase
-        .from("ratings")
-        .insert({
-          user_id: Number(userId),
-          recipe_id: Number(recipeId),
-          rating: sliderValue,
-        });
+      const { error: insertError } = await supabase.from("ratings").insert({
+        user_id: Number(userId),
+        recipe_id: Number(recipeId),
+        rating: sliderValue,
+      });
       if (insertError) {
         console.log(insertError);
       }
@@ -361,7 +357,7 @@ export default function Recipe() {
         console.log(error);
       }
       const bookmarkedIds = data?.recipe_ids || [];
-      setIsBookmarked(bookmarkedIds.includes(recipeId));
+      setIsBookmarked(bookmarkedIds.includes(Number(recipeId)));
     };
 
     fetchUser();
