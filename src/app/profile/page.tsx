@@ -1,23 +1,41 @@
+"use client";
+
 import { ROUTES } from "@/src/config/routes";
-import { createClient } from "@utils/supabase/server";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { createClient } from "@utils/supabase/client";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@utils/hooks/auth-hook";
+import { useEffect } from "react";
 
-export default async function MainProfilePage() {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
-  const user = await supabase.auth.getUser();
-  const { data, error } = await supabase
-    .from("users")
-    .select("*")
-    .eq("email", user.data.user?.email)
-    .single();
+export default function MainProfilePage() {
+  const supabase = createClient();
+  const router = useRouter();
 
-  if (!user || data === null) {
-    redirect(ROUTES.SIGNIN);
-  } else {
-    redirect(ROUTES.PROFILE + "/" + data?.id);
-  }
+  useEffect(() => {
+    async function fetchProfile() {
+      const user = await useAuth(router);
 
-  return <div>{error ? <h1>Error</h1> : <h1>Loading profile...</h1>}</div>;
+      if (!user || !user.user || !user.user.email) {
+        console.log("No user email found, redirecting to sign in.");
+        router.push(ROUTES.SIGNIN);
+        return;
+      }
+
+      const email = user.user.email;
+
+      const { data, error } = await supabase
+        .from("users")
+        .select("*")
+        .eq("email", email)
+        .single();
+
+      if (error || !data) {
+        router.push(ROUTES.SIGNIN);
+      } else {
+        router.push(ROUTES.PROFILE + "/" + data?.id);
+      }
+    }
+    fetchProfile();
+  });
+
+  return <div>Loading profile...</div>;
 }
