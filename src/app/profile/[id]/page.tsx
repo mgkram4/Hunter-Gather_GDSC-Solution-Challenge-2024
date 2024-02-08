@@ -1,7 +1,6 @@
 "use client";
 
-/*TODO - 
-  - Import all supabase types and replace created types
+/*TODO
   - Import/set up profile picture
   - Import and set up recipes/posts 
 */
@@ -32,7 +31,7 @@ type paramId = {
 export default function ProfilePage() {
   const capitalize = (str: string) => {
     try {
-      if (!str) throw new Error("String is empty or undefined");
+      if (!str) throw Error("String is empty or undefined");
       if (!str.match(/[A-Z]/gi)) throw new Error("String is not a word");
       return str.charAt(0).toUpperCase() + str.slice(1);
     } catch (err) {
@@ -107,7 +106,6 @@ export default function ProfilePage() {
 
   return (
     <div className="p-4 min-h-screen flex flex-col">
-      {/* Profile picture, username, handle, and buttons */}
       <div className="flex flex-row items-center justify-evenly">
         <div className="flex flex-col items-center">
           <img
@@ -116,9 +114,7 @@ export default function ProfilePage() {
             className="w-32 h-32 rounded-full object-cover m-3 p-3"
           />
           <div>
-            <h1 className="text-2xl font-bold">
-              {firstName} {lastName}
-            </h1>
+            <h1 className="text-2xl font-bold">{`${firstName} ${lastName}`}</h1>
             <p className="text-secondary">{handle?.toLowerCase()}</p>
           </div>
           {isCurrentUser && (
@@ -132,49 +128,65 @@ export default function ProfilePage() {
             </div>
           )}
         </div>
-
-        {/* Stats and Taste Profile */}
         <div className="mt-4 md:mt-0 md:flex md:items-center md:space-x-6 flex-wrap flex-col">
           <div className="flex justify-between space-x-4 m-4 p-2">
-            {/* Stats */}
             <div className="text-center m-4 pl-2 pr-2">
               <p className="text-lg font-bold">Recipes</p>
-              {/* Number of recipes */}
               <p className="text-base font-bold bg-ghost py-1 rounded-lg">
                 {userStats ? userStats?.recipeCount : 0}
               </p>
             </div>
             <div className="text-center m-4 pl-2 pr-2">
               <p className="text-lg font-bold">Followers</p>
-              {/* Number of followers */}
               <p className="text-base font-bold bg-ghost py-1 rounded-lg">
                 {userStats ? userStats?.recipeCount : 0}
               </p>
             </div>
             <div className="text-center m-4 pl-2 pr-2">
               <p className="text-lg font-bold">Following</p>
-              {/* Number of followings */}
               <p className="text-base font-bold bg-ghost py-1 rounded-lg">
                 {userStats ? userStats?.recipeCount : 0}
               </p>
             </div>
           </div>
         </div>
-        {/* Taste Tags */}
         <div className="flex mt-4 md:mt-0">
-          {tasteProfile &&
-            Object.entries(tasteProfile)
-              .filter(([key]) => tasteAttributes.includes(key))
-              .map(([key, value]) => (
-                <div className="rounded-lg px-2 text-sm font-semibold">
-                  <p className="text-sm text-black mr-2 mb-2">
-                    {capitalize(key)}
-                  </p>
-                  <p className="bg-primary text-ghost rounded-lg px-3 py-1 text-sm mr-2 mb-2 text-center">
-                    {value}
-                  </p>
-                </div>
-              ))}
+          <div className="rounded-lg px-2 text-sm font-semibold">
+            <p className="text-sm text-black mr-2 mb-2">{"Sweetness"}</p>
+            <p className="bg-primary text-ghost rounded-lg px-3 py-1 text-sm mr-2 mb-2 text-center">
+              {tasteProfile ? tasteProfile?.sweetness : 0}
+            </p>
+          </div>
+          <div className="rounded-lg px-2 text-sm font-semibold">
+            <p className="text-sm text-black mr-2 mb-2">{"Saltiness"}</p>
+            <p className="bg-primary text-ghost rounded-lg px-3 py-1 text-sm mr-2 mb-2 text-center">
+              {tasteProfile ? tasteProfile?.saltiness : 0}
+            </p>
+          </div>
+          <div className="rounded-lg px-2 text-sm font-semibold">
+            <p className="text-sm text-black mr-2 mb-2">{"Sourness"}</p>
+            <p className="bg-primary text-ghost rounded-lg px-3 py-1 text-sm mr-2 mb-2 text-center">
+              {tasteProfile ? tasteProfile?.sourness : 0}
+            </p>
+          </div>
+          <div className="rounded-lg px-2 text-sm font-semibold">
+            <p className="text-sm text-black mr-2 mb-2">{"Bitterness"}</p>
+            <p className="bg-primary text-ghost rounded-lg px-3 py-1 text-sm mr-2 mb-2 text-center">
+              {tasteProfile ? tasteProfile?.bitterness : 0}
+            </p>
+          </div>
+          <div className="rounded-lg px-2 text-sm font-semibold">
+            <p className="text-sm text-black mr-2 mb-2">{"Savoriness"}</p>
+            <p className="bg-primary text-ghost rounded-lg px-3 py-1 text-sm mr-2 mb-2 text-center">
+              {tasteProfile ? tasteProfile?.savoriness : 0}
+            </p>
+          </div>
+          <div className="rounded-lg px-2 text-sm font-semibold">
+            <p className="text-sm text-black mr-2 mb-2">{"Spiciness"}</p>
+            <p className="bg-primary text-ghost rounded-lg px-3 py-1 text-sm mr-2 mb-2 text-center">
+              {tasteProfile ? tasteProfile?.spiciness : 0}
+            </p>
+          </div>
         </div>
       </div>
       <div className="flex flex-col justify-center">
