@@ -51,6 +51,11 @@ export default async function Navbar() {
                 Recipes
               </a>
             </li>
+            <li>
+              <a href={ROUTES.PROFILE} className={`block ${textColor} p-2`}>
+                Profile
+              </a>
+            </li>
 
             {email ? (
               <>
