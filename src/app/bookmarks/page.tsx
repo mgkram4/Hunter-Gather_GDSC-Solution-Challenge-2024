@@ -1,100 +1,72 @@
-import { createClient } from "@utils/supabase/server";
+"use client";
+
+import React, { useEffect } from "react";
 import PostSmall from "../homepage/post-small";
-import { cookies } from "next/headers";
 import { useAuth } from "@/src/utils/hooks/auth-hook";
 import { ROUTES } from "@/src/config/routes";
 import { useRouter } from "next/navigation";
+import { ERROR_RESPONSES } from "@/src/utils/helpers/auth/enums";
+import { createClient } from "@/src/utils/supabase/client";
 
-export default async function Bookmarks() {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+export default function Bookmarks() {
   const router = useRouter();
-  const user = useAuth(router);
 
-  if (!user) {
-    return (
-      <div className="container mx-auto my-8 px-4 sm:px-6 lg:px-8 text-center">
-        <p>Please sign in to view your bookmarks.</p>
-        <a href={ROUTES.SIGNIN} className="text-blue-500">
-          Sign In
-        </a>
-      </div>
-    );
-  }
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const user = await useAuth(router);
 
-  // Fetch user ID based on email
-  const { data: userData, error: userError } = await supabase
-    .from("users")
-    .select("id")
-    .eq("email", user)
-    .single();
-  console.log("Supabase User Data:", userData);
-  console.error("Supabase User Error:", userError);
+        if (!user.user) {
+          router.push(
+            `${ROUTES.SIGNIN}?error=${ERROR_RESPONSES.AUTH_REQUIRED}`,
+          );
+          return;
+        }
 
-  if (userError) {
-    return (
-      <div className="container mx-auto my-8 px-4 sm:px-6 lg:px-8 text-center">
-        <p className="text-red-500">
-          Error fetching user data from Supabase: {userError.message}
-        </p>
-      </div>
-    );
-  }
+        const { data, error } = await createClient()
+          .from("recipes")
+          .select("id, bookmark_count")
+          .eq("user_id", user.user.id)
+          .single();
 
-  const userId = userData?.id;
+        if (error) {
+          throw new Error(error.message);
+        }
 
-  // Fetch all the recipe_ids a user has bookmarked
-  const { data: bookmarksData, error: bookmarksError } = await supabase
-    .from("bookmarks")
-    .select("recipe_ids")
-    .eq("user_id", userId);
+        const recipeIds = data && data.id ? [data.id] : [];
 
-  if (bookmarksError) {
-    return (
-      <div className="container mx-auto my-8 px-4 sm:px-6 lg:px-8 text-center">
-        <p className="text-red-500">
-          Error fetching bookmarks data from Supabase: {bookmarksError.message}
-        </p>
-      </div>
-    );
-  }
+        // Fetch detailed recipe data based on IDs
+        const { data: detailedRecipesData, error: detailedRecipesError } =
+          await createClient()
+            .from("recipes")
+            .select(
+              "id, title, short_description, headliner_image, date_published, rating_count, users(profilePicture), bookmark_count, comment_count",
+            )
+            .in("id", recipeIds);
 
-  // Extracting recipe_ids from bookmarks data
-  const recipeIds = bookmarksData[0]?.recipe_ids || [];
+        if (detailedRecipesError) {
+          throw new Error(detailedRecipesError.message);
+        }
 
-  // Fetch the details of the bookmarked recipes
-  const { data: recipesData, error: recipesError } = await supabase
-    .from("recipes")
-    .select(
-      "id, title, short_description, headliner_image, date_published, created_at, updated_at, taste_profile_id, ingredientsId, commentId, bookmark_count, comment_count, rating_count, instructions, embeddings, ratings_id",
-    )
-    .in("id", recipeIds);
+        // Render PostSmall components directly without saving to state
+        if (detailedRecipesData.length > 0) {
+          detailedRecipesData.forEach((recipe) => {
+            console.log(recipe);
+            // You can render PostSmall here with each 'recipe' data
+          });
+        }
+      } catch (error: any) {
+        console.error("Error fetching data:", error.message);
+      }
+    }
 
-  if (recipesError) {
-    return (
-      <div className="container mx-auto my-8 px-4 sm:px-6 lg:px-8 text-center">
-        <p className="text-red-500">
-          Error fetching recipe data from Supabase: {recipesError.message}
-        </p>
-      </div>
-    );
-  }
+    fetchData();
+  }, [router]);
 
   return (
     <div className="container mx-auto my-8 px-4 sm:px-6 lg:px-8">
       <h2 className="text-3xl font-bold mb-6 text-center">Your Bookmarks</h2>
-      {recipesData && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-8">
-          {recipesData.map((recipe) => (
-            <div key={recipe.id} className="mb-4">
-              <PostSmall key={recipe.id} {...recipe} />
-              {recipe.bookmark_count > 0 && (
-                <div className="text-green-500 font-bold mt-2">Bookmarked</div>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
+      <PostSmall />
     </div>
   );
 }
