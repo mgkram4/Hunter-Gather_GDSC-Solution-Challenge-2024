@@ -37,12 +37,7 @@ export default function Bookmarks() {
 
         // Fetch detailed recipe data based on IDs
         const { data: detailedRecipesData, error: detailedRecipesError } =
-          await createClient()
-            .from("recipes")
-            .select(
-              "id, title, short_description, headliner_image, date_published, rating_count, users(profilePicture), bookmark_count, comment_count",
-            )
-            .in("id", recipeIds);
+          await createClient().from("recipes").select().in("id", recipeIds);
 
         if (detailedRecipesError) {
           throw new Error(detailedRecipesError.message);
