@@ -1,4 +1,3 @@
-import { CiBookmark } from "react-icons/ci";
 import { CiHeart } from "react-icons/ci";
 import { BiComment } from "react-icons/bi";
 import { createClient } from "@/src/utils/supabase/client";
@@ -60,9 +59,10 @@ export default async function PostSmall() {
                 </div>
 
                 <div className="flex items-center space-x-1">
-                  <span className="text-sm">{recipe.bookmark_count}</span>
-                  <CiBookmark className="w-6 h-6 hover:text-blue-500 active:bg-blue-300 active:text-white rounded cursor-pointer transition-all duration-300" />
-                  <BookmarkButton recipeId={recipe.id} />
+                  <BookmarkButton
+                    initialBookmarkCount={recipe.bookmark_count}
+                    recipeId={recipe.id}
+                  />
                 </div>
 
                 <div className="flex items-center space-x-1">

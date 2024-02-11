@@ -4,7 +4,10 @@ import Bottomnav from "@/src/components/bottom-navbar";
 import Sidebar from "./sidebar";
 export default async function Timeline() {
   const supabase = createClient();
-  const { data, error } = await supabase.from("recipes").select();
+  const { data, error } = await supabase
+    .from("recipes")
+    .select()
+    .order("id", { ascending: false });
 
   return (
     <div className="flex">
