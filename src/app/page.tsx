@@ -7,11 +7,13 @@ import { Recipe } from "../types/tables";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../utils/hooks/auth-hook";
+import PostLoading from "../components/homepage/post-loading";
 
 export default function Home() {
   const router = useRouter();
   const supabase = createClient();
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [recipes, setRecipes] = useState<Recipe[]>();
+  const [loading, setLoading] = useState<boolean>(true);
 
   const fetchData = async () => {
     const user = await useAuth(router);
@@ -41,8 +43,6 @@ export default function Home() {
       },
     );
 
-    console.log(data, error);
-
     if (error) {
       console.error("Error fetching data:", error.message);
       return;
@@ -63,15 +63,17 @@ export default function Home() {
         </div>
         <div className="py-2 border-gray-300">
           <div className="flex flex-col">
-            {recipes &&
-              recipes.map((recipe, index) => (
-                <div
-                  key={index}
-                  className="border-gray-300 border-t border-b p-2 flex space-x-4 mr-8"
-                >
-                  <PostSmall key={index} {...recipe} />
-                </div>
-              ))}
+            {recipes ? (
+              recipes.map((recipe) => (
+                <PostSmall
+                  setLoading={setLoading}
+                  key={recipe.id}
+                  {...recipe}
+                />
+              ))
+            ) : (
+              <PostLoading />
+            )}
           </div>
           <Bottomnav />
         </div>
