@@ -6,6 +6,7 @@ import {
   pipeline,
 } from "https://cdn.jsdelivr.net/npm/@xenova/transformers@2.5.0";
 import { RecommendationService } from "./service.ts";
+import { corsHeaders } from "../_shared/cors.ts";
 
 // Configuration for Deno runtime
 env.useBrowserCache = false;
@@ -15,6 +16,11 @@ env.allowLocalModels = false;
  * Serverless function for generating recipe recommendations
  */
 Deno.serve(async (req) => {
+  if (req.method === 'OPTIONS') {
+    return new Response('ok', { headers: corsHeaders })
+  }
+
+  
   const authHeader = req.headers.get("Authorization");
    const supabaseClient = createClient<Database>(
     SUPABASE_URL,
@@ -25,11 +31,11 @@ Deno.serve(async (req) => {
   );
 
   // retrieve recently created recipes
-  const recipes = await RecommendationService(supabaseClient, 37);
+  const recipes = await RecommendationService(supabaseClient, req.body.id);
 
   
   return new Response(JSON.stringify(recipes), {
-    headers: { "Content-Type": "application/json" },
+    headers: {...corsHeaders,  "Content-Type": "application/json" },
   });
 });
 /* To invoke locally:
