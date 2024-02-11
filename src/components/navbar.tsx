@@ -1,11 +1,9 @@
 import { RxHamburgerMenu } from "react-icons/rx";
 import { PiCookingPotLight } from "react-icons/pi";
-import Link from "next/link";
 import { ROUTES } from "@config/routes";
 import { createClient } from "@utils/supabase/server";
 import { cookies, headers } from "next/headers";
 import { signOutAction } from "../actions/auth/signup/actions";
-import Burger from "./button/nav-hamburger";
 import Button, { BUTTON_VARIANTS } from "./button/button";
 
 // Component definition
@@ -43,11 +41,6 @@ export default async function Navbar() {
           <ul className="font-medium text-lg flex flex-col p-1 md:p-0 mt-4 rounded-lg md:flex-row md:space-x-4 md:mt-0  ">
             <li>
               <a href={ROUTES.HOME} className={`block ${textColor} p-2`}>
-                Home
-              </a>
-            </li>
-            <li>
-              <a href="#" className={`block ${textColor} p-2`}>
                 Recipes
               </a>
             </li>
