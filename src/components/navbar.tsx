@@ -12,7 +12,7 @@ import Button, { BUTTON_VARIANTS } from "./button/button";
 export default async function Navbar() {
   const headerList = headers();
   const pathname = headerList.get("x-path") || "";
-  const LIGHT_PATHS = [ROUTES.SIGNIN, ROUTES.SIGNUP, ROUTES.HOME];
+  const LIGHT_PATHS = [ROUTES.SIGNIN, ROUTES.SIGNUP];
   const isLightTheme = LIGHT_PATHS.some((route) => pathname === route);
 
   const backgroundColor = isLightTheme ? "bg-white" : "bg-primary";

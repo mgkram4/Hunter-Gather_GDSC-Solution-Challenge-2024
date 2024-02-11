@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import PostSmall from "./post-small";
 import { createClient } from "@/src/utils/supabase/client";
 import Bottomnav from "@/src/components/bottom-navbar";

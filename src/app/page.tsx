@@ -1,5 +1,4 @@
-import Sidebar from "./homepage/sidebar";
-import Timeline from "./homepage/timeline";
+import Timeline from "@components/homepage/timeline";
 
 export default function Home() {
   return (

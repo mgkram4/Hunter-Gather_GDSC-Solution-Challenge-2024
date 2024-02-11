@@ -2,7 +2,7 @@ import { CiBookmark } from "react-icons/ci";
 import { CiHeart } from "react-icons/ci";
 import { BiComment } from "react-icons/bi";
 import { createClient } from "@/src/utils/supabase/client";
-import BookmarkButton from "../bookmarks/bookmark-button";
+import BookmarkButton from "@/src/app/bookmarks/bookmark-button";
 
 interface BookmarkButtonProps {
   recipeId: number;
