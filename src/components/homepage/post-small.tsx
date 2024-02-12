@@ -1,7 +1,9 @@
 "use client";
 import { CiHeart } from "react-icons/ci";
 import { BiComment } from "react-icons/bi";
-import BookmarkButton from "@/src/app/bookmarks/bookmark-button";
+import { createClient } from "@/src/utils/supabase/client";
+import BookmarkButton from "@/src/components/button/bookmark-button";
+import { useState } from "react";
 import { Recipe } from "@/src/types/tables";
 import RatingButton from "../button/rating-button";
 
