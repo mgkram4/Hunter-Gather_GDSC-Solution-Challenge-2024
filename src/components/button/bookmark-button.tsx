@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect } from "react";
 import { createClient } from "@/src/utils/supabase/client";
 import { useAuth } from "@/src/utils/hooks/auth-hook";
@@ -23,106 +25,89 @@ export default function BookmarkButton({
   const [isBookmarked, toggleBookmarked] = useToggle(false);
   const [userId, setUserId] = useState<number>();
   const [recipeIds, setRecipeIds] = useState<number[]>([]);
-  const [isLoading, setIsLoading] = useState(false); // Added loading state
 
   const supabase = createClient();
   const router = useRouter();
 
   const fetchBookmarkData = async () => {
-    setIsLoading(true);
+    const user = await useAuth(router);
 
-    try {
-      const user = await useAuth(router);
+    if (!user.user) {
+      router.push(`${ROUTES.SIGNIN}?error=${ERROR_RESPONSES.AUTH_REQUIRED}`);
+      return;
+    }
 
-      if (!user.user) {
-        router.push(`${ROUTES.SIGNIN}?error=${ERROR_RESPONSES.AUTH_REQUIRED}`);
-        return;
-      }
+    const uuid = await supabase
+      .from("users")
+      .select("id")
+      .eq("uuid", user.user.id)
+      .single();
 
-      const uuid = await supabase
-        .from("users")
-        .select("id")
-        .eq("uuid", user.user.id)
-        .single();
+    if (!uuid.data) {
+      throw new Error("User not found");
+    }
 
-      if (!uuid.data) {
-        throw new Error("User not found");
-      }
+    setUserId(uuid.data.id);
 
-      setUserId(uuid.data.id);
+    const bookmarks = await supabase
+      .from("bookmarks")
+      .select()
+      .eq("user_id", uuid.data.id)
+      .single();
 
-      const bookmarks = await supabase
-        .from("bookmarks")
-        .select()
-        .eq("user_id", uuid.data.id)
-        .single();
+    setRecipeIds(bookmarks.data?.recipe_ids || []);
 
-      setRecipeIds(bookmarks.data?.recipe_ids || []);
-
-      if (bookmarks.data && bookmarks.data.recipe_ids) {
-        toggleBookmarked(bookmarks.data.recipe_ids.includes(recipeId));
-      }
-    } catch (error: any) {
-      console.error("Error fetching bookmark data:", error.message);
-    } finally {
-      setIsLoading(false);
+    if (bookmarks.data && bookmarks.data.recipe_ids) {
+      toggleBookmarked(bookmarks.data.recipe_ids.includes(recipeId));
     }
   };
 
   const handleClick = async () => {
-    setIsLoading(true);
+    toggleBookmarked();
+    let newCount = bookmarkCount;
 
-    try {
-      toggleBookmarked();
-      let newCount = bookmarkCount;
+    if (isBookmarked) {
+      setBookmarkCount(bookmarkCount - 1);
+      newCount = bookmarkCount - 1;
+    } else {
+      setBookmarkCount(bookmarkCount + 1);
+      newCount = bookmarkCount + 1;
+    }
 
-      if (isBookmarked) {
-        setBookmarkCount(bookmarkCount - 1);
-        newCount = bookmarkCount - 1;
-      } else {
-        setBookmarkCount(bookmarkCount + 1);
-        newCount = bookmarkCount + 1;
-      }
+    // Update the bookmark count in the database
+    const updateCount = await supabase
+      .from("recipes")
+      .update({ bookmark_count: newCount })
+      .eq("id", recipeId);
 
-      // Update the bookmark count in the database
-      const updateCount = await supabase
-        .from("recipes")
-        .update({ bookmark_count: newCount })
-        .eq("id", recipeId);
+    // add the recipe to the user's bookmarks
+    if (newCount > initialBookmarkCount && userId) {
+      const updateBookmarks = await supabase
+        .from("bookmarks")
+        .update({
+          recipe_ids: [...recipeIds, recipeId],
+        })
+        .eq("user_id", userId);
+    } else if (userId) {
+      const updateBookmarks = await supabase
+        .from("bookmarks")
+        .update({
+          recipe_ids: recipeIds.filter((id) => id !== recipeId),
+        })
+        .eq("user_id", userId);
+    }
 
-      // add the recipe to the user's bookmarks
-      if (newCount > initialBookmarkCount && userId) {
-        const updateBookmarks = await supabase
-          .from("bookmarks")
-          .update({
-            recipe_ids: [...recipeIds, recipeId],
-          })
-          .eq("user_id", userId);
-      } else if (userId) {
-        const updateBookmarks = await supabase
-          .from("bookmarks")
-          .update({
-            recipe_ids: recipeIds.filter((id) => id !== recipeId),
-          })
-          .eq("user_id", userId);
-      }
-
-      if (updateCount.error) {
-        console.error(
-          "Error updating bookmark count:",
-          updateCount.error.message,
-        );
-      }
-    } catch (error: any) {
-      console.error("Error handling click:", error.message);
-    } finally {
-      setIsLoading(false);
+    if (updateCount.error) {
+      console.error(
+        "Error updating bookmark count:",
+        updateCount.error.message,
+      );
     }
   };
 
   useEffect(() => {
     fetchBookmarkData();
-  }, []);
+  });
 
   return (
     <div className="inline-flex">
