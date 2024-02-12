@@ -8,9 +8,6 @@ import { useRouter } from "next/navigation";
 import { ERROR_RESPONSES } from "@/src/utils/helpers/auth/enums";
 import { createClient } from "@/src/utils/supabase/client";
 import { Recipe } from "@/src/types/tables";
-import RatingButton from "@/src/components/button/rating-button";
-
-interface PostSmallProps extends Recipe {}
 
 export default function Bookmarks() {
   const router = useRouter();
