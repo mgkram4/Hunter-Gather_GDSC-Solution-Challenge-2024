@@ -29,7 +29,7 @@ export default function Messages({ messages }: MessagesProps) {
                 ) : doc.data().status && doc.data().status.state === "ERROR" ? (
                   `Gemini Error: ${doc.data().status.error}`
                 ) : (
-                  "Loading..."
+                  "Cooking..."
                 )}
               </div>
             </div>
