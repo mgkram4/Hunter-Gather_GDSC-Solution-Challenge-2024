@@ -506,7 +506,15 @@ export default function Recipe() {
 
             <div className="flex w-1/5 h-full justify-end items-center">
               <div
-                className={`flex w-1/2 h-5/6 rounded-full mb-6 justify-center items-center font-bold ${rating !== undefined && rating >= 85 ? "bg-green-600 text-6xl" : rating !== undefined && rating >= 70 ? "bg-yellow-500 text-6xl" : rating !== undefined ? "bg-red-600 text-6xl" : "bg-gray-400 text-xl"}`}
+                className={`flex w-1/2 h-5/6 rounded-full mb-6 justify-center items-center font-bold ${
+                  rating !== undefined && rating >= 85
+                    ? "bg-green-600 text-6xl"
+                    : rating !== undefined && rating >= 70
+                      ? "bg-yellow-500 text-6xl"
+                      : rating !== undefined
+                        ? "bg-red-600 text-6xl"
+                        : "bg-gray-400 text-xl"
+                }`}
               >
                 {rating !== undefined ? rating : "No Ratings"}
               </div>
