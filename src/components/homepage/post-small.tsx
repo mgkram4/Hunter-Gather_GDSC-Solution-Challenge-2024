@@ -50,6 +50,10 @@ export default function PostSmall({ recipe }: PostSmallProps) {
                   initialRatingCount={recipe.rating_count}
                   recipeId={recipe.id}
                 />
+                <RatingButton
+                  initialRatingCount={recipe.rating_count}
+                  recipeId={recipe.id}
+                />
               </div>
 
               <div className="flex items-center space-x-1">
