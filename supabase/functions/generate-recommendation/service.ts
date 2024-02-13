@@ -41,22 +41,19 @@ const service = async (client: SupabaseClient<Database>, userId: number) => {
     .eq("user_id", userId)
     .single();
   // retrieve recently created recipes
-  const today = new Date();
-  const interval = today.setDate(today.getDate() - 7);
   const recipes = await client
     .from("recipes")
     .select(
       `id, bookmark_count, comment_count, rating_count, taste_profile_id, recipe_taste_profiles!RecipeTasteProfiles_recipeId_fkey(${QUERY_FIELDS})`
     )
-    .gte("created_at", new Date(interval).toISOString());
 
   // compute the cosine similarity between the user's taste profile and each recipe's taste profile
   const userTasteProfileVector = [
-    userTasteProfile.data!.sweetness,
-    userTasteProfile.data!.saltiness,
-    userTasteProfile.data!.sourness,
-    userTasteProfile.data!.bitterness,
-    userTasteProfile.data!.savoriness,
+    userTasteProfile.data?.sweetness || 0,
+    userTasteProfile.data?.saltiness || 0,
+    userTasteProfile.data?.sourness || 0,
+    userTasteProfile.data?.bitterness || 0,
+    userTasteProfile.data?.savoriness || 0,
   ];
 
   const ranks = calculateRanks(userTasteProfileVector, recipes.data!);
@@ -79,11 +76,11 @@ const calculateRanks = (
   const ranks = recipes.map((recipe) => {
     const recipeTasteProfile = recipe.recipe_taste_profiles[0];
     const recipeTasteProfileVector = [
-      recipeTasteProfile.sweetness,
-      recipeTasteProfile.saltiness,
-      recipeTasteProfile.sourness,
-      recipeTasteProfile.bitterness,
-      recipeTasteProfile.savoriness,
+      recipeTasteProfile?.sweetness || 0,
+      recipeTasteProfile?.saltiness || 0,
+      recipeTasteProfile?.sourness || 0,
+      recipeTasteProfile?.bitterness || 0,
+      recipeTasteProfile?.savoriness || 0,
     ];
 
     const similarityScore = similarity(
@@ -104,7 +101,6 @@ const calculateRanks = (
   // normalize the scores
   const minScore = Math.min(...ranks.map((rank) => rank.score));
   const maxScore = Math.max(...ranks.map((rank) => rank.score));
-  console.log(minScore, maxScore);
 
   const normalizedRanks = ranks.map((rank) => {
     return {
@@ -112,8 +108,6 @@ const calculateRanks = (
       score: normalize(minScore, maxScore)(rank.score),
     };
   });
-
-  console.log(normalizedRanks);
 
     return normalizedRanks;
 };

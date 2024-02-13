@@ -1,5 +1,3 @@
-import { CiSearch } from "react-icons/ci";
-
 export default function Sidebar() {
   return (
     <div className="hidden md:block md:w-[30%] ml-auto top-0 overflow-scroll mt-4 w-full  flex-col h-screen px-6 items-stretch">

@@ -6,28 +6,28 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[];
 
-export interface Database {
+export type Database = {
   public: {
     Tables: {
       bookmarks: {
         Row: {
           created_at: string;
           id: number;
-          recipe_ids: number[];
+          recipe_ids: number[] | null;
           updated_at: string;
           user_id: number;
         };
         Insert: {
           created_at?: string;
           id?: number;
-          recipe_ids: number[];
+          recipe_ids?: number[] | null;
           updated_at?: string;
           user_id: number;
         };
         Update: {
           created_at?: string;
           id?: number;
-          recipe_ids?: number[];
+          recipe_ids?: number[] | null;
           updated_at?: string;
           user_id?: number;
         };
@@ -161,6 +161,7 @@ export interface Database {
         Row: {
           bitterness: number;
           created_at: string;
+          embeddings: string | null;
           id: number;
           recipe_id: number;
           saltiness: number;
@@ -173,6 +174,7 @@ export interface Database {
         Insert: {
           bitterness?: number;
           created_at?: string;
+          embeddings?: string | null;
           id?: number;
           recipe_id: number;
           saltiness?: number;
@@ -185,6 +187,7 @@ export interface Database {
         Update: {
           bitterness?: number;
           created_at?: string;
+          embeddings?: string | null;
           id?: number;
           recipe_id?: number;
           saltiness?: number;
@@ -206,51 +209,57 @@ export interface Database {
       };
       recipes: {
         Row: {
-          bookmarkCount: number;
-          commentCount: number;
+          bookmark_count: number;
+          comment_count: number;
           commentId: number | null;
           created_at: string;
           date_published: string;
+          embeddings: string | null;
           headliner_image: string | null;
           id: number;
           ingredientsId: number | null;
-          instructions: string;
-          ratingCount: number;
-          short_description: string | null;
+          instructions: Json;
+          rating_count: number;
+          ratings_id: number | null;
+          short_description: string;
           taste_profile_id: number | null;
           title: string;
           updated_at: string;
           user_id: number;
         };
         Insert: {
-          bookmarkCount?: number;
-          commentCount?: number;
+          bookmark_count?: number;
+          comment_count?: number;
           commentId?: number | null;
           created_at?: string;
           date_published: string;
+          embeddings?: string | null;
           headliner_image?: string | null;
           id?: number;
           ingredientsId?: number | null;
-          instructions: string;
-          ratingCount?: number;
-          short_description?: string | null;
+          instructions?: Json;
+          rating_count?: number;
+          ratings_id?: number | null;
+          short_description?: string;
           taste_profile_id?: number | null;
           title: string;
           updated_at?: string;
           user_id: number;
         };
         Update: {
-          bookmarkCount?: number;
-          commentCount?: number;
+          bookmark_count?: number;
+          comment_count?: number;
           commentId?: number | null;
           created_at?: string;
           date_published?: string;
+          embeddings?: string | null;
           headliner_image?: string | null;
           id?: number;
           ingredientsId?: number | null;
-          instructions?: string;
-          ratingCount?: number;
-          short_description?: string | null;
+          instructions?: Json;
+          rating_count?: number;
+          ratings_id?: number | null;
+          short_description?: string;
           taste_profile_id?: number | null;
           title?: string;
           updated_at?: string;
@@ -323,6 +332,7 @@ export interface Database {
         Row: {
           bitterness: number;
           created_at: string;
+          embeddings: string | null;
           id: number;
           saltiness: number;
           savoriness: number;
@@ -335,6 +345,7 @@ export interface Database {
         Insert: {
           bitterness?: number;
           created_at?: string;
+          embeddings?: string | null;
           id?: number;
           saltiness?: number;
           savoriness?: number;
@@ -347,6 +358,7 @@ export interface Database {
         Update: {
           bitterness?: number;
           created_at?: string;
+          embeddings?: string | null;
           id?: number;
           saltiness?: number;
           savoriness?: number;
@@ -427,7 +439,7 @@ export interface Database {
       [_ in never]: never;
     };
   };
-}
+};
 
 export type Tables<
   PublicTableNameOrOptions extends

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
-import PostSmall from "../homepage/post-small";
+import PostSmall from "@components/homepage/post-small";
 import { useAuth } from "@/src/utils/hooks/auth-hook";
 import { ROUTES } from "@/src/config/routes";
 import { useRouter } from "next/navigation";

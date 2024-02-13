@@ -2,8 +2,9 @@ import { Database } from "./supabase";
 
 export type Tables = Database["public"]["Tables"];
 
-export type User = Tables["Users"]["Row"];
-export type NewUser = Tables["Users"]["Insert"];
+export type User = Tables["users"]["Row"];
+export type NewUser = Tables["users"]["Insert"];
 
-export type Recipe = Tables["Recipes"]["Row"];
-export type NewRecipe = Tables["Recipes"]["Insert"];
+export type Recipe = Tables["recipes"]["Row"];
+export type NewRecipe = Tables["recipes"]["Insert"];
+export type Bookmarks = Tables["bookmarks"]["Row"];
