@@ -106,7 +106,7 @@ export default function BookmarkButton({
 
   useEffect(() => {
     fetchBookmarkData();
-  }, []);
+  });
 
   return (
     userId && (

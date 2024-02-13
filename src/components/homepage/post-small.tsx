@@ -1,14 +1,14 @@
 "use client";
 import { CiHeart } from "react-icons/ci";
 import { BiComment } from "react-icons/bi";
-import { createClient } from "@/src/utils/supabase/client";
 import BookmarkButton from "@/src/app/bookmarks/bookmark-button";
-import { useState } from "react";
 import { Recipe } from "@/src/types/tables";
 
-interface PostSmallProps extends Recipe {}
+interface PostSmallProps extends Recipe {
+  setLoading: (value: boolean) => void;
+}
 
-export default function PostSmall({ ...recipe }: PostSmallProps) {
+export default function PostSmall({ setLoading, ...recipe }: PostSmallProps) {
   // TODO: fix the user profile picture
   return (
     <div className="m-4 ">
