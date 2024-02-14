@@ -22,80 +22,100 @@ export default function RatingButton({
   const [isRated, toggleRated] = useToggle(false);
   const [userId, setUserId] = useState<number>();
   const [recipeIds, setRecipeIds] = useState<number[]>([]);
+  const [isLoading, setIsLoading] = useState(false); // Added loading state
 
   const supabase = createClient();
   const router = useRouter();
 
   const fetchRatingData = async () => {
-    const user = await useAuth(router);
+    setIsLoading(true);
 
-    if (!user.user) {
-      router.push(`${ROUTES.SIGNIN}?error=${ERROR_RESPONSES.AUTH_REQUIRED}`);
-      return;
-    }
+    try {
+      const user = await useAuth(router);
 
-    const uuid = await supabase
-      .from("users")
-      .select("id")
-      .eq("uuid", user.user.id)
-      .single();
+      if (!user.user) {
+        router.push(`${ROUTES.SIGNIN}?error=${ERROR_RESPONSES.AUTH_REQUIRED}`);
+        return;
+      }
 
-    if (!uuid.data) {
-      throw new Error("User not found");
-    }
+      const uuid = await supabase
+        .from("users")
+        .select("id")
+        .eq("uuid", user.user.id)
+        .single();
 
-    setUserId(uuid.data.id);
+      if (!uuid.data) {
+        throw new Error("User not found");
+      }
 
-    const ratings = await supabase
-      .from("rating")
-      .select()
-      .eq("user_id", uuid.data.id)
-      .single();
+      setUserId(uuid.data.id);
 
-    setRecipeIds(ratings.data?.recipe_ids || []);
+      const ratings = await supabase
+        .from("rating")
+        .select()
+        .eq("user_id", uuid.data.id)
+        .single();
 
-    if (ratings.data && ratings.data.recipe_ids) {
-      toggleRated(ratings.data.recipe_ids.includes(recipeId));
+      setRecipeIds(ratings.data?.recipe_ids || []);
+
+      if (ratings.data && ratings.data.recipe_ids) {
+        toggleRated(ratings.data.recipe_ids.includes(recipeId));
+      }
+    } catch (error: any) {
+      console.error("Error fetching rating data:", error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleClick = async () => {
-    toggleRated();
-    let newCount = ratingCount;
+    setIsLoading(true);
 
-    if (isRated) {
-      setRatingCount(ratingCount - 1);
-      newCount = ratingCount - 1;
-    } else {
-      setRatingCount(ratingCount + 1);
-      newCount = ratingCount + 1;
-    }
+    try {
+      toggleRated();
+      let newCount = ratingCount;
 
-    // Update the rating count in the database
-    const updateCount = await supabase
-      .from("recipes")
-      .update({ bookmark_count: newCount })
-      .eq("id", recipeId);
+      if (isRated) {
+        setRatingCount(ratingCount - 1);
+        newCount = ratingCount - 1;
+      } else {
+        setRatingCount(ratingCount + 1);
+        newCount = ratingCount + 1;
+      }
 
-    // add the recipe to the user's bookmarks
-    if (newCount > initialRatingCount && userId) {
-      const updateRating = await supabase
-        .from("rating")
-        .update({
-          recipe_ids: [...recipeIds, recipeId],
-        })
-        .eq("user_id", userId);
-    } else if (userId) {
-      const updateBookmarks = await supabase
-        .from("rating")
-        .update({
-          recipe_ids: recipeIds.filter((id) => id !== recipeId),
-        })
-        .eq("user_id", userId);
-    }
+      // Update the rating count in the database
+      const updateCount = await supabase
+        .from("recipes")
+        .update({ bookmark_count: newCount })
+        .eq("id", recipeId);
 
-    if (updateCount.error) {
-      console.error("Error updating rating count:", updateCount.error.message);
+      // add the recipe to the user's bookmarks
+      if (newCount > initialRatingCount && userId) {
+        const updateRating = await supabase
+          .from("rating")
+          .update({
+            recipe_ids: [...recipeIds, recipeId],
+          })
+          .eq("user_id", userId);
+      } else if (userId) {
+        const updateBookmarks = await supabase
+          .from("rating")
+          .update({
+            recipe_ids: recipeIds.filter((id) => id !== recipeId),
+          })
+          .eq("user_id", userId);
+      }
+
+      if (updateCount.error) {
+        console.error(
+          "Error updating rating count:",
+          updateCount.error.message,
+        );
+      }
+    } catch (error: any) {
+      console.error("Error handling click:", error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -111,8 +131,11 @@ export default function RatingButton({
             isRated && "text-red-500"
           } rounded cursor-pointer transition-all duration-300`}
           onClick={handleClick}
+          disabled={isLoading} // Disable button during loading
         >
-          {isRated ? (
+          {isLoading ? (
+            "Loading..."
+          ) : isRated ? (
             <AiFillHeart className="w-6 h-6" />
           ) : (
             <AiOutlineHeart className="w-6 h-6" />
