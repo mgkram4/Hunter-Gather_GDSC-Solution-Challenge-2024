@@ -163,102 +163,78 @@ export default function ProfilePage() {
     setHandle(firstName?.charAt(0) + lastName);
 
   return (
-    <div className="p-4 min-h-screen md:flex-row  flex flex-col">
-      <div className="flex flex-col items-center">
+    <div className="flex flex-col  justify-center p-8 space-y-8 md:space-y-0 md:space-x-8">
+      <div className="flex flex-col items-center space-y-4">
         <img
           alt={`${firstName}'s profile`}
           src={profilePicture ? profilePicture : "/defaultpfp.png"}
           className="w-32 h-32 rounded-full object-cover m-3 p-3 max-w-full"
         />
-        <div>
-          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold">{`${firstName} ${lastName}`}</h1>
-          <p className="text-base md:text-lg text-secondary">
-            {handle?.toLowerCase()}
-          </p>
-        </div>
-        {isCurrentUser && (
-          <div className="flex mt-4 p-8 justify-center">
-            <button className="hidden md:inline-block bg-secondary text-ghost px-4 py-2 rounded-lg mx-2">
+        <div className="flex flex-col justify-center items-center space-y-2">
+          <h1 className="text-3xl font-bold">{`${firstName} ${lastName}`}</h1>
+          <p className="text-lg text-secondary">{handle?.toLowerCase()}</p>
+          <div className="flex p-2 space-x-2">
+            <button className="bg-secondary text-ghost px-2 py-1 rounded-lg">
               Settings
             </button>
-            <button className="hidden md:inline-block bg-secondary text-ghost px-4 py-2 rounded-lg mx-2">
+            <button className="bg-secondary text-ghost px-2 py-1 rounded-lg">
               Share
             </button>
           </div>
-        )}
-      </div>
-      <div className="mt-4 flex flex-col items-center">
-        <div className="flex justify-between space-x-4 m-4 p-2">
-          <div className="text-center m-4 pl-2 pr-2">
-            <p className="text-lg font-bold">Recipes</p>
-            <p className="text-base font-bold bg-ghost py-1 rounded-lg">
-              {userStats ? userStats?.recipeCount : 0}
-            </p>
-          </div>
-          <div className="text-center m-4 pl-2 pr-2">
-            <p className="text-lg font-bold">Followers</p>
-            <p className="text-base font-bold bg-ghost py-1 rounded-lg">
-              {userStats ? userStats?.recipeCount : 0}
-            </p>
-          </div>
-          <div className="text-center m-4 pl-2 pr-2">
-            <p className="text-lg font-bold">Following</p>
-            <p className="text-base font-bold bg-ghost py-1 rounded-lg">
-              {userStats ? userStats?.recipeCount : 0}
-            </p>
-          </div>
         </div>
       </div>
-      <div className="mt-4 w-full grid lg:grid-cols-6 md:grid-cols-1 grid-cols-2">
-        <div className="rounded-lg px-2 text-sm font-semibold">
-          <p className="text-sm text-black mr-2 mb-2">{"Sweetness"}</p>
-          <p className="bg-primary text-ghost rounded-lg px-3 py-1 text-sm mr-2 mb-2 text-center">
-            {tasteProfile ? tasteProfile?.sweetness : 0}
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 p-2">
+        <div className="text-center p-2">
+          <p className="text-2xl font-bold">Recipes</p>
+          <p className="text-lg font-bold bg-ghost py-1 rounded-lg ">
+            {userStats ? userStats?.recipeCount : 0}
           </p>
         </div>
-        <div className="rounded-lg px-2 text-sm font-semibold">
-          <p className="text-sm text-black mr-2 mb-2">{"Saltiness"}</p>
-          <p className="bg-primary text-ghost rounded-lg px-3 py-1 text-sm mr-2 mb-2 text-center">
-            {tasteProfile ? tasteProfile?.saltiness : 0}
+        <div className="text-center p-2">
+          <p className="text-2xl font-bold">Followers</p>
+          <p className="text-lg font-bold bg-ghost py-1 rounded-lg">
+            {userStats ? userStats?.followerCount : 0}
           </p>
         </div>
-        <div className="rounded-lg px-2 text-sm font-semibold">
-          <p className="text-sm text-black mr-2 mb-2">{"Sourness"}</p>
-          <p className="bg-primary text-ghost rounded-lg px-3 py-1 text-sm mr-2 mb-2 text-center">
-            {tasteProfile ? tasteProfile?.sourness : 0}
-          </p>
-        </div>
-        <div className="rounded-lg px-2 text-sm font-semibold">
-          <p className="text-sm text-black mr-2 mb-2">{"Bitterness"}</p>
-          <p className="bg-primary text-ghost rounded-lg px-3 py-1 text-sm mr-2 mb-2 text-center">
-            {tasteProfile ? tasteProfile?.bitterness : 0}
-          </p>
-        </div>
-        <div className="rounded-lg px-2 text-sm font-semibold">
-          <p className="text-sm text-black mr-2 mb-2">{"Savoriness"}</p>
-          <p className="bg-primary text-ghost rounded-lg px-3 py-1 text-sm mr-2 mb-2 text-center">
-            {tasteProfile ? tasteProfile?.savoriness : 0}
-          </p>
-        </div>
-        <div className="rounded-lg px-2 text-sm font-semibold">
-          <p className="text-sm text-black mr-2 mb-2">{"Spiciness"}</p>
-          <p className="bg-primary text-ghost rounded-lg px-3 py-1 text-sm mr-2 mb-2 text-center">
-            {tasteProfile ? tasteProfile?.spiciness : 0}
+        <div className="text-center p-2">
+          <p className="text-2xl font-bold">Following</p>
+          <p className="text-lg font-bold bg-ghost py-1 rounded-lg">
+            {userStats ? userStats?.followingCount : 0}
           </p>
         </div>
       </div>
-      <div className="mt-4 flex flex-col justify-center">
-        <p className="text-black text-center">{bio}</p>
+      <div className="flex flex-col items-center space-y-6">
+        <div className="max-w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 items-center mb-10 gap-6">
+          {[
+            "Sweetness",
+            "Saltiness",
+            "Sourness",
+            "Bitterness",
+            "Savoriness",
+            "Spiciness",
+          ].map((taste) => (
+            <div
+              key={taste}
+              className="rounded-lg px-3 py-3 text-xl font-semibold flex flex-col items-center justify-center space-y-2"
+            >
+              <p className="text-xl text-black">{taste}</p>
+              <p className="bg-primary w-24 text-ghost rounded-lg px-4 py-2 text-xl text-center">
+                {tasteProfile
+                  ? tasteProfile[
+                      taste.toLowerCase() as keyof typeof tasteProfile
+                    ]
+                  : 0}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
-      <div className="flex flex-col">
-        {/* FIX THIS  */}
-        {recipes ? (
-          recipes.map((recipe) => (
-            <PostSmall setLoading={setLoading} key={recipe.id} {...recipe} />
-          ))
-        ) : (
-          <PostLoading />
-        )}
+      {/* POST SECTION  */}
+      <div className="">
+        <hr className="mt-4 mb-4" />
+        {/* sample post need da real ones  */}
+        <div className="h-20 w-20 bg-slate-200"></div>
       </div>
     </div>
   );
