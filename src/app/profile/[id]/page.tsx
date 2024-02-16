@@ -165,28 +165,17 @@ export default function ProfilePage() {
     setHandle(firstName?.charAt(0) + lastName);
 
   return (
-    <div className="flex flex-col justify-center p-8 space-y-8 md:space-y-0 md:space-x-8">
-      <div className="flex flex-col items-center space-y-8">
-        <div className="flex justify-end space-x-4 mt-2 w-full">
-          <button className="bg-ghost font-bold py-1 px-2 text-lg rounded">
-            <CiSettings />
-          </button>
-          <button className="bg-ghost font-bold py-1 px-2 text-lg rounded">
-            <MdIosShare />
-          </button>
-        </div>
-        <img
-          alt={`${firstName}'s profile`}
-          src={profilePicture ? profilePicture : "/defaultpfp.png"}
-          className="w-48 h-48 rounded-full object-cover shadow-lg"
-        />
-
-        <div className="flex flex-col justify-center items-center space-y-4">
-          <h1 className="text-4xl font-bold text-gray-800">{`${firstName} ${lastName}`}</h1>
-          <p className="text-xl text-gray-500">@{handle?.toLowerCase()}</p>
-        </div>
+    <div className="flex flex-col justify-center p-4 space-y-4 md:space-y-0 md:space-x-8">
+      <div className="flex justify-end space-x-2 mt-2 w-full">
+        <button className="bg-ghost font-bold py-1 px-2 text-lg rounded">
+          <CiSettings />
+        </button>
+        <button className="bg-ghost font-bold py-1 px-2 text-lg rounded">
+          <MdIosShare />
+        </button>
       </div>
-      <div className="grid grid-cols-3  gap-2 p-2">
+
+      <div className="grid grid-cols-3 gap-2 p-2">
         <div className="text-center p-2 flex flex-col items-center">
           <p className="text-2xl font-bold">Recipes</p>
           <div className="bg-ghost py-1 rounded-lg md:w-36 lg:w-full w-24 h-10 flex items-center justify-center">
@@ -212,17 +201,25 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
-      <hr className="border-t border-gray-400 my-4" /> {/* Added line */}
-      <div className="flex flex-col items-center space-y-6">
-        <div className="max-w-full grid grid-cols-3 md:grid-cols-3 lg:grid-cols-6 items-center mb-10 gap-6">
-          {[
-            "Sweetness",
-            "Saltiness",
-            "Sourness",
-            "Bitterness",
-            "Savoriness",
-            "Spiciness",
-          ].map((taste) => (
+
+      <div className="flex flex-col items-center space-y-4">
+        <img
+          alt={`${firstName}'s profile`}
+          src={profilePicture ? profilePicture : "/defaultpfp.png"}
+          className="w-48 h-48 rounded-full object-cover shadow-lg"
+        />
+
+        <div className="flex flex-col justify-center items-center space-y-4">
+          <h1 className="text-4xl font-bold text-gray-800">{`${firstName} ${lastName}`}</h1>
+
+          <p className="text-xl text-gray-500">@{handle?.toLowerCase()}</p>
+          <p className="text-md text-gray-500">This is a sample bio {bio}</p>
+        </div>
+      </div>
+
+      <div className="flex flex-col items-center space-y-4">
+        <div className="max-w-full grid grid-cols-3 md:grid-cols-3 lg:grid-cols-6 items-center mb-10 gap-6 space-y-2">
+          {tasteAttributes.map((taste) => (
             <div
               key={taste}
               className="rounded-lg px-3 py-3 text-xl font-semibold flex flex-col items-center justify-center space-y-2"
@@ -239,12 +236,16 @@ export default function ProfilePage() {
           ))}
         </div>
       </div>
-      {/* POST SECTION  */}
+
       <hr className="border-t border-gray-400 my-4" />
-      <div className="flex justify-center items-center gap-4">
-        {/* sample post need da real ones  */}
-        <div className="h-60 w-60 bg-slate-200"></div>
-        <div className="h-60 w-60 bg-slate-200"></div>
+
+      <div className="p-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-4 gap-x-4 justify-items-center">
+          {/* sample post need da real ones  */}
+          <div className="h-60 w-full sm:w-60 bg-slate-200"></div>
+          <div className="h-60 w-full sm:w-60 bg-slate-200"></div>
+          <div className="h-60 w-full sm:w-60 bg-slate-200"></div>
+        </div>
       </div>
     </div>
   );
