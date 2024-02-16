@@ -8,7 +8,7 @@ import { FaRegStar, FaRegComment, FaRegBookmark } from "react-icons/fa";
 import { FaRegShareFromSquare } from "react-icons/fa6";
 import { BsBookmarkPlus, BsFillBookmarkCheckFill } from "react-icons/bs";
 import { TbShoppingCartPlus, TbShoppingCartCopy } from "react-icons/tb";
-import CircleSlider from "@/src/components/circle_slider";
+import CircleSlider from "@/src/components/input/circle-slider";
 
 export default function Recipe() {
   const supabase = createClient();
@@ -66,6 +66,10 @@ export default function Recipe() {
           .select()
           .eq("id", Number(userId))
           .single();
+        if (idError) {
+          console.error(idError);
+          return;
+        }
         setUsername(userData?.firstName + " " + userData?.lastName);
       } catch (error) {
         console.error(error);
