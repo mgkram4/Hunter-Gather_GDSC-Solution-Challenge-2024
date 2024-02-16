@@ -175,33 +175,6 @@ export default function ProfilePage() {
         </button>
       </div>
 
-      <div className="grid grid-cols-3 gap-2 p-2">
-        <div className="text-center p-2 flex flex-col items-center">
-          <p className="text-2xl font-bold">Recipes</p>
-          <div className="bg-ghost py-1 rounded-lg md:w-36 lg:w-full w-24 h-10 flex items-center justify-center">
-            <p className="text-lg font-bold">
-              {userStats ? userStats?.recipeCount : 0}
-            </p>
-          </div>
-        </div>
-        <div className="text-center p-2 flex flex-col items-center">
-          <p className="text-2xl font-bold">Followers</p>
-          <div className="bg-ghost py-1 rounded-lg md:w-36 lg:w-full w-24 h-10 flex items-center justify-center">
-            <p className="text-lg font-bold">
-              {userStats ? userStats?.followerCount : 0}
-            </p>
-          </div>
-        </div>
-        <div className="text-center p-2 flex flex-col items-center">
-          <p className="text-2xl font-bold">Following</p>
-          <div className="bg-ghost py-1 rounded-lg md:w-36 lg:w-full w-24 h-10 flex items-center justify-center">
-            <p className="text-lg font-bold">
-              {userStats ? userStats?.followingCount : 0}
-            </p>
-          </div>
-        </div>
-      </div>
-
       <div className="flex flex-col items-center space-y-4">
         <img
           alt={`${firstName}'s profile`}
@@ -216,16 +189,41 @@ export default function ProfilePage() {
           <p className="text-md text-gray-500">This is a sample bio {bio}</p>
         </div>
       </div>
-
+      <div className="grid grid-cols-3 gap-2 p-2">
+        <div className="text-center p-2 flex flex-col items-center">
+          <p className="text-2xl font-bold">Recipes</p>
+          <div className="bg-secondary py-1 rounded-lg md:w-36 lg:w-full w-24 h-10 flex items-center justify-center">
+            <p className="text-lg font-bold">
+              {userStats ? userStats?.recipeCount : 0}
+            </p>
+          </div>
+        </div>
+        <div className="text-center p-2 flex flex-col items-center">
+          <p className="text-2xl font-bold">Followers</p>
+          <div className="bg-secondary py-1 rounded-lg md:w-36 lg:w-full w-24 h-10 flex items-center justify-center">
+            <p className="text-lg font-bold">
+              {userStats ? userStats?.followerCount : 0}
+            </p>
+          </div>
+        </div>
+        <div className="text-center p-2 flex flex-col items-center">
+          <p className="text-2xl font-bold">Following</p>
+          <div className="bg-secondary py-1 rounded-lg md:w-36 lg:w-full w-24 h-10 flex items-center justify-center">
+            <p className="text-lg font-bold">
+              {userStats ? userStats?.followingCount : 0}
+            </p>
+          </div>
+        </div>
+      </div>
       <div className="flex flex-col items-center space-y-4">
-        <div className="max-w-full grid grid-cols-3 md:grid-cols-3 lg:grid-cols-6 items-center mb-10 gap-6 space-y-2">
+        <div className="max-w-full grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 items-center mb-10 gap-6 space-y-2">
           {tasteAttributes.map((taste) => (
             <div
               key={taste}
-              className="rounded-lg px-3 py-3 text-xl font-semibold flex flex-col items-center justify-center space-y-2"
+              className="rounded-lg px-3 py-3 text-xl font-semibold flex flex-col items-center justify-center space-y-2 w-full sm:w-auto"
             >
               <p className="text-xl text-black">{taste}</p>
-              <p className="bg-primary w-24 text-ghost rounded-lg px-4 py-2 text-xl text-center">
+              <p className="bg-primary w-96 md:w-24 text-ghost rounded-lg px-4 py-2 text-xl text-center ">
                 {tasteProfile
                   ? tasteProfile[
                       taste.toLowerCase() as keyof typeof tasteProfile
