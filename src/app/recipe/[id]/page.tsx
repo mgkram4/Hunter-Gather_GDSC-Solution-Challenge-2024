@@ -9,6 +9,7 @@ import { FaRegShareFromSquare } from "react-icons/fa6";
 import { BsBookmarkPlus, BsFillBookmarkCheckFill } from "react-icons/bs";
 import { TbShoppingCartPlus, TbShoppingCartCopy } from "react-icons/tb";
 import CircleSlider from "@/src/components/circle_slider";
+import { Json } from "@/src/types/supabase";
 
 export default function Recipe() {
   const supabase = createClient();
@@ -29,8 +30,8 @@ export default function Recipe() {
   const [ratingCount, setRatingCount] = useState<number | undefined>();
   const [commentCount, setCommentCount] = useState<number | undefined>();
   const [bookmarkCount, setBookmarkCount] = useState<number | undefined>();
-  const [prep, setPrep] = useState<JSON | undefined>();
-  const [ingredients, setIngredients] = useState<JSON | undefined>();
+  const [prep, setPrep] = useState<Json | undefined>();
+  const [ingredients, setIngredients] = useState<Json | undefined>();
   const [sweetness, setSweetness] = useState<number | undefined>();
   const [saltiness, setSaltiness] = useState<number | undefined>();
   const [sourness, setSourness] = useState<number | undefined>();
@@ -212,7 +213,7 @@ export default function Recipe() {
         setRatingCount(data?.rating_count);
         setCommentCount(data?.comment_count);
         setBookmarkCount(data?.bookmark_count);
-        setPrep(data?.instructions as JSON | undefined);
+        setPrep(data?.instructions);
       } catch (error) {
         console.log(error);
       }
@@ -258,7 +259,7 @@ export default function Recipe() {
         if (error) {
           console.log(error);
         }
-        setIngredients(data?.items as JSON | undefined);
+        setIngredients(data?.items);
       } catch (error) {
         console.log(error);
       }
