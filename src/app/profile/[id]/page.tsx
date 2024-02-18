@@ -122,8 +122,8 @@ export default function ProfilePage() {
     setProfilePicture(profile?.profilePicture);
 
     const user = await useAuth(router);
-    if (user?.user && profile && user.user.email === profile.email)
-      setIsCurrentUser(true);
+    const hasEmail = user?.user && profile && user.user.email === profile.email;
+    if (hasEmail) setIsCurrentUser(true);
   };
 
   const loadUserStats = async () => {
