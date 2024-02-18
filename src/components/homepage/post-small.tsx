@@ -11,6 +11,10 @@ interface PostSmallProps {
   recipe: Recipe;
 }
 
+interface PostSmallProps {
+  recipe: Recipe;
+}
+
 export default function PostSmall({ recipe }: PostSmallProps) {
   // TODO: fix the user profile picture
   return (
