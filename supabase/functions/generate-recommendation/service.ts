@@ -45,7 +45,9 @@ const service = async (client: SupabaseClient<Database>, userId: number, cursor:
     .from("recipes")
     .select(
       `id, bookmark_count, comment_count, rating_count, taste_profile_id, recipe_taste_profiles!RecipeTasteProfiles_recipeId_fkey(${QUERY_FIELDS})`
-    ).limit(5).range(cursor, cursor + 5)
+    ).order("created_at", {
+      ascending: false
+    }).order("created_at").range(cursor, cursor + 3).limit(3);
 
 
 

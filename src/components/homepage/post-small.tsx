@@ -4,7 +4,11 @@ import { BiComment } from "react-icons/bi";
 import BookmarkButton from "@/src/app/bookmarks/bookmark-button";
 import { Recipe } from "@/src/types/tables";
 
-export default function PostSmall({ ...recipe }) {
+interface PostSmallProps {
+  recipe: Recipe;
+}
+
+export default function PostSmall({ recipe }: PostSmallProps) {
   // TODO: fix the user profile picture
   return (
     <div className="m-4 ">
