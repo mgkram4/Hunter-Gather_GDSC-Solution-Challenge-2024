@@ -10,12 +10,17 @@ export default function PostScroll() {
   const router = useRouter();
   const supabase = createClient();
 
-  const fetchData = async ({ pageParam = 0 }) => {
+  const fetchData = async ({
+    pageParam = 0,
+  }): Promise<{
+    data?: Recipe[];
+    nextCursor?: number;
+  }> => {
     const user = await useAuth(router);
 
     if (!user.user) {
       router.push("/signin");
-      return;
+      return {};
     }
 
     const uuid = await supabase
@@ -26,7 +31,7 @@ export default function PostScroll() {
 
     if (uuid.error) {
       console.error("Error fetching data:", uuid.error.message);
-      return;
+      return {};
     }
 
     const { error, data } = await supabase.functions.invoke<Recipe[]>(
@@ -43,35 +48,44 @@ export default function PostScroll() {
       console.error("Error fetching data:", error.message);
       return {
         nextCursor: pageParam,
-        error: error.message,
       };
     }
 
     return {
-      ...data,
-      nextCursor: pageParam + 1,
+      nextCursor: pageParam + 3,
+      data: data || [],
     };
   };
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
-    useInfiniteQuery({
-      queryKey: "recipes",
-      queryFn: fetchData,
-      getNextPageParam: (lastPage, pages) => lastPage.nextCursor,
-    });
+  const recipes = useInfiniteQuery({
+    queryKey: "recipes",
+    queryFn: fetchData,
+    getNextPageParam: (lastPage, pages) => lastPage.nextCursor,
+  });
 
   return (
     <div className="flex flex-col">
-      {status === "loading" ? (
+      {recipes.status === "loading" ? (
         <PostLoading />
       ) : (
-        data?.pages.map((page, i) => (
-          <div key={i}>
-            <PostSmall {...page[0]} />
-          </div>
-        ))
+        recipes.data?.pages.map((group, i) => {
+          return (
+            group.data &&
+            group.data.map((recipe) => {
+              return (
+                <>
+                  <PostSmall key={recipe.id} recipe={recipe} />
+                </>
+              );
+            })
+          );
+        })
       )}
-      <button onClick={() => fetchNextPage()}>Load More</button>
+      {recipes.isFetchingNextPage ? (
+        <PostLoading />
+      ) : (
+        <button onClick={() => recipes.fetchNextPage()}>Load More</button>
+      )}
     </div>
   );
 }

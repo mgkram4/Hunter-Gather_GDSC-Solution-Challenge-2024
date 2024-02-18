@@ -103,15 +103,15 @@ export default function ChefAssistant() {
   }, []);
 
   return (
-    <div className={"flex h-full"}>
+    <div className={"flex w-full h-full"}>
       {/* TODO: get specific sizes added into figma */}
       <div className="w-1/5 flex flex-col text-center border-gray-700 border-2">
         {chats ? <Chats chats={chats} /> : "Loading..."}
       </div>
-      <div className={"w-4/5 flex flex-col relative h-full"}>
-        <div className={"overflow-y-scroll"}>
-          <h1 className={"text-xl ml-2"}>Chef Assistant</h1>
+      <div className={"w-4/5 flex flex-col h-full"}>
+        <h1 className={"text-xl ml-2"}>Chef Assistant</h1>
 
+        <div className="h-full flex flex-col overflow-y-scroll">
           {messages ? (
             <Messages messages={messages} />
           ) : (
@@ -128,21 +128,9 @@ export default function ChefAssistant() {
               </div>
             </div>
           )}
-
-          <Messages messages={messages} />
-
-          {messages && messages.docs.length == 0 && prompt && loading && (
-            <div className={"bg-green-800 text-white rounded-md p-2 w-fit"}>
-              {prompt}
-            </div>
-          )}
         </div>
 
-        <div
-          className={
-            "flex w-full relative border-y-2 border-r-2 border-gray-700 bottom-0"
-          }
-        >
+        <div className={"flex border-y-2 border-r-2 border-gray-700 bg-white"}>
           <input
             className={"w-[90%] h-10"}
             onChange={(e) => {

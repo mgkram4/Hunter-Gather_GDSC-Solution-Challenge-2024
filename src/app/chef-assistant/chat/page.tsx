@@ -35,5 +35,5 @@ export default function ChefAssistant() {
     createChat();
   }, []);
 
-  return <>Loading new chat...</>;
+  return <p className="text-center">Loading new chat...</p>;
 }
