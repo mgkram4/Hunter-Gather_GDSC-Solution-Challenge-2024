@@ -384,9 +384,12 @@ export type Database = {
           created_at: string;
           email: string;
           firstName: string | null;
+          follower_count: number | null;
+          following_count: number | null;
           id: number;
           lastName: string | null;
           profilePicture: string | null;
+          recipe_count: number | null;
           taste_profile_id: number | null;
           updated_at: string;
           uuid: string;
@@ -396,9 +399,12 @@ export type Database = {
           created_at?: string;
           email: string;
           firstName?: string | null;
+          follower_count?: number | null;
+          following_count?: number | null;
           id?: number;
           lastName?: string | null;
           profilePicture?: string | null;
+          recipe_count?: number | null;
           taste_profile_id?: number | null;
           updated_at?: string;
           uuid: string;
@@ -408,9 +414,12 @@ export type Database = {
           created_at?: string;
           email?: string;
           firstName?: string | null;
+          follower_count?: number | null;
+          following_count?: number | null;
           id?: number;
           lastName?: string | null;
           profilePicture?: string | null;
+          recipe_count?: number | null;
           taste_profile_id?: number | null;
           updated_at?: string;
           uuid?: string;
