@@ -50,22 +50,12 @@ export default function PostSmall({ recipe }: PostSmallProps) {
                   initialRatingCount={recipe.rating_count}
                   recipeId={recipe.id}
                 />
-                <RatingButton
-                  initialRatingCount={recipe.rating_count}
-                  recipeId={recipe.id}
-                />
               </div>
-
               <div className="flex items-center space-x-1">
                 <BookmarkButton
                   initialBookmarkCount={recipe.bookmark_count}
                   recipeId={recipe.id}
                 />
-              </div>
-
-              <div className="flex items-center space-x-1">
-                <span className="text-sm">{recipe.comment_count}</span>
-                <BiComment className="w-6 h-6 hover:text-green-500 active:bg-green-300 active:text-white rounded cursor-pointer transition-all duration-300" />
               </div>
             </div>
           </div>
