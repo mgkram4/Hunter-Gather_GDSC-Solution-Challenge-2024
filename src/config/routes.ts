@@ -4,7 +4,7 @@ export enum ROUTES {
   SIGNUP = "/signup",
   HOME = "/",
   PROFILE = "/profile",
-  BOOKMARKS = "/",
+  BOOKMARKS = "/bookmarks",
   SHOPPINGLIST = "/",
   HASHTAG = "/",
   POST = "/",

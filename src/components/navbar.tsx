@@ -54,6 +54,14 @@ export default async function Navbar() {
               <>
                 <li>
                   <a
+                    href={ROUTES.BOOKMARKS}
+                    className={`block ${textColor} p-2`}
+                  >
+                    Bookmarks
+                  </a>
+                </li>
+                <li>
+                  <a
                     href={ROUTES.CHEF_ASSISTANT}
                     className={`block ${textColor} p-2`}
                   >
