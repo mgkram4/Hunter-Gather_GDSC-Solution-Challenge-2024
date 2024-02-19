@@ -111,7 +111,7 @@ export default function BookmarkButton({
   return (
     <div className="inline-flex">
       <button
-        className={`w-6 h-6 hover:text-blue-500  ${
+        className={`w-6 h-6 hover:text-blue-500 ${
           isBookmarked && "text-blue-500"
         } rounded cursor-pointer transition-all duration-300`}
         onClick={handleClick}
