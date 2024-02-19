@@ -9,7 +9,6 @@ import { ERROR_RESPONSES } from "@/src/utils/helpers/auth/enums";
 import { useToggle } from "react-use";
 import { CiBookmark } from "react-icons/ci";
 import { Bookmarks } from "@/src/types/tables";
-import { IconContext } from "react-icons";
 
 interface BookmarkButtonProps {
   initialBookmarkCount: number;
@@ -112,16 +111,12 @@ export default function BookmarkButton({
   return (
     <div className="inline-flex">
       <button
-        className={`w-6 h-6 hover:text-blue-500  ${
+        className={`w-6 h-6 hover:text-blue-500 ${
           isBookmarked && "text-blue-500"
         } rounded cursor-pointer transition-all duration-300`}
         onClick={handleClick}
       >
-        <CiBookmark
-          className={`w-6 h-6 hover:text-blue-500 active:bg-blue-300 active:text-white rounded cursor-pointer transition-all duration-300 ${
-            isBookmarked && "text-blue-500"
-          }`}
-        />
+        <CiBookmark className="w-6 h-6 hover:text-blue-500 active:bg-blue-300 active:text-white rounded cursor-pointer transition-all duration-300" />
       </button>
       <p>{bookmarkCount}</p>
     </div>
