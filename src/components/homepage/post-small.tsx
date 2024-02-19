@@ -4,11 +4,11 @@ import { BiComment } from "react-icons/bi";
 import BookmarkButton from "@/src/app/bookmarks/bookmark-button";
 import { Recipe } from "@/src/types/tables";
 
-interface PostSmallProps extends Recipe {
-  setLoading: (value: boolean) => void;
+interface PostSmallProps {
+  recipe: Recipe;
 }
 
-export default function PostSmall({ setLoading, ...recipe }: PostSmallProps) {
+export default function PostSmall({ recipe }: PostSmallProps) {
   // TODO: fix the user profile picture
   return (
     <div className="m-4 ">
@@ -30,12 +30,8 @@ export default function PostSmall({ setLoading, ...recipe }: PostSmallProps) {
 
           <div className="flex items-center justify-between  mt-4">
             <div className="flex items-center space-x-2">
-              <div className="text-sm font-semibold">
-                User: <img>{recipe.users?.profilePicture}</img>
-              </div>
-              <div className="text-sm text-gray-500">
-                Profile Picture: {recipe.users?.profilePicture}
-              </div>
+              <div className="text-sm font-semibold">User:</div>
+              <div className="text-sm text-gray-500">Profile Picture:</div>
               <div className="text-sm text-gray-500">
                 {new Date(recipe.date_published).toLocaleDateString()}
               </div>

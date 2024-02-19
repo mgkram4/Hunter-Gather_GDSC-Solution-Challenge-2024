@@ -31,7 +31,7 @@ const BOOKMARK_CONSTANT = 0.5;
  * @param {number} userId - the user id of the user to generate recommendations for 
  * @returns 
  */
-const service = async (client: SupabaseClient<Database>, userId: number) => {
+const service = async (client: SupabaseClient<Database>, userId: number, cursor: number) => {
   // retrieve the user's taste profile
   const QUERY_FIELDS =
     "sweetness, saltiness, sourness, bitterness, savoriness, spiciness";
@@ -45,7 +45,11 @@ const service = async (client: SupabaseClient<Database>, userId: number) => {
     .from("recipes")
     .select(
       `id, bookmark_count, comment_count, rating_count, taste_profile_id, recipe_taste_profiles!RecipeTasteProfiles_recipeId_fkey(${QUERY_FIELDS})`
-    )
+    ).order("created_at", {
+      ascending: false
+    }).order("created_at").range(cursor, cursor + 3).limit(3);
+
+
 
   // compute the cosine similarity between the user's taste profile and each recipe's taste profile
   const userTasteProfileVector = [
