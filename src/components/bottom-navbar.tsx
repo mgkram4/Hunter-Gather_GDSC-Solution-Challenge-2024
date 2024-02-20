@@ -6,7 +6,7 @@ import { ROUTES } from "@config/routes";
 
 export default function BottomNavbar() {
   return (
-    <div className="fixed flex justify-center space-x-32 bottom-0 w-full bg-primary bg-opacity-70 p-4  box-border md:hidden ">
+    <div className="fixed flex justify-center space-x-32 bottom-0 min-w-full bg-primary bg-opacity-70 p-4  box-border md:hidden  ">
       <Link href={ROUTES.HOME} className="text-white hover:text-gray-300 mr-4">
         <IoHomeOutline className="w-7 h-7" />
       </Link>
