@@ -18,6 +18,7 @@ import PostSmall from "@/src/components/homepage/post-small";
 import PostLoading from "@/src/components/homepage/post-loading";
 import { CiSettings } from "react-icons/ci";
 import { MdIosShare } from "react-icons/md";
+import ProfileImgUpload from "@/src/components/input/profile-image";
 
 interface UserStats {
   recipeCount: number;
@@ -83,12 +84,12 @@ export default function ProfilePage() {
       try {
         const user = await useAuth(router);
 
-        if (!user.user) {
+        /*if (!user.user) {
           router.push(
             `${ROUTES.SIGNIN}?error=${ERROR_RESPONSES.AUTH_REQUIRED}`,
           );
           return;
-        }
+        }*/
 
         const fetchedRecipes = await fetchRecipes([user.user.id]);
         setRecipes(fetchedRecipes);
@@ -175,7 +176,16 @@ export default function ProfilePage() {
         </button>
       </div>
 
-      <div className="flex flex-col items-center space-y-4">
+      <div className="flex flex-col items-center space-y-4 relative">
+        {!profilePicture && (
+          <div className="absolute top-0 left-0 w-48 h-48 rounded-full cursor-pointer">
+            <ProfileImgUpload
+              supabase={supabase}
+              username={handle || ""}
+              id={id}
+            />
+          </div>
+        )}
         <img
           alt={`${firstName}'s profile`}
           src={profilePicture ? profilePicture : "/defaultpfp.png"}

@@ -4,7 +4,7 @@ import { SupabaseClient } from "@supabase/supabase-js";
 interface RecipeImageUploaderProps {
   supabase: SupabaseClient;
   username: String;
-  id: Number;
+  id: String;
 }
 
 const ProfileImgUpload: React.FC<RecipeImageUploaderProps> = ({
@@ -57,7 +57,7 @@ const ProfileImgUpload: React.FC<RecipeImageUploaderProps> = ({
   return (
     <div>
       <input type="file" onChange={handleFileChange} />
-      <button onClick={uploadProfileImg}>Upload Profile Picture</button>
+      <button onClick={uploadProfileImg} />
     </div>
   );
 };

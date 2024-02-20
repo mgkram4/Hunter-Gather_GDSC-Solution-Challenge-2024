@@ -3,7 +3,7 @@ import { SupabaseClient } from "@supabase/supabase-js";
 
 interface RecipeImageUploaderProps {
   supabase: SupabaseClient;
-  recipe_id: Number;
+  recipe_id: String;
 }
 
 const RecipeImgUpload: React.FC<RecipeImageUploaderProps> = ({
