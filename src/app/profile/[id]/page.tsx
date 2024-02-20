@@ -1,10 +1,5 @@
 "use client";
 
-/*TODO
-  - Import/set up profile picture
-  - Import and set up recipes/posts 
-*/
-
 import { createClient } from "@utils/supabase/client";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
@@ -16,7 +11,13 @@ import {
   fetchUserProfile,
   fetchPosts,
 } from "@/src/utils/helpers/profile/fetch";
-//import PostSmall from "../../homepage/post-small";
+import { ROUTES } from "@/src/config/routes";
+import { ERROR_RESPONSES } from "@/src/utils/helpers/auth/enums";
+import { Recipe } from "@/src/types/tables";
+import PostSmall from "@/src/components/homepage/post-small";
+import PostLoading from "@/src/components/homepage/post-loading";
+import { CiSettings } from "react-icons/ci";
+import { MdIosShare } from "react-icons/md";
 
 interface UserStats {
   recipeCount: number;
@@ -72,127 +73,178 @@ export default function ProfilePage() {
   );
   const [posts, setPosts] = useState<any>();
 
-  const supabase = createClient();
   const router = useRouter();
+  const supabase = createClient();
+  const [recipes, setRecipes] = useState<Recipe[]>();
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const loadTastes = async () => {
-      const tastes = await fetchTasteProfile(id as string);
-      setTasteProfile(tastes);
+    const fetchData = async () => {
+      try {
+        const user = await useAuth(router);
+
+        if (!user.user) {
+          router.push(
+            `${ROUTES.SIGNIN}?error=${ERROR_RESPONSES.AUTH_REQUIRED}`,
+          );
+          return;
+        }
+
+        const fetchedRecipes = await fetchRecipes([user.user.id]);
+        setRecipes(fetchedRecipes);
+      } catch (error: any) {
+        console.error("Error fetching data:", error.message);
+      }
     };
 
-    const loadProfile = async () => {
-      const profile = await fetchUserProfile(id as string);
-      setFirstName(profile?.firstName);
-      setLastName(profile?.lastName);
-      setProfilePicture(profile?.profilePicture);
+    fetchData();
+  }, [router]);
 
-      const user = await useAuth(router);
-      if (user?.user && profile && user.user.email === profile.email)
-        setIsCurrentUser(true);
+  useEffect(() => {
+    // Your code here
+  }, []);
+
+  const fetchRecipes = async (recipeIds: string[]) => {
+    // Implement your logic to fetch recipes based on IDs
+    // For now, returning an empty array
+    return [];
+  };
+
+  const loadTastes = async () => {
+    const tastes = await fetchTasteProfile(id as string);
+    setTasteProfile(tastes);
+  };
+
+  const loadProfile = async () => {
+    const profile = await fetchUserProfile(id as string);
+    setFirstName(profile?.firstName);
+    setLastName(profile?.lastName);
+    setProfilePicture(profile?.profilePicture);
+
+    const user = await useAuth(router);
+    const hasEmail = user?.user && profile && user.user.email === profile.email;
+    if (hasEmail) setIsCurrentUser(true);
+  };
+
+  const loadUserStats = async () => {
+    // Implement your logic to fetch and set user stats
+    // For now, returning placeholder values
+    setUserStats({
+      recipeCount: 10,
+      followerCount: 20,
+      followingCount: 15,
+    });
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const user = await useAuth(router);
+
+        if (!user.user) {
+          router.push(
+            `${ROUTES.SIGNIN}?error=${ERROR_RESPONSES.AUTH_REQUIRED}`,
+          );
+          return;
+        }
+
+        await loadTastes();
+        await loadProfile();
+        await loadUserStats();
+        const fetchedPosts = await fetchPosts(id as string);
+        setPosts(fetchedPosts);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     };
-    /*
-    const loadPosts = async() =>{
-      const posts = await fetchPosts(id as string);
-      setPosts(userPosts);
-    }
-    */
-    loadTastes();
-    loadProfile();
+
+    fetchData();
   }, [id, supabase]);
 
   if (!handle && firstName && lastName)
     setHandle(firstName?.charAt(0) + lastName);
 
   return (
-    <div className="p-4 min-h-screen flex flex-col">
-      <div className="flex flex-row items-center justify-evenly">
-        <div className="flex flex-col items-center">
-          <img
-            alt={`${firstName}'s profile`}
-            src={profilePicture ? profilePicture : "/defaultpfp.png"}
-            className="w-32 h-32 rounded-full object-cover m-3 p-3"
-          />
-          <div>
-            <h1 className="text-2xl font-bold">{`${firstName} ${lastName}`}</h1>
-            <p className="text-secondary">{handle?.toLowerCase()}</p>
-          </div>
-          {isCurrentUser && (
-            <div className="flex mt-4 md:mt-0 p-8 justify-center">
-              <button className="bg-secondary text-ghost px-4 py-2 rounded-lg mx-2">
-                Settings
-              </button>
-              <button className="bg-secondary text-ghost px-4 py-2 rounded-lg mx-2">
-                Share
-              </button>
-            </div>
-          )}
+    <div className="flex flex-col justify-center p-4 space-y-4 md:space-y-0 md:space-x-8 bg-gradient-to-b from-secondary via-ghost to-white">
+      <div className="flex justify-end space-x-2 mt-2 w-full">
+        <button className="bg-ghost font-bold py-1 px-2 text-lg rounded">
+          <CiSettings />
+        </button>
+        <button className="bg-ghost font-bold py-1 px-2 text-lg rounded">
+          <MdIosShare />
+        </button>
+      </div>
+
+      <div className="flex flex-col items-center space-y-4">
+        <img
+          alt={`${firstName}'s profile`}
+          src={profilePicture ? profilePicture : "/defaultpfp.png"}
+          className="w-48 h-48 rounded-full object-cover shadow-lg"
+        />
+
+        <div className="flex flex-col justify-center items-center space-y-4">
+          <h1 className="text-4xl font-bold text-gray-800">{`${firstName} ${lastName}`}</h1>
+
+          <p className="text-xl text-gray-500">@{handle?.toLowerCase()}</p>
+          <p className="text-md text-gray-500">This is a sample bio {bio}</p>
         </div>
-        <div className="mt-4 md:mt-0 md:flex md:items-center md:space-x-6 flex-wrap flex-col">
-          <div className="flex justify-between space-x-4 m-4 p-2">
-            <div className="text-center m-4 pl-2 pr-2">
-              <p className="text-lg font-bold">Recipes</p>
-              <p className="text-base font-bold bg-ghost py-1 rounded-lg">
-                {userStats ? userStats?.recipeCount : 0}
-              </p>
-            </div>
-            <div className="text-center m-4 pl-2 pr-2">
-              <p className="text-lg font-bold">Followers</p>
-              <p className="text-base font-bold bg-ghost py-1 rounded-lg">
-                {userStats ? userStats?.recipeCount : 0}
-              </p>
-            </div>
-            <div className="text-center m-4 pl-2 pr-2">
-              <p className="text-lg font-bold">Following</p>
-              <p className="text-base font-bold bg-ghost py-1 rounded-lg">
-                {userStats ? userStats?.recipeCount : 0}
-              </p>
-            </div>
+      </div>
+      <div className="grid grid-cols-3 gap-2 p-2">
+        <div className="text-center p-2 flex flex-col items-center">
+          <p className="text-2xl font-bold">Recipes</p>
+          <div className="bg-secondary py-1 rounded-lg md:w-36 lg:w-full w-24 h-10 flex items-center justify-center">
+            <p className="text-lg font-bold">
+              {userStats ? userStats?.recipeCount : 0}
+            </p>
           </div>
         </div>
-        <div className="flex mt-4 md:mt-0">
-          <div className="rounded-lg px-2 text-sm font-semibold">
-            <p className="text-sm text-black mr-2 mb-2">{"Sweetness"}</p>
-            <p className="bg-primary text-ghost rounded-lg px-3 py-1 text-sm mr-2 mb-2 text-center">
-              {tasteProfile ? tasteProfile?.sweetness : 0}
+        <div className="text-center p-2 flex flex-col items-center">
+          <p className="text-2xl font-bold">Followers</p>
+          <div className="bg-secondary py-1 rounded-lg md:w-36 lg:w-full w-24 h-10 flex items-center justify-center">
+            <p className="text-lg font-bold">
+              {userStats ? userStats?.followerCount : 0}
             </p>
           </div>
-          <div className="rounded-lg px-2 text-sm font-semibold">
-            <p className="text-sm text-black mr-2 mb-2">{"Saltiness"}</p>
-            <p className="bg-primary text-ghost rounded-lg px-3 py-1 text-sm mr-2 mb-2 text-center">
-              {tasteProfile ? tasteProfile?.saltiness : 0}
-            </p>
-          </div>
-          <div className="rounded-lg px-2 text-sm font-semibold">
-            <p className="text-sm text-black mr-2 mb-2">{"Sourness"}</p>
-            <p className="bg-primary text-ghost rounded-lg px-3 py-1 text-sm mr-2 mb-2 text-center">
-              {tasteProfile ? tasteProfile?.sourness : 0}
-            </p>
-          </div>
-          <div className="rounded-lg px-2 text-sm font-semibold">
-            <p className="text-sm text-black mr-2 mb-2">{"Bitterness"}</p>
-            <p className="bg-primary text-ghost rounded-lg px-3 py-1 text-sm mr-2 mb-2 text-center">
-              {tasteProfile ? tasteProfile?.bitterness : 0}
-            </p>
-          </div>
-          <div className="rounded-lg px-2 text-sm font-semibold">
-            <p className="text-sm text-black mr-2 mb-2">{"Savoriness"}</p>
-            <p className="bg-primary text-ghost rounded-lg px-3 py-1 text-sm mr-2 mb-2 text-center">
-              {tasteProfile ? tasteProfile?.savoriness : 0}
-            </p>
-          </div>
-          <div className="rounded-lg px-2 text-sm font-semibold">
-            <p className="text-sm text-black mr-2 mb-2">{"Spiciness"}</p>
-            <p className="bg-primary text-ghost rounded-lg px-3 py-1 text-sm mr-2 mb-2 text-center">
-              {tasteProfile ? tasteProfile?.spiciness : 0}
+        </div>
+        <div className="text-center p-2 flex flex-col items-center">
+          <p className="text-2xl font-bold">Following</p>
+          <div className="bg-secondary py-1 rounded-lg md:w-36 lg:w-full w-24 h-10 flex items-center justify-center">
+            <p className="text-lg font-bold">
+              {userStats ? userStats?.followingCount : 0}
             </p>
           </div>
         </div>
       </div>
-      <div className="flex flex-col justify-center">
-        <p className="text-black text-center">{bio}</p>
+      <div className="flex flex-col items-center space-y-4">
+        <div className="max-w-full grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 items-center mb-10 gap-6 space-y-2">
+          {tasteAttributes.map((taste) => (
+            <div
+              key={taste}
+              className="rounded-lg px-3 py-3 text-xl font-semibold flex flex-col items-center justify-center space-y-2 w-full sm:w-auto"
+            >
+              <p className="text-xl text-black">{taste}</p>
+              <p className="bg-primary w-96 md:w-24 text-ghost rounded-lg px-4 py-2 text-xl text-center ">
+                {tasteProfile
+                  ? tasteProfile[
+                      taste.toLowerCase() as keyof typeof tasteProfile
+                    ]
+                  : 0}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
-      <hr className="h-px my-10 bg-primary border-0"></hr>
+
+      <hr className="border-t border-gray-400 my-4" />
+
+      <div className="p-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-4 gap-x-4 justify-items-center">
+          {/* sample post need da real ones  */}
+          <div className="h-60 w-full sm:w-60 bg-slate-200"></div>
+          <div className="h-60 w-full sm:w-60 bg-slate-200"></div>
+          <div className="h-60 w-full sm:w-60 bg-slate-200"></div>
+        </div>
+      </div>
     </div>
   );
 }

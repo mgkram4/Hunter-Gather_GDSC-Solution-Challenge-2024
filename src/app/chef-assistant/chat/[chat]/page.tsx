@@ -5,6 +5,7 @@ import Messages from "@components/chef-assistant/messages";
 import { ROUTES } from "@config/routes";
 import { ERROR_RESPONSES } from "@utils/helpers/auth/enums";
 import { createClient } from "@utils/supabase/client";
+import { set } from "date-fns";
 import {
   CollectionReference,
   DocumentData,
@@ -33,6 +34,7 @@ export default function ChefAssistant() {
   const [messages, setMessages] = useState<QuerySnapshot<DocumentData>>();
   const [chats, setChats] = useState<QuerySnapshot<DocumentData>>();
   const [userId, setUserId] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const updateHooks = async (
     messagesCollectionRef: CollectionReference<DocumentData>,
@@ -79,6 +81,7 @@ export default function ChefAssistant() {
   };
 
   const handleSendMessages = async () => {
+    setLoading(true);
     const COLLECTION_PATHS = {
       CHATS: `users/${userId}/chats/${params.chat}`,
       MESSAGES: `users/${userId}/chats/${params.chat}/messages`,
@@ -92,6 +95,7 @@ export default function ChefAssistant() {
     });
 
     setPrompt("");
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -99,24 +103,34 @@ export default function ChefAssistant() {
   }, []);
 
   return (
-    <div className={"flex h-full"}>
+    <div className={"flex w-full h-full"}>
       {/* TODO: get specific sizes added into figma */}
       <div className="w-1/5 flex flex-col text-center border-gray-700 border-2">
-        <SuspenseWithPerf traceId="chats" fallback="testing">
-          <Chats chats={chats} />
-        </SuspenseWithPerf>
+        {chats ? <Chats chats={chats} /> : "Loading..."}
       </div>
-      <div className={"w-4/5 flex flex-col relative h-full"}>
-        <div className={"overflow-y-scroll"}>
-          <h1 className={"text-xl ml-2"}>Chef Assistant</h1>
-          <Messages messages={messages} />
+      <div className={"w-4/5 flex flex-col h-full"}>
+        <h1 className={"text-xl ml-2"}>Chef Assistant</h1>
+
+        <div className="h-full flex flex-col overflow-y-scroll">
+          {messages ? (
+            <Messages messages={messages} />
+          ) : (
+            <div className="flow-root ml-2 mr-2">
+              <div className={"bg-green-800 text-white rounded-md p-2 w-fit"}>
+                Loading...
+              </div>
+              <div
+                className={
+                  "float-right right-0 bg-neutral-200 px-2 w-fit max-w-[50%] rounded-md"
+                }
+              >
+                Loading...
+              </div>
+            </div>
+          )}
         </div>
 
-        <div
-          className={
-            "flex w-full relative border-y-2 border-r-2 border-gray-700 bottom-0"
-          }
-        >
+        <div className={"flex border-y-2 border-r-2 border-gray-700 bg-white"}>
           <input
             className={"w-[90%] h-10"}
             onChange={(e) => {
