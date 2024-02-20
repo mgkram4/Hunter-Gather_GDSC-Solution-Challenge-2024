@@ -7,15 +7,7 @@ import { useState } from "react";
 import { Recipe } from "@/src/types/tables";
 import RatingButton from "../button/rating-button";
 
-interface PostSmallProps {
-  recipe: Recipe;
-}
-
-interface PostSmallProps {
-  recipe: Recipe;
-}
-
-export default function PostSmall({ recipe }: PostSmallProps) {
+export default function PostSmall(recipe: Recipe) {
   // TODO: fix the user profile picture
   return (
     <div className="m-4 ">

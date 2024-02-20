@@ -13,7 +13,7 @@ export const fetchUserProfile = async (userId: string) => {
     return data;
   } catch (error) {
     console.error("Error fetching user profile:", error);
-    return null; // or handle the error as per your application's need
+    return null;
   }
 };
 
@@ -30,7 +30,7 @@ export const fetchTasteProfile = async (userId: string) => {
     return data;
   } catch (error) {
     console.error("Error fetching taste profile:", error);
-    return null; // or handle the error as per your application's need
+    return null;
   }
 };
 
@@ -46,6 +46,6 @@ export const fetchPosts = async (userId: string) => {
     return data;
   } catch (error) {
     console.error("Error fetching user posts:", error);
-    return null; // or handle the error as per your application's need
+    return null;
   }
 };
