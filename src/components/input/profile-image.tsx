@@ -3,10 +3,15 @@ import { SupabaseClient } from "@supabase/supabase-js";
 
 interface RecipeImageUploaderProps {
   supabase: SupabaseClient;
+  username: String;
+  id: Number;
 }
 
-const ProfileImgUpload: React.FC<RecipeImageUploaderProps> = ({ supabase }) => {
-  //pull user id as prop
+const ProfileImgUpload: React.FC<RecipeImageUploaderProps> = ({
+  supabase,
+  username,
+  id,
+}) => {
   const [file, setFile] = useState<File | null>(null);
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -31,12 +36,21 @@ const ProfileImgUpload: React.FC<RecipeImageUploaderProps> = ({ supabase }) => {
       ((fileName.lastIndexOf(".") - 1) >>> 0) + 2,
     );
 
-    const { error, data } = await supabase.storage
+    const { error: uploadError, data: uploadData } = await supabase.storage
       .from("profile-pictures")
-      .upload(`profile_${Date.now()}.${fileExtension}`, file); //change date to first last name
+      .upload(`profile_${username}.${fileExtension}`, file);
 
-    if (error) {
-      console.log("Error Uploading Image", error.message);
+    if (uploadError) {
+      console.log("Error Uploading Image", uploadError.message);
+    } else {
+      const url = `https://xnjgzwpzppkttqesxmhj.supabase.co/storage/v1/object/public/profile-images/${uploadData.path}`;
+      const { error: storageError, data: storageData } = await supabase
+        .from("users")
+        .update({ profilePicture: url })
+        .eq("id", id);
+      if (storageError) {
+        console.log("Error Storing Image", storageError.message);
+      }
     }
   };
 
