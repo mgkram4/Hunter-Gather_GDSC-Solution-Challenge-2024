@@ -192,15 +192,15 @@ export default function ProfilePage() {
       <div className="grid grid-cols-3 gap-2 p-2">
         <div className="text-center p-2 flex flex-col items-center">
           <p className="text-2xl font-bold">Recipes</p>
-          <div className="bg-secondary py-1 rounded-lg md:w-36 lg:w-full w-24 h-10 flex items-center justify-center">
-            <p className="text-lg font-bold">
+          <div className="bg-secondary border border-slate-200 shadow-sm py-1 rounded-lg md:w-36 lg:w-full w-24 h-10 flex items-center justify-center">
+            <p className="text-lg font-bold ">
               {userStats ? userStats?.recipeCount : 0}
             </p>
           </div>
         </div>
         <div className="text-center p-2 flex flex-col items-center">
           <p className="text-2xl font-bold">Followers</p>
-          <div className="bg-secondary py-1 rounded-lg md:w-36 lg:w-full w-24 h-10 flex items-center justify-center">
+          <div className="bg-secondary border border-slate-200 shadow-sm py-1 rounded-lg md:w-36 lg:w-full w-24 h-10 flex items-center justify-center">
             <p className="text-lg font-bold">
               {userStats ? userStats?.followerCount : 0}
             </p>
@@ -208,7 +208,7 @@ export default function ProfilePage() {
         </div>
         <div className="text-center p-2 flex flex-col items-center">
           <p className="text-2xl font-bold">Following</p>
-          <div className="bg-secondary py-1 rounded-lg md:w-36 lg:w-full w-24 h-10 flex items-center justify-center">
+          <div className="bg-secondary border border-slate-200 shadow-sm py-1 rounded-lg md:w-36 lg:w-full w-24 h-10 flex items-center justify-center">
             <p className="text-lg font-bold">
               {userStats ? userStats?.followingCount : 0}
             </p>
@@ -223,7 +223,7 @@ export default function ProfilePage() {
               className="rounded-lg px-3 py-3 text-xl font-semibold flex flex-col items-center justify-center space-y-2 w-full sm:w-auto"
             >
               <p className="text-xl text-black">{taste}</p>
-              <p className="bg-primary w-96 md:w-24 text-ghost rounded-lg px-4 py-2 text-xl text-center ">
+              <p className="bg-primary border border-slate-200 shadow-sm w-96 md:w-24 text-ghost rounded-lg px-4 py-2 text-xl text-center ">
                 {tasteProfile
                   ? tasteProfile[
                       taste.toLowerCase() as keyof typeof tasteProfile

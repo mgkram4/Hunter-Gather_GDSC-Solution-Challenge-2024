@@ -27,12 +27,12 @@ export default async function Navbar() {
   return (
     <div className="mr-4 ml-4 mt-2 mb-2">
       <div
-        className={`${backgroundColor}  border-slate-300 shadow-sm border-2 p-2 h-fit sticky top-0 w-full z-10 rounded-xl mr-8`}
+        className={`${backgroundColor} border-slate-300 shadow-sm border-2 p-2 h-fit sticky top-0 w-full z-10 rounded-xl mr-8`}
       >
         <div className="w-full flex flex-wrap items-center justify-between mx-auto p-4">
           <a href={ROUTES.HOME} className="flex items-center space-x-3">
             {/* Logo */}
-            <PiCookingPotLight className="w-10 h-10" />
+            <PiCookingPotLight className="w-10 h-10 text-white" />
           </a>
           {/* Mobile Hamburger */}
           <button className="md:hidden inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg  hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200">
@@ -40,14 +40,20 @@ export default async function Navbar() {
           </button>
           {/* Nav Elements */}
           <div className="hidden w-full md:block md:w-auto">
-            <ul className="font-medium text-lg flex flex-col p-1 md:p-0 mt-4 rounded-lg md:flex-row md:space-x-4 md:mt-0  ">
+            <ul className="font-medium text-lg flex flex-col p-1 md:p-0 mt-4 rounded-lg md:flex-row md:space-x-4 md:mt-0">
               <li>
-                <a href={ROUTES.HOME} className={`block ${textColor} p-2`}>
+                <a
+                  href={ROUTES.HOME}
+                  className={`block ${textColor} p-2 transition-colors duration-300 hover:text-gray-500`}
+                >
                   Recipes
                 </a>
               </li>
               <li>
-                <a href={ROUTES.PROFILE} className={`block ${textColor} p-2`}>
+                <a
+                  href={ROUTES.PROFILE}
+                  className={`block ${textColor} p-2 transition-colors duration-300 hover:text-gray-500`}
+                >
                   Profile
                 </a>
               </li>
@@ -57,7 +63,7 @@ export default async function Navbar() {
                   <li>
                     <a
                       href={ROUTES.CHEF_ASSISTANT}
-                      className={`block ${textColor} p-2`}
+                      className={`block ${textColor} p-2 transition-colors duration-300 hover:text-gray-500`}
                     >
                       Chef Assistant
                     </a>
