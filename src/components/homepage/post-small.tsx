@@ -22,7 +22,7 @@ export default function PostSmall({ recipe }: PostSmallProps) {
                 ? recipe.headliner_image
                 : undefined
             }
-            className="w-full h-32 object-cover rounded-md mb-2"
+            className="w-full h-32 object-cover rounded-md mb-2 md:h-48 lg:h-64"
           />
 
           <div className="flex items-center justify-between  mt-4">
