@@ -1,22 +1,12 @@
 "use client";
-import { CiHeart } from "react-icons/ci";
-import { BiComment } from "react-icons/bi";
-import { createClient } from "@/src/utils/supabase/client";
 import BookmarkButton from "@/src/components/button/bookmark-button";
-import { useState } from "react";
 import { Recipe } from "@/src/types/tables";
 import RatingButton from "../button/rating-button";
 
 interface PostSmallProps {
   recipe: Recipe;
 }
-
-interface PostSmallProps {
-  recipe: Recipe;
-}
-
 export default function PostSmall({ recipe }: PostSmallProps) {
-  // TODO: fix the user profile picture
   return (
     <div className="m-4 ">
       {recipe && (
@@ -50,22 +40,12 @@ export default function PostSmall({ recipe }: PostSmallProps) {
                   initialRatingCount={recipe.rating_count}
                   recipeId={recipe.id}
                 />
-                <RatingButton
-                  initialRatingCount={recipe.rating_count}
-                  recipeId={recipe.id}
-                />
               </div>
-
               <div className="flex items-center space-x-1">
                 <BookmarkButton
                   initialBookmarkCount={recipe.bookmark_count}
                   recipeId={recipe.id}
                 />
-              </div>
-
-              <div className="flex items-center space-x-1">
-                <span className="text-sm">{recipe.comment_count}</span>
-                <BiComment className="w-6 h-6 hover:text-green-500 active:bg-green-300 active:text-white rounded cursor-pointer transition-all duration-300" />
               </div>
             </div>
           </div>

@@ -133,7 +133,7 @@ export default function RatingButton({
           onClick={handleClick}
           disabled={isLoading} // Disable button during loading
         >
-          {isLoading ? (
+          {isLoading && !isRated ? (
             "Loading..."
           ) : isRated ? (
             <AiFillHeart className="w-6 h-6" />

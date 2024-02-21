@@ -3,7 +3,7 @@
 import { createClient } from "@utils/supabase/client";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { Tables } from "@/supabase/functions/_shared/types/tables";
+import { Tables, Recipe } from "@/src/types/tables";
 import { useAuth } from "@utils/hooks/auth-hook";
 import { useRouter } from "next/navigation";
 import {
@@ -13,33 +13,17 @@ import {
 } from "@/src/utils/helpers/profile/fetch";
 import { ROUTES } from "@/src/config/routes";
 import { ERROR_RESPONSES } from "@/src/utils/helpers/auth/enums";
-import { Recipe } from "@/src/types/tables";
 import PostSmall from "@/src/components/homepage/post-small";
 import PostLoading from "@/src/components/homepage/post-loading";
 import { CiSettings } from "react-icons/ci";
 import { MdIosShare } from "react-icons/md";
-
-interface UserStats {
-  recipeCount: number;
-  followerCount: number;
-  followingCount: number;
-}
+import ProfileImgUpload from "@/src/components/input/profile-image";
 
 type paramId = {
   id: string;
 };
 
 export default function ProfilePage() {
-  const capitalize = (str: string) => {
-    try {
-      if (!str) throw Error("String is empty or undefined");
-      if (!str.match(/[A-Z]/gi)) throw new Error("String is not a word");
-      return str.charAt(0).toUpperCase() + str.slice(1);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   const params = useParams<paramId>();
   const id = params.id;
 
@@ -55,11 +39,13 @@ export default function ProfilePage() {
     "spiciness",
   ];
 
-  const [userStats, setUserStats] = useState<UserStats | undefined>({
-    recipeCount: 0,
-    followerCount: 0,
-    followingCount: 0,
-  });
+  const [followerCount, setFollowerCount] = useState<number | undefined | null>(
+    0,
+  );
+  const [followingCount, setFollowingCount] = useState<
+    number | undefined | null
+  >(0);
+  const [recipeCount, setRecipeCount] = useState<number | undefined | null>(0);
 
   const [profilePicture, setProfilePicture] = useState<
     string | undefined | null
@@ -71,12 +57,10 @@ export default function ProfilePage() {
   const [isCurrentUser, setIsCurrentUser] = useState<boolean | undefined>(
     false,
   );
-  const [posts, setPosts] = useState<any>();
+  const [posts, setPosts] = useState<Recipe[]>(null);
 
   const router = useRouter();
   const supabase = createClient();
-  const [recipes, setRecipes] = useState<Recipe[]>();
-  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -89,9 +73,6 @@ export default function ProfilePage() {
           );
           return;
         }
-
-        const fetchedRecipes = await fetchRecipes([user.user.id]);
-        setRecipes(fetchedRecipes);
       } catch (error: any) {
         console.error("Error fetching data:", error.message);
       }
@@ -100,14 +81,10 @@ export default function ProfilePage() {
     fetchData();
   }, [router]);
 
-  useEffect(() => {
-    // Your code here
-  }, []);
-
-  const fetchRecipes = async (recipeIds: string[]) => {
-    // Implement your logic to fetch recipes based on IDs
-    // For now, returning an empty array
-    return [];
+  const loadPosts = async () => {
+    const fetchedPosts = await fetchPosts(id as string);
+    setPosts(fetchedPosts);
+    setRecipeCount(fetchedPosts.length);
   };
 
   const loadTastes = async () => {
@@ -127,13 +104,10 @@ export default function ProfilePage() {
   };
 
   const loadUserStats = async () => {
-    // Implement your logic to fetch and set user stats
-    // For now, returning placeholder values
-    setUserStats({
-      recipeCount: 10,
-      followerCount: 20,
-      followingCount: 15,
-    });
+    const profile = await fetchUserProfile(id as string);
+    setFollowerCount(profile?.follower_count);
+    setFollowingCount(profile?.following_count);
+    setRecipeCount(profile?.recipe_count);
   };
 
   useEffect(() => {
@@ -151,8 +125,7 @@ export default function ProfilePage() {
         await loadTastes();
         await loadProfile();
         await loadUserStats();
-        const fetchedPosts = await fetchPosts(id as string);
-        setPosts(fetchedPosts);
+        await loadPosts();
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -193,16 +166,14 @@ export default function ProfilePage() {
         <div className="text-center p-2 flex flex-col items-center">
           <p className="text-2xl font-bold">Recipes</p>
           <div className="bg-secondary py-1 rounded-lg md:w-36 lg:w-full w-24 h-10 flex items-center justify-center">
-            <p className="text-lg font-bold">
-              {userStats ? userStats?.recipeCount : 0}
-            </p>
+            <p className="text-lg font-bold">{recipeCount ? recipeCount : 0}</p>
           </div>
         </div>
         <div className="text-center p-2 flex flex-col items-center">
           <p className="text-2xl font-bold">Followers</p>
           <div className="bg-secondary py-1 rounded-lg md:w-36 lg:w-full w-24 h-10 flex items-center justify-center">
             <p className="text-lg font-bold">
-              {userStats ? userStats?.followerCount : 0}
+              {followerCount ? followerCount : 0}
             </p>
           </div>
         </div>
@@ -210,7 +181,7 @@ export default function ProfilePage() {
           <p className="text-2xl font-bold">Following</p>
           <div className="bg-secondary py-1 rounded-lg md:w-36 lg:w-full w-24 h-10 flex items-center justify-center">
             <p className="text-lg font-bold">
-              {userStats ? userStats?.followingCount : 0}
+              {followingCount ? followingCount : 0}
             </p>
           </div>
         </div>
@@ -239,10 +210,18 @@ export default function ProfilePage() {
 
       <div className="p-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-4 gap-x-4 justify-items-center">
-          {/* sample post need da real ones  */}
-          <div className="h-60 w-full sm:w-60 bg-slate-200"></div>
-          <div className="h-60 w-full sm:w-60 bg-slate-200"></div>
-          <div className="h-60 w-full sm:w-60 bg-slate-200"></div>
+          {posts ? (
+            posts.map((post: any) => (
+              <PostSmall
+                className="h-60 w-full sm:w-60 bg-slate-200"
+                key={post.id}
+                id={post.id}
+                {...post}
+              />
+            ))
+          ) : (
+            <PostLoading />
+          )}
         </div>
       </div>
     </div>
