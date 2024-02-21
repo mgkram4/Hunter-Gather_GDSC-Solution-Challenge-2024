@@ -84,12 +84,12 @@ export default function ProfilePage() {
       try {
         const user = await useAuth(router);
 
-        /*if (!user.user) {
+        if (!user.user) {
           router.push(
             `${ROUTES.SIGNIN}?error=${ERROR_RESPONSES.AUTH_REQUIRED}`,
           );
           return;
-        }*/
+        }
 
         const fetchedRecipes = await fetchRecipes([user.user.id]);
         setRecipes(fetchedRecipes);
