@@ -4,6 +4,7 @@ import Textarea from "../input/textarea";
 import Input from "../input/input";
 import Slider from "../input/slider";
 import Button, { BUTTON_VARIANTS } from "../button/button";
+import RecipeImgUpload from "../input/recipe-image";
 
 const initialValues = {
   title: "",
@@ -16,6 +17,7 @@ const initialValues = {
   saltiness: 1,
   spiciness: 1,
   savoriness: 1,
+  //images: [""]
 };
 
 export type RecipeSchema = typeof initialValues;
@@ -61,6 +63,10 @@ const recipeSchema = Yup.object().shape({
     .min(1, "Too Short!")
     .max(10, "Too Long!")
     .required("Required"),
+  /*images: Yup.array()
+    .min(1, "Need Image!")
+    .max(4, "Too Many!")
+    .required("Required")*/
 });
 
 interface CreateRecipeFormProps {
@@ -186,7 +192,8 @@ export default function CreateRecipeForm({
               }
             />
 
-            {/* TODO: image upload, pending recipe display page */}
+            {/*<RecipeImgUpload supabase={} recipe_id={}/>*/}
+
             <Button
               type={"submit"}
               varient={BUTTON_VARIANTS.PRIMARY}

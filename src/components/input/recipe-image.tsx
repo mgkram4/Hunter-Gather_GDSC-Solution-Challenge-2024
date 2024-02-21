@@ -87,7 +87,7 @@ const RecipeImgUpload: React.FC<RecipeImageUploaderProps> = ({
   return (
     <div>
       <input type="file" onChange={handleFileChange} multiple />
-      <button onClick={uploadRecipeImg}>Upload Recipe Images</button>
+      <button onClick={uploadRecipeImg} />
     </div>
   );
 };

@@ -176,16 +176,7 @@ export default function ProfilePage() {
         </button>
       </div>
 
-      <div className="flex flex-col items-center space-y-4 relative">
-        {!profilePicture && (
-          <div className="absolute top-0 left-0 w-48 h-48 rounded-full cursor-pointer">
-            <ProfileImgUpload
-              supabase={supabase}
-              username={handle || ""}
-              id={id}
-            />
-          </div>
-        )}
+      <div className="flex flex-col items-center space-y-4">
         <img
           alt={`${firstName}'s profile`}
           src={profilePicture ? profilePicture : "/defaultpfp.png"}
