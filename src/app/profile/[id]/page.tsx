@@ -138,7 +138,7 @@ export default function ProfilePage() {
     setHandle(firstName?.charAt(0) + lastName);
 
   return (
-    <div className="flex flex-col justify-center p-4 space-y-4 md:space-y-0 md:space-x-8 bg-gradient-to-b from-secondary via-ghost to-white">
+    <div className="flex flex-col justify-center p-4 space-y-4 md:space-y-0 md:space-x-8 bg-gradient-to-b from-secondary via-ghost to-white m-4 rounded-xl">
       <div className="flex justify-end space-x-2 mt-2 w-full">
         <button className="bg-ghost font-bold py-1 px-2 text-lg rounded">
           <CiSettings />
