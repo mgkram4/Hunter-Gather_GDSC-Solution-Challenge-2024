@@ -83,6 +83,7 @@ export default function ProfilePage() {
   const loadPosts = async () => {
     const fetchedPosts = await fetchPosts(id as string);
     setPosts(fetchedPosts);
+    setRecipeCount(fetchedPosts.length);
   };
 
   const loadTastes = async () => {
