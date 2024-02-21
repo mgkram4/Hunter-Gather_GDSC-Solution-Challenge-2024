@@ -109,12 +109,16 @@ export default function CreateRecipe() {
     };
   }, []);
   return (
-    <div className={"flex flex-col h-full mt-10 mx-[12%]"}>
-      <h1 className={"text-center text-5xl"}>Create Your Masterpiece</h1>
-      <CreateRecipeForm handleSubmit={handleSubmit} />
-      {submissionError && (
-        <span className="font-bold text-red-500">{submissionError}</span>
-      )}
+    <div className="m-4 bg-gradient-to-b from-secondary via-ghost to-whit rounded-xl p-4">
+      <div className={"flex flex-col min-h-full mt-8 mx-[12%] "}>
+        <h1 className={"text-center text-5xl mb-4 font-bold"}>
+          Create Your Masterpiece
+        </h1>
+        <CreateRecipeForm handleSubmit={handleSubmit} />
+        {submissionError && (
+          <span className="font-bold text-red-500">{submissionError}</span>
+        )}
+      </div>
     </div>
   );
 }

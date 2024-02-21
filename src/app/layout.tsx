@@ -15,11 +15,12 @@ export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
+  showNavbar?: boolean;
 }) {
   return (
     <html lang="en">
       <body className={`${inter.className} h-screen w-full`}>
-        <Navbar />
+        {<Navbar />}
         {children}
         <Footer />
       </body>

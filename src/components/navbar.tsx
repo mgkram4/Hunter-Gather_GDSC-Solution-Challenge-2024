@@ -40,7 +40,7 @@ export default async function Navbar() {
           </button>
           {/* Nav Elements */}
           <div className="hidden w-full md:block md:w-auto">
-            <ul className="font-medium text-lg flex flex-col p-1 md:p-0 mt-4 rounded-lg md:flex-row md:space-x-4 md:mt-0">
+            <ul className="font-medium text-base md:text-lg lg:text-lg xl:text-xl flex flex-col p-1 md:p-0 mt-4 rounded-lg md:flex-row md:space-x-1 lg:space-x-4 xl:space-x-4 md:mt-0">
               <li>
                 <a
                   href={ROUTES.HOME}
@@ -60,6 +60,14 @@ export default async function Navbar() {
 
               {email ? (
                 <>
+                  <li>
+                    <a
+                      href={ROUTES.BOOKMARKS}
+                      className={`block ${textColor} p-2 transition-colors duration-300 hover:text-gray-500`}
+                    >
+                      Bookmarks
+                    </a>
+                  </li>
                   <li>
                     <a
                       href={ROUTES.CHEF_ASSISTANT}

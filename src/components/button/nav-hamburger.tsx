@@ -56,7 +56,7 @@ export default function NavHamburger() {
           <span>Profile</span>
         </Link>
         <Link
-          href={ROUTES.SIGNIN}
+          href={ROUTES.BOOKMARKS}
           onClick={handleLinkClick}
           className={`flex items-center p-2 transition-colors duration-300 hover:text-gray-500`}
         >
