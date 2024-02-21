@@ -217,6 +217,7 @@ export type Database = {
           embeddings: string | null;
           headliner_image: string | null;
           id: number;
+          images: string[] | null;
           ingredientsId: number | null;
           instructions: Json;
           rating_count: number;
@@ -236,6 +237,7 @@ export type Database = {
           embeddings?: string | null;
           headliner_image?: string | null;
           id?: number;
+          images?: string[] | null;
           ingredientsId?: number | null;
           instructions?: Json;
           rating_count?: number;
@@ -255,6 +257,7 @@ export type Database = {
           embeddings?: string | null;
           headliner_image?: string | null;
           id?: number;
+          images?: string[] | null;
           ingredientsId?: number | null;
           instructions?: Json;
           rating_count?: number;
