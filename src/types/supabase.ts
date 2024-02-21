@@ -217,6 +217,7 @@ export type Database = {
           embeddings: string | null;
           headliner_image: string | null;
           id: number;
+          images: string[] | null;
           ingredientsId: number | null;
           instructions: Json;
           rating_count: number;
@@ -236,6 +237,7 @@ export type Database = {
           embeddings?: string | null;
           headliner_image?: string | null;
           id?: number;
+          images?: string[] | null;
           ingredientsId?: number | null;
           instructions?: Json;
           rating_count?: number;
@@ -255,6 +257,7 @@ export type Database = {
           embeddings?: string | null;
           headliner_image?: string | null;
           id?: number;
+          images?: string[] | null;
           ingredientsId?: number | null;
           instructions?: Json;
           rating_count?: number;
@@ -384,9 +387,12 @@ export type Database = {
           created_at: string;
           email: string;
           firstName: string | null;
+          follower_count: number | null;
+          following_count: number | null;
           id: number;
           lastName: string | null;
           profilePicture: string | null;
+          recipe_count: number | null;
           taste_profile_id: number | null;
           updated_at: string;
           uuid: string;
@@ -396,9 +402,12 @@ export type Database = {
           created_at?: string;
           email: string;
           firstName?: string | null;
+          follower_count?: number | null;
+          following_count?: number | null;
           id?: number;
           lastName?: string | null;
           profilePicture?: string | null;
+          recipe_count?: number | null;
           taste_profile_id?: number | null;
           updated_at?: string;
           uuid: string;
@@ -408,9 +417,12 @@ export type Database = {
           created_at?: string;
           email?: string;
           firstName?: string | null;
+          follower_count?: number | null;
+          following_count?: number | null;
           id?: number;
           lastName?: string | null;
           profilePicture?: string | null;
+          recipe_count?: number | null;
           taste_profile_id?: number | null;
           updated_at?: string;
           uuid?: string;

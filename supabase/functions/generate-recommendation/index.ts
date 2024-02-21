@@ -30,8 +30,11 @@ Deno.serve(async (req) => {
     }
   );
 
+  const data = await req.json();
+
   // retrieve recently created recipes
-  const recipes = await RecommendationService(supabaseClient, req.body.id);
+  const recipes = await RecommendationService(supabaseClient, data.id, data.cursor);
+
 
   
   return new Response(JSON.stringify(recipes), {

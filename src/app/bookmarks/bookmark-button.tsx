@@ -106,21 +106,19 @@ export default function BookmarkButton({
 
   useEffect(() => {
     fetchBookmarkData();
-  }, []);
+  });
 
   return (
-    userId && (
-      <div className="inline-flex">
-        <button
-          className={`w-6 h-6 hover:text-blue-500  ${
-            isBookmarked && "text-blue-500"
-          } rounded cursor-pointer transition-all duration-300`}
-          onClick={handleClick}
-        >
-          <CiBookmark className="w-6 h-6 hover:text-blue-500 active:bg-blue-300 active:text-white rounded cursor-pointer transition-all duration-300" />
-        </button>
-        <p>{bookmarkCount}</p>
-      </div>
-    )
+    <div className="inline-flex">
+      <button
+        className={`w-6 h-6 hover:text-blue-500 ${
+          isBookmarked && "text-blue-500"
+        } rounded cursor-pointer transition-all duration-300`}
+        onClick={handleClick}
+      >
+        <CiBookmark className="w-6 h-6 hover:text-blue-500 active:bg-blue-300 active:text-white rounded cursor-pointer transition-all duration-300" />
+      </button>
+      <p>{bookmarkCount}</p>
+    </div>
   );
 }

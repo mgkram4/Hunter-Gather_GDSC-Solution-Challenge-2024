@@ -1,15 +1,12 @@
 "use client";
-import { CiHeart } from "react-icons/ci";
-import { BiComment } from "react-icons/bi";
-import { createClient } from "@/src/utils/supabase/client";
-import BookmarkButton from "@/src/app/bookmarks/bookmark-button";
-import { useState } from "react";
+import BookmarkButton from "@/src/components/button/bookmark-button";
 import { Recipe } from "@/src/types/tables";
+import RatingButton from "../button/rating-button";
 
-interface PostSmallProps extends Recipe {}
-
-export default function PostSmall({ ...recipe }: PostSmallProps) {
-  // TODO: fix the user profile picture
+interface PostSmallProps {
+  recipe: Recipe;
+}
+export default function PostSmall({ recipe }: PostSmallProps) {
   return (
     <div className="m-4 ">
       {recipe && (
@@ -30,12 +27,8 @@ export default function PostSmall({ ...recipe }: PostSmallProps) {
 
           <div className="flex items-center justify-between  mt-4">
             <div className="flex items-center space-x-2">
-              <div className="text-sm font-semibold">
-                User: <img>{recipe.users?.profilePicture}</img>
-              </div>
-              <div className="text-sm text-gray-500">
-                Profile Picture: {recipe.users?.profilePicture}
-              </div>
+              <div className="text-sm font-semibold">User:</div>
+              <div className="text-sm text-gray-500">Profile Picture:</div>
               <div className="text-sm text-gray-500">
                 {new Date(recipe.date_published).toLocaleDateString()}
               </div>
@@ -43,20 +36,16 @@ export default function PostSmall({ ...recipe }: PostSmallProps) {
 
             <div className="flex space-x-4">
               <div className="flex items-center space-x-1">
-                <span className="text-sm">{recipe.rating_count}</span>
-                <CiHeart className="w-6 h-6 hover:text-red-500 active:bg-red-300 active:text-white rounded cursor-pointer transition-all duration-300" />
+                <RatingButton
+                  initialRatingCount={recipe.rating_count}
+                  recipeId={recipe.id}
+                />
               </div>
-
               <div className="flex items-center space-x-1">
                 <BookmarkButton
                   initialBookmarkCount={recipe.bookmark_count}
                   recipeId={recipe.id}
                 />
-              </div>
-
-              <div className="flex items-center space-x-1">
-                <span className="text-sm">{recipe.comment_count}</span>
-                <BiComment className="w-6 h-6 hover:text-green-500 active:bg-green-300 active:text-white rounded cursor-pointer transition-all duration-300" />
               </div>
             </div>
           </div>
