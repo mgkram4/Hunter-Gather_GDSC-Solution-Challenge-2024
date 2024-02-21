@@ -17,6 +17,7 @@ import PostSmall from "@/src/components/homepage/post-small";
 import PostLoading from "@/src/components/homepage/post-loading";
 import { CiSettings } from "react-icons/ci";
 import { MdIosShare } from "react-icons/md";
+import ProfileImgUpload from "@/src/components/input/profile-image";
 
 type paramId = {
   id: string;

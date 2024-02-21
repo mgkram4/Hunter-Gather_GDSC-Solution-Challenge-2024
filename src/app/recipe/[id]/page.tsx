@@ -8,7 +8,7 @@ import { FaRegStar, FaRegComment, FaRegBookmark } from "react-icons/fa";
 import { FaRegShareFromSquare } from "react-icons/fa6";
 import { BsBookmarkPlus, BsFillBookmarkCheckFill } from "react-icons/bs";
 import { TbShoppingCartPlus, TbShoppingCartCopy } from "react-icons/tb";
-import CircleSlider from "@/src/components/circle_slider";
+import CircleSlider from "@/src/components/input/circle-slider";
 import { Json } from "@/src/types/supabase";
 
 export default function Recipe() {
@@ -16,11 +16,11 @@ export default function Recipe() {
   const params = useParams<{ id: string }>();
   const [userId, setUserId] = useState<number | null>(null);
   const recipeId = params.id;
-  const [profilePicOP, setProfilePicOP] = useState();
-  const [usernameOP, setUsernameOP] = useState<string | null | undefined>();
+  const [profilePicOP, setProfilePicOP] = useState<string | undefined>();
+  const [usernameOP, setUsernameOP] = useState<string | undefined | null>();
   const [handle, setHandle] = useState<string | undefined>();
-  const [profilePic, setProfilePic] = useState();
-  const [username, setUsername] = useState<string | null | undefined>();
+  const [profilePic, setProfilePic] = useState<string | undefined>();
+  const [username, setUsername] = useState<string | undefined | null>();
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [title, setTitle] = useState<string | undefined>();
   const [description, setDescription] = useState<string | null | undefined>();
@@ -30,6 +30,7 @@ export default function Recipe() {
   const [ratingCount, setRatingCount] = useState<number | undefined>();
   const [commentCount, setCommentCount] = useState<number | undefined>();
   const [bookmarkCount, setBookmarkCount] = useState<number | undefined>();
+  const [imageUrls, setImageUrls] = useState([]);
   const [prep, setPrep] = useState<Json | undefined>();
   const [ingredients, setIngredients] = useState<Json | undefined>();
   const [sweetness, setSweetness] = useState<number | undefined>();
@@ -67,7 +68,12 @@ export default function Recipe() {
           .select()
           .eq("id", Number(userId))
           .single();
+        if (idError) {
+          console.error(idError);
+          return;
+        }
         setUsername(userData?.firstName + " " + userData?.lastName);
+        setProfilePic(userData?.profilePicture);
       } catch (error) {
         console.error(error);
       }
@@ -184,7 +190,9 @@ export default function Recipe() {
           console.log(error);
         }
         setUsernameOP(data?.firstName + " " + data?.lastName);
-        setHandle(data?.email);
+        setHandle(data?.firstName.charAt(0) + data?.lastName);
+        setProfilePicOP(data?.profilePicture);
+        console.log(data?.profilePicture);
       } catch (error) {
         console.log(error);
       }
@@ -214,6 +222,7 @@ export default function Recipe() {
         setCommentCount(data?.comment_count);
         setBookmarkCount(data?.bookmark_count);
         setPrep(data?.instructions);
+        setImageUrls(data?.images || []);
       } catch (error) {
         console.log(error);
       }
@@ -311,7 +320,10 @@ export default function Recipe() {
         const userComments =
           commentsData?.map((entry) => ({
             comment: entry.comment,
-            usernameComment: usernameMap?.get(entry.user_id || "Anonymous"),
+            usernameComment:
+              usernameMap?.get(entry.user_id)?.name || "Anonymous",
+            profilePicture:
+              usernameMap?.get(entry.user_id)?.profilePicture || null,
             posted: formatDistanceToNow(new Date(entry.created_at), {
               addSuffix: true,
             }),
@@ -327,7 +339,7 @@ export default function Recipe() {
         const promises = commentIds.map(async (commentId) => {
           const { error, data } = await supabase
             .from("users")
-            .select("id, firstName, lastName")
+            .select("id, firstName, lastName, profilePicture")
             .eq("id", commentId);
           if (error) {
             console.log(error);
@@ -339,7 +351,10 @@ export default function Recipe() {
         return new Map(
           results.map((user) => [
             user.id,
-            `${user.firstName} ${user.lastName}`,
+            {
+              name: `${user.firstName} ${user.lastName}`,
+              profilePicture: user.profilePicture,
+            },
           ]),
         );
       } catch (error) {
@@ -384,7 +399,16 @@ export default function Recipe() {
   const CommentPost = ({ comment }) => {
     return (
       <div className="flex p-4 rounded-xl">
-        <button className="w-16 h-16 rounded-full bg-gray-100">pfp</button>
+        <button className="w-16 h-16 rounded-full bg-gray-100">
+          {comment.profilePicture ? (
+            <img
+              src={comment.profilePicture}
+              className="w-full h-full rounded-full"
+            />
+          ) : (
+            <img src="/defaultpfp.png" className="w-full h-full rounded-full" />
+          )}
+        </button>
         <div className="flex flex-col ml-2 w-5/6">
           <p className="text-lg font-medium mb-1">{comment.usernameComment}</p>
           <div className="border-2 border-green-400 rounded-xl p-2 whitespace-normal break-words">
@@ -401,7 +425,19 @@ export default function Recipe() {
       <div className="flex w-full h-[540px] p-4">
         <div className="flex flex-col w-1/4 items-center">
           <div className="flex space-x-3 mt-2 mb-6 items-center">
-            <button className="w-20 h-20 rounded-full bg-gray-100">pfp</button>
+            <button className="w-20 h-20 rounded-full bg-gray-100">
+              {profilePicOP ? (
+                <img
+                  src={profilePicOP}
+                  className="w-full h-full rounded-full"
+                />
+              ) : (
+                <img
+                  src="/defaultpfp.png"
+                  className="w-full h-full rounded-full"
+                />
+              )}
+            </button>
             <div className="mt-1">
               <p className="text-xl font-medium">{usernameOP}</p>
               <p className="text-sm">@{handle}</p>
@@ -452,8 +488,8 @@ export default function Recipe() {
         </div>
 
         <div className="flex flex-col w-full">
-          <div className="flex">
-            <div className="w-3/5 h-full mb-6">
+          <div className="flex mb-6">
+            <div className="w-3/5 h-full">
               <div className="flex text-center">
                 <p className="text-5xl font-bold mr-4">{title}</p>
                 <button className="text-4xl" onClick={handleBookmarkClick}>
@@ -502,7 +538,7 @@ export default function Recipe() {
 
             <div className="flex w-1/5 h-full justify-end items-center">
               <div
-                className={`flex w-1/2 h-5/6 rounded-full mb-6 justify-center items-center font-bold ${
+                className={`flex w-[140px] h-[140px] rounded-full mb-6 justify-center items-center font-bold ${
                   rating !== undefined && rating >= 85
                     ? "bg-green-600 text-6xl"
                     : rating !== undefined && rating >= 70
@@ -522,18 +558,14 @@ export default function Recipe() {
               <button>&lt;</button>
             </div>
             <div className="flex space-x-12 w-full h-full mx-2 justify-center">
-              <div className="w-[300px] h-[300px] rounded-xl bg-white">
-                <img src="" alt="" />
-              </div>
-              <div className="w-[300px] h-[300px] rounded-xl bg-white">
-                <img src="" alt="" />
-              </div>
-              <div className="w-[300px] h-[300px] rounded-xl bg-white">
-                <img src="" alt="" />
-              </div>
-              <div className="w-[300px] h-[300px] rounded-xl bg-white">
-                <img src="" alt="" />
-              </div>
+              {imageUrls.map((url, index) => (
+                <div
+                  key={index}
+                  className="w-[300px] h-[300px] rounded-xl bg-white"
+                >
+                  <img src={url} className="w-full h-full rounded-xl" />
+                </div>
+              ))}
             </div>
             <div className="flex h-full ml-2 justify-center items-center text-3xl">
               <button>&gt;</button>
@@ -584,9 +616,18 @@ export default function Recipe() {
       <div className="w-full h-0.5 bg-black"></div>
 
       <div className="w-full h-full bg-gray-200">
-        <div id="comments" className="w-full h-full px-96 pt-6">
+        <div id="comments" className="w-full h-full px-96 py-6">
           <div className="flex space-x-2 items-center">
-            <div className="w-20 h-20 rounded-full bg-gray-100">pfp</div>
+            <div className="w-20 h-20 rounded-full bg-gray-100">
+              {profilePic ? (
+                <img src={profilePic} className="w-full h-full rounded-full" />
+              ) : (
+                <img
+                  src="/defaultpfp.png"
+                  className="w-full h-full rounded-full"
+                />
+              )}
+            </div>
             <div className="flex flex-col w-1/2">
               <p className="text-xl mb-1 font-medium">{username}</p>
               <textarea
