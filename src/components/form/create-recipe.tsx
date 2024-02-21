@@ -5,6 +5,7 @@ import Input from "../input/input";
 import Slider from "../input/slider";
 import Button, { BUTTON_VARIANTS } from "../button/button";
 import RecipeImgUpload from "../input/recipe-image";
+import { useState, ChangeEvent } from "react";
 
 const initialValues = {
   title: "",
@@ -76,6 +77,23 @@ interface CreateRecipeFormProps {
 export default function CreateRecipeForm({
   handleSubmit,
 }: CreateRecipeFormProps) {
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+
+  const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const newFiles = event.target.files;
+    if (!newFiles || newFiles.length === 0) {
+      console.error("No files selected for image");
+      return;
+    }
+
+    const selectedImage = newFiles[0];
+    setImageFile(selectedImage);
+
+    const previewUrl = URL.createObjectURL(selectedImage);
+    setImagePreview(previewUrl);
+  };
+
   return (
     <>
       <Formik
@@ -193,6 +211,23 @@ export default function CreateRecipeForm({
             />
 
             {/*<RecipeImgUpload supabase={} recipe_id={}/>*/}
+            <div className="my-2">
+              <h1 className="text-3xl font-bold">Headliner Image</h1>
+              <input
+                className="my-1"
+                type="file"
+                onChange={handleImageChange}
+              />
+              {imageFile && (
+                <div>
+                  <img
+                    src={imagePreview}
+                    alt="Selected Image Preview"
+                    className="mt-1 w-48 h-48 object-cover rounded-lg border border-gray-500"
+                  />
+                </div>
+              )}
+            </div>
 
             <Button
               type={"submit"}
