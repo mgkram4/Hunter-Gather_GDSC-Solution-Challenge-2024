@@ -33,7 +33,7 @@ export default function NavHamburger() {
       <div className="ml-4"></div>
 
       <div
-        className={`text-black z-10 bg-slate-200 space-y-12 text-3xl font-weight-80 flex flex-col absolute left-0 top-20 h-screen w-3/5 md:w-2/5 pt-20 shadow-2xl transition-transform duration-300 ease-in-out ${
+        className={`text-black z-10 bg-slate-200 space-y-12 text-3xl font-weight-80 flex flex-col absolute left-[-3%]  top-20 h-screen w-4/5 md:w-3/5  pt-20 shadow-2xl transition-transform duration-300 ease-in-out ${
           open
             ? "translate-x-0 opacity-100"
             : "-translate-x-full opacity-0 pointer-events-none transition-opacity duration-300"
