@@ -8,7 +8,6 @@ import { PiCookingPotLight } from "react-icons/pi";
 import Input from "@components/input/input";
 import { ROUTES } from "@config/routes";
 import Button, { BUTTON_VARIANTS } from "@components/button/button";
-import PostSmall from "@/src/components/homepage/post-small";
 
 interface SignUpProps {
   searchParams?: {
