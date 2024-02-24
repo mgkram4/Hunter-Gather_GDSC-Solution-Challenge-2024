@@ -1,14 +1,18 @@
-import { Recipe } from "@/src/types/tables";
+"use client";
+
+import { Recipe, User } from "@/src/types/tables";
 import { useAuth } from "@/src/utils/hooks/auth-hook";
 import { createClient } from "@/src/utils/supabase/client";
 import { useRouter } from "next/navigation";
 import { useInfiniteQuery } from "react-query";
 import PostLoading from "./post-loading";
 import PostSmall from "./post-small";
+import { useState } from "react";
 
 export default function PostScroll() {
   const router = useRouter();
   const supabase = createClient();
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   const fetchData = async ({
     pageParam = 0,
@@ -74,7 +78,11 @@ export default function PostScroll() {
             group.data.map((recipe) => {
               return (
                 <>
-                  <PostSmall key={recipe.id} recipe={recipe} />
+                  <PostSmall
+                    key={recipe.id}
+                    recipe={recipe}
+                    user={currentUser}
+                  />
                 </>
               );
             })

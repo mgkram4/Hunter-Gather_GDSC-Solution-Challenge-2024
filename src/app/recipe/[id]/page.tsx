@@ -421,171 +421,172 @@ export default function Recipe() {
   };
 
   return (
-    <div className="w-full h-full bg-gray-200">
-      <div className="flex w-full h-[540px] p-4">
-        <div className="flex flex-col w-1/4 items-center">
-          <div className="flex space-x-3 mt-2 mb-6 items-center">
-            <button className="w-20 h-20 rounded-full bg-gray-100">
-              {profilePicOP ? (
-                <img
-                  src={profilePicOP}
-                  className="w-full h-full rounded-full"
-                />
-              ) : (
-                <img
-                  src="/defaultpfp.png"
-                  className="w-full h-full rounded-full"
-                />
+    <div className="bg-gradient-to-b from-secondary via-ghost to-white m-4 rounded-xl">
+      <div className="w-full h-full">
+        <div className="flex lg:flex-row w-full h-[540px] p-4">
+          <div className="lg:w-1/4 flex flex-col items-center">
+            <div className="flex space-x-3 mt-2 mb-6 items-center">
+              <button className="w-20 h-20 rounded-full bg-gray-100">
+                {profilePicOP ? (
+                  <img
+                    src={profilePicOP}
+                    className="w-full h-full rounded-full"
+                  />
+                ) : (
+                  <img
+                    src="/defaultpfp.png"
+                    className="w-full h-full rounded-full"
+                  />
+                )}
+              </button>
+              <div className="mt-1 text-center lg:text-left">
+                <p className="text-xl font-medium">{usernameOP}</p>
+                <p className="text-sm">@{handle}</p>
+              </div>
+            </div>
+
+            <div className="lg:w-3/5 lg:h-full">
+              <p className="text-center lg:text-left text-2xl font-bold underline mb-1">
+                Taste Profile
+              </p>
+              {sweetness !== 0 && (
+                <div>
+                  <p className="text-lg font-bold">Sweet</p>
+                  <TasteBar percentage={sweetness} />
+                </div>
               )}
-            </button>
-            <div className="mt-1">
-              <p className="text-xl font-medium">{usernameOP}</p>
-              <p className="text-sm">@{handle}</p>
+              {saltiness !== 0 && (
+                <div>
+                  <p className="text-lg font-bold">Salty</p>
+                  <TasteBar percentage={saltiness} />
+                </div>
+              )}
+              {sourness !== 0 && (
+                <div>
+                  <p className="text-lg font-bold">Sour</p>
+                  <TasteBar percentage={sourness} />
+                </div>
+              )}
+              {bitterness !== 0 && (
+                <div>
+                  <p className="text-lg font-bold">Bitter</p>
+                  <TasteBar percentage={bitterness} />
+                </div>
+              )}
+              {savoriness !== 0 && (
+                <div>
+                  <p className="text-lg font-bold">Savory</p>
+                  <TasteBar percentage={savoriness} />
+                </div>
+              )}
+              {spiciness !== 0 && (
+                <div>
+                  <p className="text-lg font-bold">Spicy</p>
+                  <TasteBar percentage={spiciness} />
+                </div>
+              )}
             </div>
           </div>
 
-          <div className="w-3/5 h-full">
-            <p className="text-center text-2xl font-bold underline mb-1">
-              Taste Profile
-            </p>
-            {sweetness !== 0 && (
-              <div>
-                <p className="text-lg font-bold">Sweet</p>
-                <TasteBar percentage={sweetness} />
-              </div>
-            )}
-            {saltiness !== 0 && (
-              <div>
-                <p className="text-lg font-bold">Salty</p>
-                <TasteBar percentage={saltiness} />
-              </div>
-            )}
-            {sourness !== 0 && (
-              <div>
-                <p className="text-lg font-bold">Sour</p>
-                <TasteBar percentage={sourness} />
-              </div>
-            )}
-            {bitterness !== 0 && (
-              <div>
-                <p className="text-lg font-bold">Bitter</p>
-                <TasteBar percentage={bitterness} />
-              </div>
-            )}
-            {savoriness !== 0 && (
-              <div>
-                <p className="text-lg font-bold">Savory</p>
-                <TasteBar percentage={savoriness} />
-              </div>
-            )}
-            {spiciness !== 0 && (
-              <div>
-                <p className="text-lg font-bold">Spicy</p>
-                <TasteBar percentage={spiciness} />
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className="flex flex-col w-full">
-          <div className="flex mb-6">
-            <div className="w-3/5 h-full">
-              <div className="flex text-center">
-                <p className="text-5xl font-bold mr-4">{title}</p>
-                <button className="text-4xl" onClick={handleBookmarkClick}>
-                  {isBookmarked ? (
-                    <BsFillBookmarkCheckFill />
-                  ) : (
-                    <BsBookmarkPlus />
-                  )}
-                </button>
-              </div>
-              {description && <p className="text-xl my-2">{description}</p>}
-              <p className="text-sm mb-2">
-                Posted: {datePublished} &nbsp;&nbsp;&nbsp;&nbsp; Last Updated:{" "}
-                {dateUpdated}
-              </p>
-              <div className="flex">
-                <div className="flex w-auto h-8 pr-2 text-xl space-x-0.5">
-                  <a href="#comments">
-                    <FaRegStar className="text-3xl" />
-                  </a>
-                  <p>{ratingCount}</p>
-                </div>
-                <div className="flex w-auto h-8 pr-2 text-xl space-x-0.5">
-                  <a href="#comments">
-                    <FaRegComment className="text-3xl" />
-                  </a>
-                  <p>{commentCount}</p>
-                </div>
-                <div className="flex w-auto h-8 pr-2 text-xl">
-                  <FaRegBookmark className="text-3xl" />
-                  <p>{bookmarkCount}</p>
-                </div>
-                <div className="flex w-8 h-8 mr-4">
-                  <button>
-                    <FaRegShareFromSquare className="text-3xl" />
+          <div className="flex flex-col lg:w-3/4">
+            <div className="flex mb-6 flex-col md:flex-row">
+              <div className="md:w-3/5 h-full">
+                <div className="flex text-center md:text-left">
+                  <p className="text-5xl font-bold mr-4">{title}</p>
+                  <button className="text-4xl" onClick={handleBookmarkClick}>
+                    {isBookmarked ? (
+                      <BsFillBookmarkCheckFill />
+                    ) : (
+                      <BsBookmarkPlus />
+                    )}
                   </button>
                 </div>
-                <a
-                  href="#comments"
-                  className="flex w-auto h-8 rounded-lg p-2 items-center text-center bg-green-600"
-                >
-                  Add a review
-                </a>
-              </div>
-            </div>
-
-            <div className="flex w-1/5 h-full justify-end items-center">
-              <div
-                className={`flex w-[140px] h-[140px] rounded-full mb-6 justify-center items-center font-bold ${
-                  rating !== undefined && rating >= 85
-                    ? "bg-green-600 text-6xl"
-                    : rating !== undefined && rating >= 70
-                      ? "bg-yellow-500 text-6xl"
-                      : rating !== undefined
-                        ? "bg-red-600 text-6xl"
-                        : "bg-gray-400 text-xl"
-                }`}
-              >
-                {rating !== undefined ? rating : "No Ratings"}
-              </div>
-            </div>
-          </div>
-
-          <div className="flex w-5/6 h-full pb-6">
-            <div className="flex h-full mr-2 justify-center items-center text-3xl">
-              <button>&lt;</button>
-            </div>
-            <div className="flex space-x-12 w-full h-full mx-2 justify-center">
-              {imageUrls.map((url, index) => (
-                <div
-                  key={index}
-                  className="w-[300px] h-[300px] rounded-xl bg-white"
-                >
-                  <img src={url} className="w-full h-full rounded-xl" />
+                {description && <p className="text-xl my-2">{description}</p>}
+                <p className="text-sm mb-2">
+                  Posted: {datePublished} &nbsp;&nbsp;&nbsp;&nbsp; Last Updated:{" "}
+                  {dateUpdated}
+                </p>
+                <div className="flex">
+                  <div className="flex w-auto h-8 pr-2 text-xl space-x-0.5">
+                    <a href="#comments">
+                      <FaRegStar className="text-3xl" />
+                    </a>
+                    <p>{ratingCount}</p>
+                  </div>
+                  <div className="flex w-auto h-8 pr-2 text-xl space-x-0.5">
+                    <a href="#comments">
+                      <FaRegComment className="text-3xl" />
+                    </a>
+                    <p>{commentCount}</p>
+                  </div>
+                  <div className="flex w-auto h-8 pr-2 text-xl">
+                    <FaRegBookmark className="text-3xl" />
+                    <p>{bookmarkCount}</p>
+                  </div>
+                  <div className="flex w-8 h-8 mr-4">
+                    <button>
+                      <FaRegShareFromSquare className="text-3xl" />
+                    </button>
+                  </div>
+                  <a
+                    href="#comments"
+                    className="flex w-auto h-8 rounded-lg p-2 items-center text-center bg-green-600"
+                  >
+                    Add a review
+                  </a>
                 </div>
-              ))}
+              </div>
+
+              <div className="md:w-2/5 lg:w-1/5 h-full justify-end items-center">
+                <div
+                  className={`flex w-[140px] h-[140px] rounded-full mb-6 justify-center items-center font-bold ${
+                    rating !== undefined && rating >= 85
+                      ? "bg-green-600 text-6xl"
+                      : rating !== undefined && rating >= 70
+                        ? "bg-yellow-500 text-6xl"
+                        : rating !== undefined
+                          ? "bg-red-600 text-6xl"
+                          : "bg-gray-400 text-xl"
+                  }`}
+                >
+                  {rating !== undefined ? rating : "No Ratings"}
+                </div>
+              </div>
             </div>
-            <div className="flex h-full ml-2 justify-center items-center text-3xl">
-              <button>&gt;</button>
+
+            <div className="flex w-full h-full pb-6">
+              <div className="flex h-full mr-2 justify-center items-center text-3xl">
+                <button>&lt;</button>
+              </div>
+              <div className="flex space-x-2 md:space-x-12 w-full h-full mx-2 justify-center">
+                {imageUrls.map((url, index) => (
+                  <div
+                    key={index}
+                    className="w-full md:w-[300px] h-[300px] rounded-xl bg-white mb-2 md:mb-0"
+                  >
+                    <img src={url} className="w-full h-full rounded-xl" />
+                  </div>
+                ))}
+              </div>
+              <div className="flex h-full ml-2 justify-center items-center text-3xl">
+                <button>&gt;</button>
+              </div>
             </div>
           </div>
         </div>
       </div>
-
       <div className="w-full h-0.5 bg-black"></div>
 
-      <div className="flex justify-center space-x-48 w-full h-1/2 mt-10 pb-10 bg-gray-200">
-        <div className="w-1/4 h-full rounded-xl p-10 ml-32 bg-white">
+      <div className="flex flex-col md:flex-row justify-center md:space-x-4 w-full h-auto mt-10 pb-10 ">
+        <div className="w-full md:w-1/2 lg:w-1/4 h-full rounded-xl p-4 md:p-10 bg-white">
           <p className="mb-4 text-center text-4xl underline font-bold">
             Ingredients
           </p>
           {ingredients &&
             Object.entries(ingredients).map(([ingredient, quantity], index) => (
-              <div className="flex">
+              <div className="flex items-center mb-2">
                 <button
-                  className="flex w-8 h-8 mb-2 ml-7 rounded-md justify-center items-center text-2xl bg-green-600"
+                  className="flex w-8 h-8 mr-2 rounded-md justify-center items-center text-2xl bg-green-600"
                   onClick={() => handleAddCart(ingredient)}
                 >
                   {cartState[ingredient] ? (
@@ -594,19 +595,20 @@ export default function Recipe() {
                     <TbShoppingCartPlus />
                   )}
                 </button>
-                <p key={ingredient} className="text-xl mb-2 ml-2">
+                <p key={ingredient} className="text-xl">
                   {`${ingredient} (${quantity})`}
                 </p>
               </div>
             ))}
         </div>
-        <div className="w-1/4 h-full rounded-xl p-10 bg-white">
+
+        <div className="w-full md:w-1/2 lg:w-1/4 h-full rounded-xl p-4 md:p-10 bg-white mt-4 md:mt-0">
           <p className="mb-4 text-center text-4xl underline font-bold">
             Preparation
           </p>
           {prep &&
             Object.entries(prep).map(([step, instruction], index) => (
-              <p key={step} className="ml-8 text-xl mb-2">
+              <p key={step} className="text-xl mb-2">
                 {`${index + 1}. ${instruction}`}
               </p>
             ))}
@@ -615,9 +617,9 @@ export default function Recipe() {
 
       <div className="w-full h-0.5 bg-black"></div>
 
-      <div className="w-full h-full bg-gray-200">
-        <div id="comments" className="w-full h-full px-96 py-6">
-          <div className="flex space-x-2 items-center">
+      <div className="w-full">
+        <div id="comments" className="w-full px-4 py-6">
+          <div className="flex flex-col items-center">
             <div className="w-20 h-20 rounded-full bg-gray-100">
               {profilePic ? (
                 <img src={profilePic} className="w-full h-full rounded-full" />
@@ -628,39 +630,43 @@ export default function Recipe() {
                 />
               )}
             </div>
-            <div className="flex flex-col w-1/2">
-              <p className="text-xl mb-1 font-medium">{username}</p>
+            <div className="flex flex-col w-full mt-4">
+              <p className="text-xl mb-1 font-medium text-center">{username}</p>
               <textarea
-                className="w-full h-12 p-2 rounded-lg bg-white border-2 border-green-400 text-sm resize-y"
+                className="w-full h-20 p-2 rounded-lg bg-white border-2 border-green-400 text-sm resize-y"
                 placeholder="Add a comment..."
                 value={newCommentText}
                 onChange={(e) => setNewCommentText(e.target.value)}
               />
+              <div className="flex flex-col md:flex-row mt-4 items-center justify-center ">
+                <button
+                  className="h-10 px-4 mt-4 md:mt-0 rounded-full bg-green-600"
+                  onClick={handleAddComment}
+                  disabled={commented}
+                >
+                  Comment
+                </button>
+                <div className="md:pl-6 mt-4">
+                  <CircleSlider onChange={handleSliderChange} />
+                </div>
+                <button
+                  className="h-10 px-4 mt-4 md:ml-4 rounded-full bg-green-600"
+                  onClick={handleRating}
+                  disabled={rated}
+                >
+                  {rated ? <div>Rated &#10003;</div> : "Add Rating"}
+                </button>
+              </div>
             </div>
-            <button
-              className="h-1/2 p-2 mt-8 rounded-full bg-green-600"
-              onClick={handleAddComment}
-              disabled={commented}
-            >
-              Comment
-            </button>
-            <div className="pl-6">
-              <CircleSlider onChange={handleSliderChange} />
-            </div>
-            <button
-              className="h-1/2 p-2 mt-8 rounded-full bg-green-600"
-              onClick={handleRating}
-              disabled={rated}
-            >
-              {rated ? <div>Rated &#10003;</div> : "Add Rating"}
-            </button>
           </div>
 
-          <div className="flex flex-col">
+          <div className="flex flex-col mt-6">
             <div className="flex items-center">
               <p className="text-2xl font-bold">Comments</p>
+
               <p className="ml-2 text-2xl">{commentCount}</p>
             </div>
+            <div className="w-full h-0.5 bg-black"></div>
             <div>
               {comments.map((comment, index) => (
                 <CommentPost key={index} comment={comment} />

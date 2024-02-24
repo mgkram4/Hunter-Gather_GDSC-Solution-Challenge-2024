@@ -16,8 +16,8 @@ export default function Home() {
         <QueryClientProvider client={queryClient}>
           <PostScroll />
         </QueryClientProvider>
-        <Bottomnav />
       </div>
+      <Bottomnav />
     </div>
   );
 }

@@ -21,81 +21,66 @@ export default function NavHamburger() {
   }
 
   return (
-    <div className="ml-4 mr-4 flex items-center justify-between rounded-xl  border-4 m-2 hover:bg-green-900 focus:outline-none focus:bg-green-900  focus:border-green-600 ">
-      <div className="cursor-pointer ml-4" onClick={() => setOpen(!open)}>
-        <RxHamburgerMenu className="w-6 h-10 text-slate-200 " />
+    <div
+      className={`mr-4 flex items-center justify-between rounded-xl m-2 focus:outline-none ${
+        open ? "border-none" : " focus:border-green-600"
+      }`}
+    >
+      <div className="cursor-pointer ml-6 " onClick={() => setOpen(!open)}>
+        <RxHamburgerMenu className="w-6 h-10 text-slate-200" />
       </div>
 
-      <div className="items-center ml-4"></div>
+      <div className="ml-4"></div>
 
       <div
-        className={`pl-8 text-black z-10 bg-slate-200 space-y-12 text-2xl font-weight-80 flex flex-col absolute left-0 top-20 h-screen w-3/5 md:w-2/5 pt-20 shadow-2xl transition-transform duration-300 ease-in-out ${
-          open ? "transform translate-x-0" : "transform -translate-x-full"
+        className={`text-black z-10 bg-slate-200 space-y-12 text-3xl font-weight-80 flex flex-col absolute left-[-3%]  top-20 h-screen w-4/5 md:w-3/5  pt-20 shadow-2xl transition-transform duration-300 ease-in-out ${
+          open
+            ? "translate-x-0 opacity-100"
+            : "-translate-x-full opacity-0 pointer-events-none transition-opacity duration-300"
         }`}
       >
         <Link
           href={ROUTES.HOME}
           onClick={handleLinkClick}
-          className="flex items-center hover:text-primary hover:duration-500"
+          className={`flex items-center p-2 transition-colors duration-300 hover:text-gray-500`}
         >
-          <IoHomeOutline className="m-2" />
+          <IoHomeOutline className="w-8 h-8 mr-2 text-primary" />
           <span>Home</span>
         </Link>
         <Link
           href={ROUTES.PROFILE}
           onClick={handleLinkClick}
-          className="flex items-center hover:text-primary hover:duration-500"
+          className={`flex items-center p-2 transition-colors duration-300 hover:text-gray-500`}
         >
-          <CgProfile className="m-2" />
-
+          <CgProfile className="w-8 h-8 mr-2 text-primary" />
           <span>Profile</span>
         </Link>
         <Link
-          href={ROUTES.SIGNIN}
+          href={ROUTES.BOOKMARKS}
           onClick={handleLinkClick}
-          className="flex items-center hover:text-primary hover:duration-500"
+          className={`flex items-center p-2 transition-colors duration-300 hover:text-gray-500`}
         >
-          <CiBookmark className="m-2" />
-
+          <CiBookmark className="w-8 h-8 mr-2 text-primary" />
           <span>Bookmarks</span>
         </Link>
-        <Link
-          href={ROUTES.SHOPPINGLIST}
-          onClick={handleLinkClick}
-          className="flex items-center hover:text-primary hover:duration-500"
-        >
-          <FiShoppingCart className="m-2" />
 
-          <span>Shopping List</span>
-        </Link>
-        <Link
-          href={ROUTES.HASHTAG}
-          onClick={handleLinkClick}
-          className="flex items-center hover:text-primary hover:duration-500"
-        >
-          <CiHashtag className="m-2" />
-
-          <span>Hashtag</span>
-        </Link>
         <Link
           href={ROUTES.CHEF_ASSISTANT}
           onClick={handleLinkClick}
-          className="flex items-center hover:text-primary hover:duration-500"
+          className={`flex items-center p-2 transition-colors duration-300 hover:text-gray-500`}
         >
-          <GiCook className="m-2" />
-
+          <GiCook className="w-8 h-8 mr-2 text-primary" />
           <span>Cook Assistant</span>
         </Link>
         <Link
           href={ROUTES.POST}
           onClick={handleLinkClick}
-          className="flex items-center hover:text-primary hover:duration-500"
+          className={`flex items-center p-2 transition-colors duration-300 hover:text-gray-500`}
         >
-          <MdOutlinePostAdd className="m-2" />
-
+          <MdOutlinePostAdd className="w-8 h-8 mr-2 text-primary" />
           <span>Post</span>
         </Link>
-        <PiCookingPotLight className="ml-28 w-20 h-20 " />
+        <PiCookingPotLight className="ml-36 w-20 h-20 text-primary" />
       </div>
     </div>
   );

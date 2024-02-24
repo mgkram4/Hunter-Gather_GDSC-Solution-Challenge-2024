@@ -103,51 +103,60 @@ export default function ChefAssistant() {
   }, []);
 
   return (
-    <div className={"flex w-full h-full"}>
-      {/* TODO: get specific sizes added into figma */}
-      <div className="w-1/5 flex flex-col text-center border-gray-700 border-2">
-        {chats ? <Chats chats={chats} /> : "Loading..."}
-      </div>
-      <div className={"w-4/5 flex flex-col h-full"}>
-        <h1 className={"text-xl ml-2"}>Chef Assistant</h1>
-
-        <div className="h-full flex flex-col overflow-y-scroll">
-          {messages ? (
-            <Messages messages={messages} />
-          ) : (
-            <div className="flow-root ml-2 mr-2">
-              <div className={"bg-green-800 text-white rounded-md p-2 w-fit"}>
-                Loading...
-              </div>
-              <div
-                className={
-                  "float-right right-0 bg-neutral-200 px-2 w-fit max-w-[50%] rounded-md"
-                }
-              >
-                Loading...
-              </div>
-            </div>
-          )}
+    <div className="bg-gradient-to-b from-secondary via-ghost to-white m-4 rounded-xl border-2 border-slate-200">
+      <div className={"flex w-full h-full"}>
+        {/* TODO: get specific sizes added into figma */}
+        <div className="w-1/5 flex flex-col text-center border-l-2 border-r-2 border-slate-200">
+          {chats ? <Chats chats={chats} /> : "Loading..."}
         </div>
+        <div className={"w-4/5 flex flex-col h-full"}>
+          <h1 className={"text-xl ml-2"}>Chef Assistant</h1>
 
-        <div className={"flex border-y-2 border-r-2 border-gray-700 bg-white"}>
-          <input
-            className={"w-[90%] h-10"}
-            onChange={(e) => {
-              setPrompt(e.target.value);
-            }}
-            type="text"
-            placeholder="Type here..."
-            value={prompt}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handleSendMessages();
+          <div className="h-full flex flex-col overflow-y-scroll">
+            {messages ? (
+              <Messages messages={messages} />
+            ) : (
+              <div className="flow-root ml-2 mr-2">
+                <div className={"bg-green-800 text-white rounded-md p-2 w-fit"}>
+                  Loading...
+                </div>
+                <div
+                  className={
+                    "float-right right-0 bg-neutral-200 px-2 w-fit max-w-[50%] rounded-md"
+                  }
+                >
+                  Loading...
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="mt-4 mb-4"></div>
+          <div
+            className={"flex border-y-2 border-r-2 border-slate-200 bg-white"}
+          >
+            <input
+              className={"w-[90%] h-16"}
+              onChange={(e) => {
+                setPrompt(e.target.value);
+              }}
+              type="text"
+              placeholder="Type here..."
+              value={prompt}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSendMessages();
+                }
+              }}
+            />
+            <button
+              className={
+                "p-2 bg-primary hover:opacity-90 cursor-pointer active:bg-secondary"
               }
-            }}
-          />
-          <button className={"p-2"} onClick={handleSendMessages}>
-            Send Message
-          </button>
+              onClick={handleSendMessages}
+            >
+              Send Message
+            </button>
+          </div>
         </div>
       </div>
     </div>

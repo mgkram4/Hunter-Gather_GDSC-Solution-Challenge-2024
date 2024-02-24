@@ -209,6 +209,7 @@ export type Database = {
       };
       recipes: {
         Row: {
+          [x: string]: any;
           bookmark_count: number;
           comment_count: number;
           commentId: number | null;

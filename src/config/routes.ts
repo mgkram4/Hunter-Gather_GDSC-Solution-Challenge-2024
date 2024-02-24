@@ -7,7 +7,7 @@ export enum ROUTES {
   BOOKMARKS = "/bookmarks",
   SHOPPINGLIST = "/",
   HASHTAG = "/",
-  POST = "/",
+  POST = "/recipe/create",
   CHEF_ASSISTANT = "/chef-assistant/chat",
 }
 
