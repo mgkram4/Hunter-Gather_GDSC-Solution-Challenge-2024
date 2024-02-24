@@ -109,8 +109,8 @@ export default function ChefAssistant() {
         <div className="w-1/5 flex flex-col text-center border-l-2 border-r-2 border-slate-200">
           {chats ? <Chats chats={chats} /> : "Loading..."}
         </div>
-        <div className={"w-4/5 flex flex-col h-full"}>
-          <h1 className={"text-xl ml-2"}>Chef Assistant</h1>
+        <div className={"w-4/5 flex flex-col min-h-full"}>
+          <h1 className={"text-3xl mt-2 ml-2"}>Chef Assistant</h1>
 
           <div className="h-full flex flex-col overflow-y-scroll">
             {messages ? (
@@ -130,7 +130,7 @@ export default function ChefAssistant() {
               </div>
             )}
           </div>
-          <div className="mt-4 mb-4"></div>
+
           <div
             className={"flex border-y-2 border-r-2 border-slate-200 bg-white"}
           >
@@ -150,7 +150,7 @@ export default function ChefAssistant() {
             />
             <button
               className={
-                "p-2 bg-primary hover:opacity-90 cursor-pointer active:bg-secondary"
+                "p-2 bg-primary text-white hover:opacity-90 cursor-pointer active:bg-secondary"
               }
               onClick={handleSendMessages}
             >

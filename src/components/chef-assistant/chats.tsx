@@ -14,7 +14,7 @@ export default function Chats({ chats }: ChatsProps) {
     <>
       <Suspense fallback="loading...">
         <button
-          className={"border-2 border-gray-700 w-full"}
+          className={"border-2 border-slate-200 w-full"}
           onClick={() => {
             router.push(ROUTES.CHEF_ASSISTANT);
           }}
@@ -24,7 +24,7 @@ export default function Chats({ chats }: ChatsProps) {
         {chats?.docs.map((chat) => {
           return (
             <button
-              className="border-2 border-gray-700 w-full"
+              className="border-2 border-slate-200 w-full"
               onClick={() => {
                 router.push(`${ROUTES.CHEF_ASSISTANT}/${chat.id}`);
               }}
