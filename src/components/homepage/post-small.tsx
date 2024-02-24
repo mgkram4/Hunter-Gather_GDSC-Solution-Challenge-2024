@@ -21,16 +21,14 @@ export default function PostSmall({
       {recipe && (
         <div className="bg-white">
           <div className="bg-slate-50 p-4 border-b border-slate-200">
-            {/* <Link href={`/recipe/${recipe.id}/page`}>
-              <a>Go to recipe</a> */}
-            {/* Link wraps the title and short description */}
-            <div>
-              <div className="font-bold text-xl mb-2">{recipe.title}</div>
-              <div className="text-gray-600 mb-1">
-                {recipe.short_description || ""}
+            <Link href={`/recipe/${recipe.id}`}>
+              <div>
+                <div className="font-bold text-xl mb-2">{recipe.title}</div>
+                <div className="text-gray-600 mb-1">
+                  {recipe.short_description || ""}
+                </div>
               </div>
-            </div>
-            {/* </Link> */}
+            </Link>
           </div>
           <div className="flex justify-center items-center h-64 sm:h-72 md:h-96">
             <img

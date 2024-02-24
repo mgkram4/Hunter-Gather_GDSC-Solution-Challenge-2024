@@ -216,6 +216,7 @@ export default function ProfilePage() {
                 className="h-60 w-full sm:w-60 bg-slate-200"
                 key={post.id}
                 id={post.id}
+                user={post.user}
                 {...post}
               />
             ))

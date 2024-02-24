@@ -559,14 +559,12 @@ export default function Recipe() {
                 <button>&lt;</button>
               </div>
               <div className="flex space-x-2 md:space-x-12 w-full h-full mx-2 justify-center">
-                {imageUrls.map((url, index) => (
-                  <div
-                    key={index}
-                    className="w-full md:w-[300px] h-[300px] rounded-xl bg-white mb-2 md:mb-0"
-                  >
-                    <img src={url} className="w-full h-full rounded-xl" />
-                  </div>
-                ))}
+                <div className="w-auto md:w-[300px] h-[300px] rounded-xl bg-white mb-2 md:mb-0">
+                  <img
+                    src={imageUrls[0]}
+                    className="w-full h-full rounded-xl"
+                  />
+                </div>
               </div>
               <div className="flex h-full ml-2 justify-center items-center text-3xl">
                 <button>&gt;</button>
