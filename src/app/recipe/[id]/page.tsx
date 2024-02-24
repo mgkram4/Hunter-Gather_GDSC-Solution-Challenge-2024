@@ -10,6 +10,7 @@ import { BsBookmarkPlus, BsFillBookmarkCheckFill } from "react-icons/bs";
 import { TbShoppingCartPlus, TbShoppingCartCopy } from "react-icons/tb";
 import CircleSlider from "@/src/components/input/circle-slider";
 import { Json } from "@/src/types/supabase";
+import type { Recipe } from "@/src/types/tables";
 
 export default function Recipe() {
   const supabase = createClient();
@@ -208,6 +209,7 @@ export default function Recipe() {
         if (error) {
           console.log(error);
         }
+        setImageUrls(data?.images || []);
         setTitle(data?.title);
         setDescription(data?.short_description);
         setDatePublished(
@@ -554,12 +556,12 @@ export default function Recipe() {
               </div>
             </div>
 
-            <div className="flex w-full h-full pb-6">
+            <div className="flex w-full h-60 pb-6">
               <div className="flex h-full mr-2 justify-center items-center text-3xl">
                 <button>&lt;</button>
               </div>
               <div className="flex space-x-2 md:space-x-12 w-full h-full mx-2 justify-center">
-                <div className="w-auto md:w-[300px] h-[300px] rounded-xl bg-white mb-2 md:mb-0">
+                <div className="w-auto md:w-[300px] h-auto rounded-xl bg-white mb-2 md:mb-0">
                   <img
                     src={imageUrls[0]}
                     className="w-full h-full rounded-xl"
